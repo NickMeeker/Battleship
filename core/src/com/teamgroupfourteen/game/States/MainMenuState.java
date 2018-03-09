@@ -46,6 +46,12 @@ public class MainMenuState extends State {
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, singlePlayerBtn)){
                 System.out.println("Transition to singleplayer");
+            } else if(isTouched(touchPosition, multiPlayerBtn)){
+                System.out.println("Transition to multiplayer");
+            } else if(isTouched(touchPosition, spectatorBtn)) {
+                System.out.println("Transition to spectator button");
+            } else if(isTouched(touchPosition, creditsBtn)){
+                System.out.println("Transition to credits button");
             }
 
         }
@@ -73,6 +79,10 @@ public class MainMenuState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        singlePlayerBtn.disposeAssets();
+        multiPlayerBtn.disposeAssets();
+        spectatorBtn.disposeAssets();
+        creditsBtn.disposeAssets();
         System.out.println("Menu State Disposed");
     }
 

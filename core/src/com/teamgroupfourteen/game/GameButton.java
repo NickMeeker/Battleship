@@ -60,4 +60,8 @@ public class GameButton {
     public void setImage(Texture image) {
         this.image = image;
     }
+
+    public void disposeAssets(){
+        image.dispose();
+    }
 }
