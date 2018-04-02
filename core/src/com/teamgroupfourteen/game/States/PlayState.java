@@ -32,7 +32,7 @@ public class PlayState extends State {
         this.player1 = player1;
         this.player2 = player2;
 
-
+        gsm.push(new PlayStateSetup(gsm));
     }
 
     @Override
