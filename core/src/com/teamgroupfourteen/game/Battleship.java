@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.teamgroupfourteen.game.States.GameStateManager;
 import com.teamgroupfourteen.game.States.MainMenuState;
-
+import com.teamgroupfourteen.game.States.PlayStateSetup;
 
 
 public class Battleship extends ApplicationAdapter {
@@ -26,7 +26,7 @@ public class Battleship extends ApplicationAdapter {
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 
-		gsm.push(new MainMenuState(gsm));
+		gsm.push(new PlayStateSetup(gsm));
 	}
 
 	@Override
