@@ -1,5 +1,7 @@
 package com.teamgroupfourteen.game.Player;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.GameBoard;
 
 /**
@@ -37,5 +39,29 @@ public class Player {
 
         board = new GameBoard();
 
+    }
+
+    public void createShips(){
+
+        this.board.makeShip(2);
+        this.board.makeShip(3);
+        this.board.makeShip(3);
+        this.board.makeShip(4);
+        this.board.makeShip(5);
+
+    }
+
+    public Texture getShipTexture(int shipNum){
+
+        return this.board.getShipTexture(shipNum);
+
+    }
+
+    public void updateShipPosition(int shipNum, int x, int y, int z){
+        this.board.updateShipPosition(shipNum, x, y, z);
+    }
+
+    public Vector3 getShipPosition(int shipNum){
+        return this.board.getShipPosition(shipNum);
     }
 }

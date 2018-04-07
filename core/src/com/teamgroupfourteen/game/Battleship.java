@@ -5,10 +5,11 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.teamgroupfourteen.game.Player.Player;
 import com.teamgroupfourteen.game.States.GameStateManager;
 import com.teamgroupfourteen.game.States.MainMenuState;
 import com.teamgroupfourteen.game.States.PlayStateSetup;
-
+import com.teamgroupfourteen.game.States.PlayState;
 
 public class Battleship extends ApplicationAdapter {
 	// KEEP RELEVANT CONSTANTS HERE
@@ -25,8 +26,8 @@ public class Battleship extends ApplicationAdapter {
 		gsm = new GameStateManager();
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-
-		gsm.push(new PlayStateSetup(gsm));
+		Player player= new Player(null);
+		gsm.push(new PlayStateSetup(gsm, player));
 	}
 
 	@Override
