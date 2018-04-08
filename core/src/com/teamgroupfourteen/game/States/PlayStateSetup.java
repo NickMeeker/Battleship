@@ -30,9 +30,14 @@ public class PlayStateSetup extends State {
     private GameButton leftBtn;
     private GameButton rightBtn;
     private GameButton rotateBtn;
-    private GameButton confirmBtn;
+    private GameButton finishBtn;
+    private GameButton leftShipBtn;
+    private GameButton rightShipBtn;
     private Texture minesweeper, frigate, submarine, battleship, carrier;
     private TextureRegion minesweeperRegion, frigateRegion, submarineRegion, battleshipRegion, carrierRegion;
+    private Texture currentShipTexture;
+    private TextureRegion currentShipTextureRegion;
+
 
     //data variables
     int currentShipNumber;
@@ -62,46 +67,147 @@ public class PlayStateSetup extends State {
         downBtn = new GameButton(190, 20, 100, 100, "Arrow_down.png");
         leftBtn = new GameButton(90, 120, 100, 100, "Arrow_left.png");
         rightBtn = new GameButton(290, 120, 100, 100, "Arrow_right.png");
-        rotateBtn = new GameButton(290, 220, 100, 100, "clockwiseArrow.png");
-        confirmBtn = new GameButton(340, 20, 120, 60, "blackSquare.png");
+        rotateBtn = new GameButton(335, 220, 100, 100, "clockwiseArrow.png");
+        finishBtn = new GameButton(340, 20, 120, 60, "GrayFinish.png");
+        leftShipBtn = new GameButton(20, 245, 50, 50, "Arrow_left.png");
+        rightShipBtn = new GameButton(110, 245, 50, 50, "Arrow_right.png");
 
         //place the ships in their initial location
         this.player.createShips();
-        minesweeper = player.getShipTexture(1);
-        frigate = player.getShipTexture(2);
-        submarine = player.getShipTexture(3);
-        battleship = player.getShipTexture(4);
-        carrier = player.getShipTexture(5);
+        minesweeper = player.getShipTexture(0);
+        frigate = player.getShipTexture(1);
+        submarine = player.getShipTexture(2);
+        battleship = player.getShipTexture(3);
+        carrier = player.getShipTexture(4);
 
-        minesweeperRegion = new TextureRegion(minesweeper, 0, 0, 806, 285 );
-        frigateRegion = new TextureRegion(frigate, 0, 0, 1024, 330 );
-        submarineRegion = new TextureRegion(submarine, 0, 0, 656, 390 );
-        battleshipRegion = new TextureRegion(battleship, 0, 0, 2041, 736 );
-        carrierRegion = new TextureRegion(carrier, 0, 0, 720, 405 );
+        minesweeperRegion = new TextureRegion(minesweeper, 0, 0, 40, 80 );
+        frigateRegion = new TextureRegion(frigate, 0, 0, 40, 120 );
+        submarineRegion = new TextureRegion(submarine, 0, 0, 40, 120 );
+        battleshipRegion = new TextureRegion(battleship, 0, 0, 40, 160 );
+        carrierRegion = new TextureRegion(carrier, 0, 0, 40, 200 );
+
+        //current ship starts with the minesweeper
+        currentShipTexture = player.getShipTexture(currentShipNumber);
+        currentShipTextureRegion = new TextureRegion(currentShipTexture, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
     }
 
     @Override
     public void handleInput(){
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
-            if(isTouched(touchPosition, upBtn)){
-                player.updateShipPosition(currentShipNumber, 0, 40, 0);
+
+            //move ships
+            if (isTouched(touchPosition, upBtn)) {
+                if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') {
+                    if (player.getShipSize(currentShipNumber) * 40 + player.getShipPosition(currentShipNumber).y < 740) {
+                        player.updateShipPosition(currentShipNumber, 0, 40, 0);
+                    }
+                }
+                else{
+                    if(player.getShipPosition(currentShipNumber).y + 40 < 740)
+                        player.updateShipPosition(currentShipNumber, 0, 40, 0);
+                }
             }
-            else if(isTouched(touchPosition, downBtn)){
-                player.updateShipPosition(currentShipNumber, 0, -40, 0);
+            else if (isTouched(touchPosition, downBtn)) {
+                if (player.getShipPosition(currentShipNumber).y > 340) {
+                    player.updateShipPosition(currentShipNumber, 0, -40, 0);
+                }
             }
-            else if(isTouched(touchPosition, leftBtn)){
-                player.updateShipPosition(currentShipNumber, -40, 0, 0);
+            else if (isTouched(touchPosition, leftBtn)) {
+                if(player.getShipPosition(currentShipNumber).x > 60)
+                    player.updateShipPosition(currentShipNumber, -40, 0, 0);
             }
-            else if(isTouched(touchPosition, rightBtn)){
-                player.updateShipPosition(currentShipNumber, 40, 0, 0);
-            }
-            else if(isTouched(touchPosition, rotateBtn)){
+            else if (isTouched(touchPosition, rightBtn)) {
+                if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u'){
+                    if(player.getShipPosition(currentShipNumber).x + 40 < 460){
+                        player.updateShipPosition(currentShipNumber, 40, 0, 0);
+                    }
+                }
+                else{
+                    if(player.getShipSize(currentShipNumber) * 40 + player.getShipPosition(currentShipNumber).x < 460) {
+                        player.updateShipPosition(currentShipNumber, 40, 0, 0);
+                    }
+                }
 
             }
 
+            //ship selectors
+            else if(isTouched(touchPosition, leftShipBtn)){
+                if(currentShipNumber == 0)
+                    currentShipNumber = 5;
+                currentShipNumber = (currentShipNumber - 1);
+                currentShipTexture = player.getShipTexture(currentShipNumber);
+                currentShipTextureRegion = new TextureRegion(currentShipTexture, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+
+            }
+            else if(isTouched(touchPosition, rightShipBtn)){
+                currentShipNumber = (currentShipNumber + 1) % 5;
+                currentShipTexture = player.getShipTexture(currentShipNumber);
+                currentShipTextureRegion = new TextureRegion(currentShipTexture, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+            }
+            else if(isTouched(touchPosition, rotateBtn)) {
+                player.rotateShip(currentShipNumber);
+
+                if((player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') && player.getShipSize(currentShipNumber) * 40 + player.getShipPosition(currentShipNumber).y > 740)
+                    player.setShipPosition(currentShipNumber, (int)player.getShipPosition(currentShipNumber).x, 740 - (player.getShipSize(currentShipNumber) * 40), 0);
+
+                if((player.getShipOrientation(currentShipNumber) == 'r' || player.getShipOrientation(currentShipNumber) == 'l') && player.getShipSize(currentShipNumber) * 40 + player.getShipPosition(currentShipNumber).x > 460)
+                    player.setShipPosition(currentShipNumber, 460 - (player.getShipSize(currentShipNumber) * 40), (int)player.getShipPosition(currentShipNumber).y, 0);
+
+                //minesweeper
+                if (currentShipNumber == 0){
+                    if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') {
+                        minesweeper = player.getShipTexture(currentShipNumber);
+                        minesweeperRegion = new TextureRegion(minesweeper, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+                    } else {
+                        minesweeper = player.getShipTexture(currentShipNumber);
+                        minesweeperRegion = new TextureRegion(minesweeper, 0, 0, player.getShipSize(currentShipNumber) * 40, 40);
+                    }
+                }
+                //frigate
+                else if (currentShipNumber == 1){
+                    if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') {
+                        frigate = player.getShipTexture(currentShipNumber);
+                        frigateRegion = new TextureRegion(frigate, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+                    } else {
+                        frigate = player.getShipTexture(currentShipNumber);
+                        frigateRegion = new TextureRegion(frigate, 0, 0, player.getShipSize(currentShipNumber) * 40, 40);
+                    }
+                }
+                //submarine
+                else if (currentShipNumber == 2){
+                    if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') {
+                        submarine = player.getShipTexture(currentShipNumber);
+                        submarineRegion = new TextureRegion(submarine, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+                    } else {
+                        submarine = player.getShipTexture(currentShipNumber);
+                        submarineRegion = new TextureRegion(submarine, 0, 0, player.getShipSize(currentShipNumber) * 40, 40);
+                    }
+                }
+                //battleship
+                else if (currentShipNumber == 3){
+                    if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') {
+                        battleship = player.getShipTexture(currentShipNumber);System.out.println("check");
+                        battleshipRegion = new TextureRegion(battleship, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+                    } else {
+                        battleship = player.getShipTexture(currentShipNumber);
+                        battleshipRegion = new TextureRegion(battleship, 0, 0, player.getShipSize(currentShipNumber) * 40, 40);
+                    }
+                }
+                //aircraft carrier
+                else if (currentShipNumber == 4){
+                    if (player.getShipOrientation(currentShipNumber) == 'd' || player.getShipOrientation(currentShipNumber) == 'u') {
+                        carrier = player.getShipTexture(currentShipNumber);
+                        carrierRegion = new TextureRegion(carrier, 0, 0, 40, player.getShipSize(currentShipNumber) * 40);
+                    } else {
+                        carrier = player.getShipTexture(currentShipNumber);
+                        carrierRegion = new TextureRegion(carrier, 0, 0, player.getShipSize(currentShipNumber) * 40, 40);
+                    }
+                }
+            }
         }
     }
+
 
     @Override
     public void update(float dt) {
@@ -119,11 +225,43 @@ public class PlayStateSetup extends State {
         sb.draw(mainGrid, 20, 340, 440, 440);
         sb.draw(coordinateBackground, 190, 120,100,100);
 
-        sb.draw(minesweeperRegion, player.getShipPosition(0).x, player.getShipPosition(0).y,40,80);
-        sb.draw(frigateRegion, player.getShipPosition(1).x, player.getShipPosition(1).y,40,120);
-        sb.draw(submarineRegion, player.getShipPosition(2).x, player.getShipPosition(2).y,40,120);
-        sb.draw(battleshipRegion, player.getShipPosition(3).x, player.getShipPosition(3).y,40,160);
-        sb.draw(carrierRegion, player.getShipPosition(4).x, player.getShipPosition(4).y,40,200);
+        //ships
+        //minesweeper
+        if(player.getShipOrientation(0) == 'd' || player.getShipOrientation(0) == 'u'){
+            sb.draw(minesweeperRegion, player.getShipPosition(0).x, player.getShipPosition(0).y,40,80);
+        }
+        else
+            sb.draw(minesweeperRegion, player.getShipPosition(0).x, player.getShipPosition(0).y,80,40);
+
+        //frigate
+        if(player.getShipOrientation(1) == 'd' || player.getShipOrientation(1) == 'u'){
+            sb.draw(frigateRegion, player.getShipPosition(1).x, player.getShipPosition(1).y,40,120);
+        }
+        else
+            sb.draw(frigateRegion, player.getShipPosition(1).x, player.getShipPosition(1).y,120,40);
+
+        //submarine
+        if(player.getShipOrientation(2) == 'd' || player.getShipOrientation(2) == 'u'){
+            sb.draw(submarineRegion, player.getShipPosition(2).x, player.getShipPosition(2).y,40,120);
+        }
+        else
+            sb.draw(submarineRegion, player.getShipPosition(2).x, player.getShipPosition(2).y,120,40);
+
+        //battleship
+        if(player.getShipOrientation(3) == 'd' || player.getShipOrientation(3) == 'u'){
+            sb.draw(battleshipRegion, player.getShipPosition(3).x, player.getShipPosition(3).y,40,160);
+        }
+        else
+            sb.draw(battleshipRegion, player.getShipPosition(3).x, player.getShipPosition(3).y,160,40);
+
+        //aircraft carrier
+        if(player.getShipOrientation(4) == 'd' || player.getShipOrientation(4) == 'u'){
+            sb.draw(carrierRegion, player.getShipPosition(4).x, player.getShipPosition(4).y,40,200);
+        }
+        else
+            sb.draw(carrierRegion, player.getShipPosition(4).x, player.getShipPosition(4).y,200,40);
+
+        sb.draw(currentShipTextureRegion, 80, 270 - (player.getShipSize(currentShipNumber) * 10),20,player.getShipSize(currentShipNumber) * 20);
 
         //buttons
         sb.draw(upBtn.getImage(), upBtn.getX(), upBtn.getY(), upBtn.getWidth(), upBtn.getHeight());
@@ -131,7 +269,10 @@ public class PlayStateSetup extends State {
         sb.draw(leftBtn.getImage(), leftBtn.getX(), leftBtn.getY(), leftBtn.getWidth(), leftBtn.getHeight());
         sb.draw(rightBtn.getImage(), rightBtn.getX(), rightBtn.getY(), rightBtn.getWidth(), rightBtn.getHeight());
         sb.draw(rotateBtn.getImage(), rotateBtn.getX(),rotateBtn.getY(), rotateBtn.getWidth(), rotateBtn.getHeight());
-        sb.draw(confirmBtn.getImage(), confirmBtn.getX(),confirmBtn.getY(), confirmBtn.getWidth(), confirmBtn.getHeight());
+        sb.draw(finishBtn.getImage(), finishBtn.getX(),finishBtn.getY(), finishBtn.getWidth(), finishBtn.getHeight());
+        sb.draw(leftShipBtn.getImage(), leftShipBtn.getX(),leftShipBtn.getY(), leftShipBtn.getWidth(), leftShipBtn.getHeight());
+        sb.draw(rightShipBtn.getImage(), rightShipBtn.getX(),rightShipBtn.getY(), rightShipBtn.getWidth(), rightShipBtn.getHeight());
+
         sb.end();
     }
 

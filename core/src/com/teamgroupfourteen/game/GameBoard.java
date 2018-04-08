@@ -66,7 +66,11 @@ public class GameBoard {
     }
 
     public Texture getShipTexture(int shipNum){
-        return Ships[shipNum - 1].getTexture();
+        return Ships[shipNum].getTexture();
+    }
+
+    public void setShipPosition(int shipNum, int x, int y, int z){
+        Ships[shipNum].setPosition(x, y, z);
     }
 
     public void updateShipPosition(int shipNum, int x, int y, int z){
@@ -76,4 +80,17 @@ public class GameBoard {
     public Vector3 getShipPosition(int shipNum){
         return Ships[shipNum].getPosition();
     }
+
+    public int getShipSize(int shipNum){
+        return Ships[shipNum].getSize();
+    }
+
+    public void rotateShip(int shipNum){
+        this.Ships[shipNum].changeOrientation();
+    }
+
+    public char getShipOrientation(int shipNum){
+        return this.Ships[shipNum].getOrientation();
+    }
 }
+

@@ -64,4 +64,20 @@ public class Player {
     public Vector3 getShipPosition(int shipNum){
         return this.board.getShipPosition(shipNum);
     }
+
+    public int getShipSize (int shipNum){
+        return this.board.getShipSize(shipNum);
+    }
+
+    public void rotateShip(int shipNum){
+        this.board.rotateShip(shipNum);
+    }
+
+    public char getShipOrientation(int shipNum){
+        return this.board.getShipOrientation(shipNum);
+    }
+
+    public void setShipPosition(int shipNum, int x, int y, int z){
+        this.board.setShipPosition(shipNum, x, y, z);
+    }
 }
