@@ -116,7 +116,8 @@ public class Ship {
 
     //rotates ship clockwise
     public void changeOrientation(){
-        System.out.println(this.orientation);        //rotate ship based on current orientation
+
+        //rotate ship based on current orientation
         if(this.orientation == 'd') {
             this.orientation = 'l';
             this.currentPicture = this.pictures[2];
@@ -133,7 +134,6 @@ public class Ship {
             this.orientation = 'd';
             this.currentPicture = this.pictures[0];
         }
-        System.out.println(this.orientation);
     }
 
     private void hitShip(int coordinate){
