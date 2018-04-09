@@ -80,4 +80,8 @@ public class Player {
     public void setShipPosition(int shipNum, int x, int y, int z){
         this.board.setShipPosition(shipNum, x, y, z);
     }
+
+    public void fillCell(int x, int y, int shipNum){
+        this.board.fillCell(x, y, shipNum);
+    }
 }

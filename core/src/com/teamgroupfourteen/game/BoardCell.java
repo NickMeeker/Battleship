@@ -10,9 +10,17 @@ package com.teamgroupfourteen.game;
 public class BoardCell {
     private boolean containsShip;
     private boolean shipFront;
+    private boolean hit;
     private Ship ship;
 
     public BoardCell(){
+        containsShip = false;
+        shipFront = false;
+        hit = false;
+        ship = null;
+    }
 
+    public void fill(){
+        this.containsShip = true;
     }
 }

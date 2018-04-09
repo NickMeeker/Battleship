@@ -9,6 +9,8 @@ import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jeremy on 4/2/2018.
  */
@@ -30,6 +32,7 @@ public class PlayStateSetup extends State {
     private GameButton leftBtn;
     private GameButton rightBtn;
     private GameButton rotateBtn;
+    private GameButton greyFinishBtn;
     private GameButton finishBtn;
     private GameButton leftShipBtn;
     private GameButton rightShipBtn;
@@ -68,7 +71,8 @@ public class PlayStateSetup extends State {
         leftBtn = new GameButton(90, 120, 100, 100, "Arrow_left.png");
         rightBtn = new GameButton(290, 120, 100, 100, "Arrow_right.png");
         rotateBtn = new GameButton(335, 220, 100, 100, "clockwiseArrow.png");
-        finishBtn = new GameButton(340, 20, 120, 60, "GrayFinish.png");
+        greyFinishBtn = new GameButton(340, 20, 120, 60, "GrayFinish.png");
+        finishBtn = new GameButton(340, 20, 120, 60, "Finish.png");
         leftShipBtn = new GameButton(20, 245, 50, 50, "Arrow_left.png");
         rightShipBtn = new GameButton(110, 245, 50, 50, "Arrow_right.png");
 
@@ -205,6 +209,18 @@ public class PlayStateSetup extends State {
                     }
                 }
             }
+            else if(isTouched(touchPosition, finishBtn) && !collision()) {
+                System.out.println("uh oh");
+                for(int i = 0; i < 5; i++){
+                    for(int j = 0; j < player.getShipSize(i); j++) {
+                        if (player.getShipOrientation(i) == 'd' || player.getShipOrientation(i) == 'u')
+                            player.fillCell(((int) player.getShipPosition(i).x - 60) / 40, (((int) player.getShipPosition(i).y + (40 * j)) - 340) / 40, i);
+                        else
+                            player.fillCell((((int)player.getShipPosition(i).x + (40 * j)) - 60) / 40, ((int)player.getShipPosition(i).y - 340) / 40, i);
+                    }
+                }
+
+            }
         }
     }
 
@@ -261,7 +277,7 @@ public class PlayStateSetup extends State {
         else
             sb.draw(carrierRegion, player.getShipPosition(4).x, player.getShipPosition(4).y,200,40);
 
-        sb.draw(currentShipTextureRegion, 80, 270 - (player.getShipSize(currentShipNumber) * 10),20,player.getShipSize(currentShipNumber) * 20);
+            sb.draw(currentShipTextureRegion, 80, 270 - (player.getShipSize(currentShipNumber) * 10),20,player.getShipSize(currentShipNumber) * 20);
 
         //buttons
         sb.draw(upBtn.getImage(), upBtn.getX(), upBtn.getY(), upBtn.getWidth(), upBtn.getHeight());
@@ -269,9 +285,15 @@ public class PlayStateSetup extends State {
         sb.draw(leftBtn.getImage(), leftBtn.getX(), leftBtn.getY(), leftBtn.getWidth(), leftBtn.getHeight());
         sb.draw(rightBtn.getImage(), rightBtn.getX(), rightBtn.getY(), rightBtn.getWidth(), rightBtn.getHeight());
         sb.draw(rotateBtn.getImage(), rotateBtn.getX(),rotateBtn.getY(), rotateBtn.getWidth(), rotateBtn.getHeight());
-        sb.draw(finishBtn.getImage(), finishBtn.getX(),finishBtn.getY(), finishBtn.getWidth(), finishBtn.getHeight());
         sb.draw(leftShipBtn.getImage(), leftShipBtn.getX(),leftShipBtn.getY(), leftShipBtn.getWidth(), leftShipBtn.getHeight());
         sb.draw(rightShipBtn.getImage(), rightShipBtn.getX(),rightShipBtn.getY(), rightShipBtn.getWidth(), rightShipBtn.getHeight());
+
+        if(!collision()) {
+            sb.draw(finishBtn.getImage(), finishBtn.getX(), finishBtn.getY(), finishBtn.getWidth(), finishBtn.getHeight());
+        }
+        else{
+            sb.draw(greyFinishBtn.getImage(), greyFinishBtn.getX(), greyFinishBtn.getY(), greyFinishBtn.getWidth(), greyFinishBtn.getHeight());
+        }
 
         sb.end();
     }
@@ -286,4 +308,38 @@ public class PlayStateSetup extends State {
         System.out.println("Play State Setup Disposed");
     }
 
+    private boolean collision(){
+
+        ArrayList<Vector3> coordinates = new ArrayList<Vector3>();
+        Vector3 tempVector = new Vector3();
+
+
+
+        //check if any ships collide
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < player.getShipSize(i); j++){
+                tempVector = player.getShipPosition(i).cpy();
+                if(player.getShipOrientation(i) == 'd' || player.getShipOrientation(i) == 'u'){
+                    if(coordinates.contains(tempVector.add(0, 40 * j, 0))){
+                        return true;
+                    }
+                    else{
+                        tempVector.add(0, -40 * j, 0);
+                        coordinates.add(tempVector.add(0, 40 * j, 0));
+                    }
+                }
+                else{
+                    if(coordinates.contains(tempVector.add(40 * j, 0, 0))){
+                        return true;
+                    }
+                    else{
+                        tempVector.add(-40 * j, 0, 0);
+                        coordinates.add(tempVector.add(40 * j, 0, 0));
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }

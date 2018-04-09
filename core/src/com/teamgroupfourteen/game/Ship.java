@@ -168,7 +168,7 @@ public class Ship {
     }
 
     public Vector3 getPosition(){
-        return position;
+        return this.position;
     }
 
     public int getSize(){
