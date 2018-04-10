@@ -206,7 +206,6 @@ public class PlayStateSetup extends State {
                 }
             }
             else if(isTouched(touchPosition, finishBtn) && !collision()) {
-                System.out.println("uh oh");
                 for(int i = 0; i < 5; i++){
                     for(int j = 0; j < player.getShipSize(i); j++) {
                         if (player.getShipOrientation(i) == 'd' || player.getShipOrientation(i) == 'u')
@@ -216,6 +215,8 @@ public class PlayStateSetup extends State {
                     }
                 }
 
+                //dispose();
+                gsm.pop();
             }
         }
     }
@@ -297,11 +298,26 @@ public class PlayStateSetup extends State {
     @Override
     public void dispose() {
         background.dispose();
+        gameGrid.dispose();
+        background.dispose();
+        coordinateBackground.dispose();
+        minesweeper.dispose();
+        frigate.dispose();
+        submarine.dispose();
+        battleship.dispose();
+        carrier.dispose();
+        currentShipTexture.dispose();
         upBtn.disposeAssets();
         downBtn.disposeAssets();
         leftBtn.disposeAssets();
         rightBtn.disposeAssets();
+        rotateBtn.disposeAssets();
+        greyFinishBtn.disposeAssets();
+        finishBtn.disposeAssets();
+        leftShipBtn.disposeAssets();
+        rightShipBtn.disposeAssets();
         System.out.println("Play State Setup Disposed");
+
     }
 
     private boolean collision(){

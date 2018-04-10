@@ -32,8 +32,8 @@ public class PlayState extends State {
         this.player1 = player1;
         this.player2 = player2;
 
-        gsm.push(new PlayStateSetup(gsm, player1));
-        gsm.push(new PlayStateSetup(gsm, player1));
+        gsm.push(new PlayStateSetup(gsm, player1));System.out.println("check");
+        gsm.push(new PlayStateSetup(gsm, player2));
     }
 
     @Override
@@ -57,6 +57,8 @@ public class PlayState extends State {
         sb.begin();
 
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.WIDTH);
+
+        sb.end();
 
     }
 
