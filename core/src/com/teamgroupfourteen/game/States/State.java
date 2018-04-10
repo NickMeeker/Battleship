@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.teamgroupfourteen.game.GameButton;
 
 /**
@@ -38,4 +39,5 @@ public abstract class State {
         return (touchPosition.x >= button.getX() && touchPosition.x <= button.getX() + button.getWidth()
                 && touchPosition.y >= button.getY() && touchPosition.y <= button.getY() + button.getHeight());
     }
+
 }

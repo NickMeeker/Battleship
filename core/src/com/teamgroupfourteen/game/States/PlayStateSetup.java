@@ -46,13 +46,9 @@ public class PlayStateSetup extends State {
     int currentShipNumber;
 
     public PlayStateSetup(GameStateManager gsm, Player player){
-
         super(gsm);
-
         this.player = player;
-
         currentShipNumber = 0;
-
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
 
         // set the background as a texture region. 178x232 is the resolution of the image
