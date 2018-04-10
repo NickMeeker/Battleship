@@ -92,5 +92,10 @@ public class GameBoard {
     public char getShipOrientation(int shipNum){
         return this.Ships[shipNum].getOrientation();
     }
+
+    public void fillCell(int x, int y, int shipNum){
+        this.gameBoard[x][y].fill();
+    }
+
 }
 
