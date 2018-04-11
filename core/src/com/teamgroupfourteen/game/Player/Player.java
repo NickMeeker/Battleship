@@ -2,7 +2,18 @@ package com.teamgroupfourteen.game.Player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.GameBoard;
+
+import org.json.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Created by Jeremy on 3/31/2018.
@@ -10,29 +21,57 @@ import com.teamgroupfourteen.game.GameBoard;
 
 //A player with all relevant information
 public class Player {
-
-    //playerName is based on username
+    private GameBoard board;
 
     private String playerName;
-    private GameBoard board;
-    private String exp;
-    private String coins;
-    private String numPowerup1;
-    private String numPowerup2;
-    private String numPowerup3;
+    private String userID;
+    private String token;
+    private int exp;
+    private int numCoins;
+    private int numPowerUp1;
+    private int numPowerUp2;
+    private int numPowerUp3;
+
+    private HttpResponse<JsonNode> resp;
+
 
     public Player (String name){
-
-        //if name is null, no online account is active
+        // if name is null, no online account is active
         if(name == null) {
             playerName = "Player1";
-            exp = "--";
-            coins = "--";
-            numPowerup1 = "--";
-            numPowerup2 = "--";
-            numPowerup3 = "--";
+            exp = 0;
+            numCoins = 0;
+            numPowerUp1 = 0;
+            numPowerUp2 = 0;
+            numPowerUp3 = 0;
         }
         else {
+            getAuthDataFromFile();
+            if(userID.equals("ERROR")){
+                // TODO: implement error
+                System.out.println("Something went wrong");
+            }
+
+            try {
+                resp = Unirest.get(Battleship.APIPREFIX + "users/{id}")
+                        .header("Authorization", token)
+                        .routeParam("id", userID)
+                        .asJson();
+
+                JSONObject respAsJSON = (JSONObject)resp.getBody().getArray().get(0);
+
+                exp = respAsJSON.getInt("exp");
+                numCoins = respAsJSON.getInt("coins");
+                numPowerUp1 = respAsJSON.getInt("powerUp1");
+                numPowerUp2 = respAsJSON.getInt("powerUp2");
+                numPowerUp3 = respAsJSON.getInt("powerUp3");
+
+                System.out.println(exp + " " + numCoins + " " + numPowerUp1 + " " + numPowerUp2 + " " + numPowerUp3);
+
+            } catch(UnirestException e){
+                // TODO: implement error
+
+            }
             playerName = name;
             // TODO: Query Database For Player Information
         }
@@ -99,5 +138,23 @@ public class Player {
 
     public boolean allShipsDestroyed(){
         return this.board.allShipsDestroyed();
+    }
+
+
+    private void getAuthDataFromFile(){
+        File ifp = new File("authdata.txt");
+        try{
+            // TODO: Implement error handling here
+            if(!ifp.exists())
+                return;
+            Scanner scan = new Scanner(ifp);
+            scan.nextLine();
+            this.playerName = scan.nextLine();
+            this.userID = scan.nextLine();
+            this.token = scan.nextLine();
+            return;
+        }catch(IOException e) {
+            return;
+        }
     }
 }
