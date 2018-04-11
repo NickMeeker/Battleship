@@ -8,13 +8,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.teamgroupfourteen.game.Authentication.LoginRequest;
 import com.teamgroupfourteen.game.Authentication.RegistrationRequest;
 import com.teamgroupfourteen.game.Battleship;
-import com.teamgroupfourteen.game.GameButton;
-import com.teamgroupfourteen.game.Player.Player;
-
-import java.io.File;
+import com.teamgroupfourteen.game.Board.GameButton;
 
 /**
  * Created by nick on 4/9/18.

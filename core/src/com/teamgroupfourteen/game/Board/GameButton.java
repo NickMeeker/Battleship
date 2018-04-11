@@ -1,4 +1,4 @@
-package com.teamgroupfourteen.game;
+package com.teamgroupfourteen.game.Board;
 
 import com.badlogic.gdx.graphics.Texture;
 

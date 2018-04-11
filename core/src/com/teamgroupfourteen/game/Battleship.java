@@ -27,7 +27,7 @@ public class Battleship extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Player player1= new Player(null);
 		Player player2 = new Player(null);
-		gsm.push(new PlayState(gsm, player1, player2));
+		gsm.push(new LoginState(gsm));
 	}
 
 	@Override

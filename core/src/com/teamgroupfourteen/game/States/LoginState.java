@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.teamgroupfourteen.game.Authentication.LoginRequest;
 import com.teamgroupfourteen.game.Battleship;
-import com.teamgroupfourteen.game.GameButton;
+import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
 
 
@@ -79,7 +79,8 @@ public class LoginState extends State {
                 if(attempt){
                     resp.writeCredentials();
                     Player player = new Player(usernameField.getText());
-                    //gsm.set(new PlayStateSetup(gsm, player));
+                    Player player2 = new Player(usernameField.getText());
+                    gsm.set(new PlayState(gsm, player, player2));
                 }
 
             }

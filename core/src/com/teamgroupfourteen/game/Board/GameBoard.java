@@ -1,8 +1,9 @@
-package com.teamgroupfourteen.game;
+package com.teamgroupfourteen.game.Board;
 
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.teamgroupfourteen.game.Ship;
 
 /**
  * Created by Jeremy on 3/31/2018.

@@ -1,12 +1,10 @@
 package com.teamgroupfourteen.game.States;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.teamgroupfourteen.game.GameButton;
+import com.teamgroupfourteen.game.Board.GameButton;
 
 /**
  * Created by nick on 2/28/18.

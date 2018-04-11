@@ -7,7 +7,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.teamgroupfourteen.game.Battleship;
-import com.teamgroupfourteen.game.GameBoard;
+import com.teamgroupfourteen.game.Board.GameBoard;
 
 import org.json.*;
 
