@@ -84,4 +84,20 @@ public class Player {
     public void fillCell(int x, int y, int shipNum){
         this.board.fillCell(x, y, shipNum);
     }
+
+    public boolean cellContainsShip(int x, int y){
+        return this.board.cellContainsShip(x, y);
+    }
+
+    public void hitCell(int x, int y){
+        this.board.hitCell(x, y);
+    }
+
+    public boolean cellIsHit(int x, int y){
+        return this.board.isCellHit(x, y);
+    }
+
+    public boolean allShipsDestroyed(){
+        return this.board.allShipsDestroyed();
+    }
 }

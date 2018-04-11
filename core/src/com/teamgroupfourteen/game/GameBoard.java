@@ -97,5 +97,32 @@ public class GameBoard {
         this.gameBoard[x][y].fill();
     }
 
+    public boolean cellContainsShip(int x, int y){
+        return this.gameBoard[x][y].containsShip();
+    }
+
+    public void hitCell(int x, int y){
+        this.gameBoard[x][y].hit();
+    }
+
+    public boolean isCellHit(int x, int y){
+        return this.gameBoard[x][y].isHit();
+    }
+
+    public boolean allShipsDestroyed(){
+
+        int counter = 0;
+
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(this.gameBoard[i][j].isHit() && this.gameBoard[i][j].containsShip()){
+                    counter++;
+                    if(counter == 17)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 

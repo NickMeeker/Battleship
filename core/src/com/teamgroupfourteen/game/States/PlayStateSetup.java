@@ -45,18 +45,18 @@ public class PlayStateSetup extends State {
     //data variables
     int currentShipNumber;
 
-    public PlayStateSetup(GameStateManager gsm, Player player){
+    public PlayStateSetup(GameStateManager gsm, Player player, PlayState playState){
         super(gsm);
         this.player = player;
         currentShipNumber = 0;
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
 
         // set the background as a texture region. 178x232 is the resolution of the image
-        background = new Texture("backgroundOcean.png");
+        background = new Texture("backgroundFinal.png");
         gameGrid = new Texture("GameGrid.png");
         coordinateBackground = new Texture("blackSquare.png");
 
-        mainBackground = new TextureRegion(background, 0, 0, 178, 232 );
+        mainBackground = new TextureRegion(background, 0, 0, 480, 800 );
         mainGrid = new TextureRegion(gameGrid, 0, 0, 440, 440);
         coordinateBackgrounRegion = new TextureRegion(coordinateBackground, 0, 0, 1536, 1478);
 
@@ -214,8 +214,6 @@ public class PlayStateSetup extends State {
                             player.fillCell((((int)player.getShipPosition(i).x + (40 * j)) - 60) / 40, ((int)player.getShipPosition(i).y - 340) / 40, i);
                     }
                 }
-
-                //dispose();
                 gsm.pop();
             }
         }

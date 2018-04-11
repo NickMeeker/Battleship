@@ -23,4 +23,16 @@ public class BoardCell {
     public void fill(){
         this.containsShip = true;
     }
+
+    public boolean containsShip(){
+        return containsShip;
+    }
+
+    public void hit(){
+        this.hit = true;
+    }
+
+    public boolean isHit(){
+        return hit;
+    }
 }

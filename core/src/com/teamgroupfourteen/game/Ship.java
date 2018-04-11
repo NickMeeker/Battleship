@@ -123,8 +123,8 @@ public class Ship {
             this.currentPicture = this.pictures[2];
         }
         else if(this.orientation == 'l') {
-            this.orientation = 'u';
-            this.currentPicture = this.pictures[1];
+            this.orientation = 'd';
+            this.currentPicture = this.pictures[0];
         }
         else if(this.orientation == 'u') {
             this.orientation = 'r';
