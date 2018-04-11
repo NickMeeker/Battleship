@@ -272,7 +272,7 @@ public class PlayState extends State {
 
                 for(int i = 0; i < 10; i++){
                     for(int j = 0; j < 10; j++){
-                        if(players[(currentPlayerNum)].cellIsHit(i, j) && players[(currentPlayerNum + 1) % 2].cellContainsShip(i, j)){
+                        if(players[(currentPlayerNum)].cellIsHit(i, j) && players[currentPlayerNum].cellContainsShip(i, j)){
                             shipHitVector.set((i*40) + 70, (j*40) + 350, 0);
                             sb.draw(shipHitRegion, shipHitVector.x, shipHitVector.y, 20, 20);
                         }
