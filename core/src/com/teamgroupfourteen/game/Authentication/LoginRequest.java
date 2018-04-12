@@ -27,6 +27,7 @@ public class LoginRequest {
     public LoginRequest(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
+
     }
 
     public boolean newLoginAttempt() {
@@ -64,7 +65,8 @@ public class LoginRequest {
 
     // used to check if the user is already logged in on the device
     public boolean attemptInitAuth(){
-        return cm.attemptInitAuth();
+        cm = new CredentialsManager();
+        return cm.getLoggedIn();
     }
 
 
