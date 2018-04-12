@@ -13,6 +13,9 @@ import org.json.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -45,6 +48,9 @@ public class Player {
     private int prevHitX;
     private int prevHitY;
     private char predict;
+    private boolean yourTurn;
+    Queue<Integer> possibleX;
+    Queue<Integer> possibleY;
 
     private HttpResponse<JsonNode> resp;
 
@@ -61,6 +67,8 @@ public class Player {
             isComputer = true;
             hit = false;
             predict = 'u';
+            possibleX = new LinkedList<Integer>();
+            possibleY = new LinkedList<Integer>();
         }
         else if(name == null) {
             playerName = "Player1";
@@ -130,11 +138,11 @@ public class Player {
             collision = true;
 
             //check for valid placement
-            while(collision){System.out.println("check1");
+            while(collision){
                 collision = false;
                 for(int j = 0; j < this.getShipSize(i); j++){
                     if(shipSideWays == 0){
-                        while (setY > 10 - this.getShipSize(i)){System.out.println("check2 setY = " + setY + " i = " + i + " j = "+ j);
+                        while (setY > 10 - this.getShipSize(i)){
                             setY = rand.nextInt(10);
                         }
                         if(this.cellContainsShip(setX, setY + j)){
@@ -142,19 +150,17 @@ public class Player {
                             setX = rand.nextInt(10);
                             setY = rand.nextInt(10);
                             j = -1;
-                            System.out.println("check3 setY = " + setY + " i = " + i + " j = "+ j);
                         }
                     }
                     else{
                         while (setX > 10 - this.getShipSize(i)){
-                            setX = rand.nextInt(10);System.out.println("check4 setX = " + setX + " i = " + i + " j = "+ j);
+                            setX = rand.nextInt(10);
                         }
                         if(this.cellContainsShip(setX + j, setY)){
                             collision = true;
                             setX = rand.nextInt(10);
                             setY = rand.nextInt(10);
                             j = -1;
-                            System.out.println("check5 setX = " + setX + " i = " + i + " j = "+ j);
                         }
                     }
                 }
@@ -173,29 +179,47 @@ public class Player {
     }
 
     public void makeMove(Player otherPlayer){
+
+        yourTurn = true;
+
         Random rand = new Random();
 
-        if(hit){
-            if(predict == 'u'){
-                if(prevHitY != 9 && !otherPlayer.cellIsHit(prevHitX, prevHitY)){
+        if(!possibleX.isEmpty() && !possibleY.isEmpty()){
+            setX = possibleX.remove();
+            setY = possibleY.remove();
 
+            while((setX > 9 || setX < 0 || setY > 9 || setY < 0 || otherPlayer.cellIsHit(setX, setY)) && (!possibleX.isEmpty() && !possibleY.isEmpty())){
+                setX = possibleX.remove();
+                setY = possibleY.remove();
+            }
+
+            if(!((setX > 9 || setX < 0 || setY > 9 || setY < 0 || otherPlayer.cellIsHit(setX, setY)) && (possibleX.isEmpty() && possibleY.isEmpty()))){
+                otherPlayer.hitCell(setX, setY);
+
+                if(otherPlayer.cellContainsShip(setX, setY)){
+                    //up
+                    possibleX.add(setX);
+                    possibleY.add(setY + 1);
+                    //right
+                    possibleX.add(setX + 1);
+                    possibleY.add(setY);
+                    //down
+                    possibleX.add(setX);
+                    possibleY.add(setY - 1);
+                    //left
+                    possibleX.add(setX - 1);
+                    possibleY.add(setY);
                 }
-            }
-            else if(predict == 'r'){
 
+                yourTurn = false;
             }
-            else if(predict == 'd'){
 
-            }
-            else if(predict == 'l'){
-
-            }
         }
-        else {
+        else if(yourTurn){
             setX = rand.nextInt(10);
             setY = rand.nextInt(10);
 
-            if (otherPlayer.cellIsHit(setX, setY)) {
+            while (otherPlayer.cellIsHit(setX, setY)) {
                 setX = rand.nextInt(10);
                 setY = rand.nextInt(10);
             }
@@ -203,10 +227,19 @@ public class Player {
             otherPlayer.hitCell(setX, setY);
 
             if(otherPlayer.cellContainsShip(setX, setY)){
-                this.hit = true;
-                this.prevHitX = setX;
-                this.prevHitY = setY;
-                this.predict = 'u';
+                //up
+                possibleX.add(setX);
+                possibleY.add(setY + 1);
+                //right
+                possibleX.add(setX + 1);
+                possibleY.add(setY);
+                //down
+                possibleX.add(setX);
+                possibleY.add(setY - 1);
+                //left
+                possibleX.add(setX - 1);
+                possibleY.add(setY);
+
             }
         }
     }
