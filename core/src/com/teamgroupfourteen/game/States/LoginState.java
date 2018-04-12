@@ -80,7 +80,7 @@ public class LoginState extends State {
                     resp.writeCredentials();
                     Player player = new Player(usernameField.getText());
                     Player player2 = new Player(usernameField.getText());
-                    gsm.set(new PlayState(gsm, player, player2));
+                    gsm.set(new MainMenuState(gsm));
                 }
 
             }
@@ -94,7 +94,7 @@ public class LoginState extends State {
         if(loggedIn){
             System.out.println("The user is already logged in.");
             Player player = new Player(resp.getUsername());
-            //gsm.set(new PlayStateSetup(gsm, player));
+            gsm.set(new MainMenuState(gsm));
         }
         handleInput();
 

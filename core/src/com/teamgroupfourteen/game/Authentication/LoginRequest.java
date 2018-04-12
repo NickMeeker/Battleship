@@ -22,6 +22,8 @@ public class LoginRequest {
 
     private File ifp;
 
+    private CredentialsManager cm;
+
     public LoginRequest(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
@@ -43,52 +45,26 @@ public class LoginRequest {
         if (resp.getStatus() == 201) {
             System.out.println("Login Successful");
             this.setResp(resp);
+            cm = new CredentialsManager(username, resp);
             return true;
 
-        } else {
+        } else if(resp.getStatus() == 404){
+            // TODO: Invalid username/password error message
+            System.out.println("Invalid Username/password");
+            return false;
+        }else {
             System.out.println("Login Failed");
             return false;
         }
     }
 
     public void writeCredentials(){
-        // stores credentials upon successful login:
-        // (boolean) logged in on device
-        // (string) username
-        // (string) user id
-        // (string) bearer token
-        setIfp(new File("authdata.txt"));
-        try {
-            if (getIfp().exists())
-                getIfp().delete();
-            getIfp().createNewFile();
-            FileWriter writer = new FileWriter(ifp);
-            writer.write("true");
-            writer.write("\n");
-            writer.write(username);
-            writer.write("\n");
-            writer.write(getResp().getBody().getObject().getString("id"));
-            writer.write("\n");
-            writer.write(getResp().getBody().getObject().getString("token"));
-            writer.flush();
-            writer.close();
-        }catch(IOException e){
-
-        }
+        cm.writeCredentials();
     }
 
     // used to check if the user is already logged in on the device
     public boolean attemptInitAuth(){
-        setIfp(new File("authdata.txt"));
-        try{
-            if(!getIfp().exists())
-                return false;
-            Scanner scan = new Scanner(ifp);
-            boolean loggedIn = scan.nextBoolean();
-            return loggedIn;
-        }catch(IOException e) {
-            return false;
-        }
+        return cm.attemptInitAuth();
     }
 
 

@@ -27,8 +27,8 @@ public class Battleship extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Player player1= new Player(null);
 		Player player2 = new Player(null);
-		gsm.push(new MainMenuState(gsm));
-		//gsm.push(new LoginState(gsm));
+		//gsm.push(new MainMenuState(gsm));
+		gsm.push(new LoginState(gsm));
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class Battleship extends ApplicationAdapter {
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render(batch);
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();

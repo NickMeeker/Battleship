@@ -6,6 +6,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.teamgroupfourteen.game.Authentication.APIParser;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameBoard;
 
@@ -92,7 +93,7 @@ public class Player {
                         .routeParam("id", userID)
                         .asJson();
 
-                JSONObject respAsJSON = (JSONObject)resp.getBody().getArray().get(0);
+                JSONObject respAsJSON = APIParser.getJsonObject(resp);
 
                 exp = respAsJSON.getInt("exp");
                 numCoins = respAsJSON.getInt("coins");
@@ -108,7 +109,6 @@ public class Player {
 
             }
             playerName = name;
-            // TODO: Query Database For Player Information
         }
 
         board = new GameBoard();
