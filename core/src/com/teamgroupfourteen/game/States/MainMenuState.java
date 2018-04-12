@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.Multiplayer.GameLoader;
 import com.teamgroupfourteen.game.Multiplayer.HostGame;
 import com.teamgroupfourteen.game.Player.Player;
 
@@ -25,7 +26,7 @@ public class MainMenuState extends State {
     private GameButton friendsBtn;
     private GameButton creditsBtn;
 
-    
+
 
     public MainMenuState(GameStateManager gsm){
         super(gsm);
@@ -51,9 +52,8 @@ public class MainMenuState extends State {
                 gsm.push(new PlayState(gsm, player1, player2, true, false));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
                 System.out.println("Transition to multiplayer");
-                HostGame multiPlayerGame = new HostGame("nickmeeker");
-
-                //gsm.push(new MultiplayerState(gsm));
+                GameLoader gl = new GameLoader("5acfe31361542d1fb90f35d9");
+                // gsm.push(new MultiplayerState(gsm));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
             } else if(isTouched(touchPosition, creditsBtn)){
