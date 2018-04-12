@@ -1,0 +1,41 @@
+Two Strings:
+ - Setup
+    - Comma separated entries as in:
+    - "0A9fd,0B2cr,0C6mr,0D0bd,0E7br,1A9fd......."
+    - Should only contain 10 values, 5 for each player's ships
+    - parse like a csv into an arraylist of strings
+    - Form for an example string str = "0A9fd":
+        - str.charAt(0) -> player indicator, 0 = host player, 1 = guest player
+        - str.charAt(1) -> row indicator
+        - str.charAt(2) -> column indicator, remember it is 0-indexed so 0 = column 1
+        - str.charAt(3) -> ship indicator
+            - f = frigate
+            - b = battleship
+            - c = carrier
+            - s = sub
+            - m = minesweeper
+        - str.charAt(4) -> orientation, r = right, d = down
+    - so 0A9fd represents host player's frigate starting at square A10 oriented down
+    - remember A9 is really A10 because this is 0-indexed
+ 
+ - Moves
+    - Comma separated entries as in :
+    - "n0A9h,10A9o,s0A9,e1fA6d,m0C9hC8o..."
+    - Second character in each entry represents the player, notice that it alternates
+      between 0 and 1 as players take turns
+    - First character represents the type of move:
+        - n -> normal shot. last character represents hit (h) or miss (o). so
+          n0A9h can be read as normal move by host player firing a shot at A9 (A10) 
+          which hits
+        - s -> place shield. s0A9 = shield placed by host player at square A9 (A10)
+        - e -> evade. third character represents ship type, same as in setup.
+               last three characters represent row, column and orientation
+               e1fA6d -> evade by guest player moving frigate to A6 oriented down
+        - m -> multishot. two coordinates and a hit indicator representing each shot
+               m0C9hC8o -> multishot by host player. first shot at C9 hits, second shot
+               at C8 misses
+    - return an array list of moves and implement relevant parser methods.
+
+
+
+
