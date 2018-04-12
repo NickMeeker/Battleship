@@ -13,6 +13,7 @@ import org.json.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -32,18 +33,43 @@ public class Player {
     private int numPowerUp2;
     private int numPowerUp3;
 
+    private boolean isComputer;
+
+    //computer setup
+    private int currentShipNum;
+    private int shipSideWays;
+    private int setX;
+    private int setY;
+    private boolean collision;
+    private boolean hit;
+    private int prevHitX;
+    private int prevHitY;
+    private char predict;
+
     private HttpResponse<JsonNode> resp;
 
 
     public Player (String name){
         // if name is null, no online account is active
-        if(name == null) {
+        if(name == "computer"){
+            playerName = name;
+            exp = 0;
+            numCoins = 0;
+            numPowerUp1 = 0;
+            numPowerUp2 = 0;
+            numPowerUp3 = 0;
+            isComputer = true;
+            hit = false;
+            predict = 'u';
+        }
+        else if(name == null) {
             playerName = "Player1";
             exp = 0;
             numCoins = 0;
             numPowerUp1 = 0;
             numPowerUp2 = 0;
             numPowerUp3 = 0;
+            isComputer = false;
         }
         else {
             getAuthDataFromFile();
@@ -65,6 +91,7 @@ public class Player {
                 numPowerUp1 = respAsJSON.getInt("powerUp1");
                 numPowerUp2 = respAsJSON.getInt("powerUp2");
                 numPowerUp3 = respAsJSON.getInt("powerUp3");
+                isComputer = false;
 
                 System.out.println(exp + " " + numCoins + " " + numPowerUp1 + " " + numPowerUp2 + " " + numPowerUp3);
 
@@ -88,6 +115,100 @@ public class Player {
         this.board.makeShip(4);
         this.board.makeShip(5);
 
+    }
+
+    public void makeBoard(){
+        currentShipNum = 0;
+        Random rand = new Random();
+
+        this.createShips();
+
+        for(int i = 0; i < 5; i++){
+            shipSideWays = rand.nextInt(2);
+            setX = rand.nextInt(10);
+            setY = rand.nextInt(10);
+            collision = true;
+
+            //check for valid placement
+            while(collision){System.out.println("check1");
+                collision = false;
+                for(int j = 0; j < this.getShipSize(i); j++){
+                    if(shipSideWays == 0){
+                        while (setY > 10 - this.getShipSize(i)){System.out.println("check2 setY = " + setY + " i = " + i + " j = "+ j);
+                            setY = rand.nextInt(10);
+                        }
+                        if(this.cellContainsShip(setX, setY + j)){
+                            collision = true;
+                            setX = rand.nextInt(10);
+                            setY = rand.nextInt(10);
+                            j = -1;
+                            System.out.println("check3 setY = " + setY + " i = " + i + " j = "+ j);
+                        }
+                    }
+                    else{
+                        while (setX > 10 - this.getShipSize(i)){
+                            setX = rand.nextInt(10);System.out.println("check4 setX = " + setX + " i = " + i + " j = "+ j);
+                        }
+                        if(this.cellContainsShip(setX + j, setY)){
+                            collision = true;
+                            setX = rand.nextInt(10);
+                            setY = rand.nextInt(10);
+                            j = -1;
+                            System.out.println("check5 setX = " + setX + " i = " + i + " j = "+ j);
+                        }
+                    }
+                }
+            }
+
+            //place ship
+            for(int j = 0; j < this.getShipSize(i); j++){
+                if(shipSideWays == 0){System.out.println();
+                    this.fillCell(setX, setY + j, i);
+                }
+                else{
+                    this.fillCell(setX + j, setY, i);
+                }
+            }
+        }
+    }
+
+    public void makeMove(Player otherPlayer){
+        Random rand = new Random();
+
+        if(hit){
+            if(predict == 'u'){
+                if(prevHitY != 9 && !otherPlayer.cellIsHit(prevHitX, prevHitY)){
+
+                }
+            }
+            else if(predict == 'r'){
+
+            }
+            else if(predict == 'd'){
+
+            }
+            else if(predict == 'l'){
+
+            }
+        }
+        else {
+            setX = rand.nextInt(10);
+            setY = rand.nextInt(10);
+
+            if (otherPlayer.cellIsHit(setX, setY)) {
+                setX = rand.nextInt(10);
+                setY = rand.nextInt(10);
+            }
+
+            otherPlayer.hitCell(setX, setY);
+
+            if(otherPlayer.cellContainsShip(setX, setY)){
+                this.hit = true;
+                this.prevHitX = setX;
+                this.prevHitY = setY;
+                this.predict = 'u';
+            }
+        }
     }
 
     public Texture getShipTexture(int shipNum){
