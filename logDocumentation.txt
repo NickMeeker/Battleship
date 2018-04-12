@@ -20,7 +20,7 @@ Two Strings:
  
  - Moves
     - Comma separated entries as in :
-    - "n0A9h,10A9o,s0A9,e1fA6d,m0C9hC8o..."
+    - "n0A9h,n1A9o,s0A9,e1fA6d,m0C9hC8o..."
     - Second character in each entry represents the player, notice that it alternates
       between 0 and 1 as players take turns
     - First character represents the type of move:
