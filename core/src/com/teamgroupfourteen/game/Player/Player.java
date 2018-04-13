@@ -270,6 +270,8 @@ public class Player {
         return this.board.getShipName(shipNum);
     }
 
+
+
     public char getShipOrientation(int shipNum){
         return this.board.getShipOrientation(shipNum);
     }
