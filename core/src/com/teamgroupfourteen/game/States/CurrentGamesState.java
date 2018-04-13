@@ -1,5 +1,5 @@
 package com.teamgroupfourteen.game.States;
-/*
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,12 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.teamgroupfourteen.game.Authentication.APIParser;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.Player.Player;
 import com.teamgroupfourteen.game.User.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.Font;
+import java.util.ArrayList;
 
 public class CurrentGamesState extends State {
 
@@ -39,6 +41,9 @@ public class CurrentGamesState extends State {
     private BitmapFont font;
     private Stage stage;
     private Table table;
+    private boolean launchGame;
+    private String launchGameID;
+    private ArrayList<Stack> rowsList;
     private int i;
 
 
@@ -71,15 +76,16 @@ public class CurrentGamesState extends State {
         container.setBounds(0, 15, Battleship.WIDTH, 1000);
         stage.addActor(container);
 
-        JSONArray gamesArray = user.getUserHostGames();
+        final JSONArray gamesArray = user.getUserHostGames();
         System.out.println(gamesArray.getJSONObject(0));
 
-        this is where the games will actually go
+        rowsList = new ArrayList<Stack>();
+        //this is where the games will actually go
         for(i = 0; i < gamesArray.length(); i++){
             TextButton tmp = new TextButton("", skin);
             Image matchBar = new Image(barBlue);
             tmp.setText(i + "");
-            Stack stack = new Stack();
+            final Stack stack = new Stack();
             stack.add(matchBar);
             // TODO PLEASE SOMEONE MAKE THIS BETTER
             stack.add(new Label("   Host: ", skin));
@@ -87,18 +93,20 @@ public class CurrentGamesState extends State {
             stack.add(new Label("                                                           Guest: ", skin));
             stack.add(new Label("                                                                        " + gamesArray.getJSONObject(i).getString("guestPlayer"), skin));
 
+
             stack.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-                    System.out.println("game selected");
+                    launchGame = true;
+                    launchGameID = gamesArray.getJSONObject(rowsList.indexOf(stack)).getString("_id");
+
                 }
             });
-//            table.add(matchBar).width(454).height(40).padTop(10).padBottom(5);
-//            table.add("Host:").;
-            table.add(stack).width(454).height(40).padTop(10).padBottom(5);
 
+            table.add(stack).width(454).height(40).padTop(10).padBottom(5);
             table.row();
+            rowsList.add(stack);
 
         }
         table.add();
@@ -120,6 +128,12 @@ public class CurrentGamesState extends State {
     @Override
     public void update(float dt) {
         handleInput();
+
+        if(launchGame){
+            // this will launch a an ongoing game
+        }
+
+
     }
 
     @Override
@@ -146,4 +160,3 @@ public class CurrentGamesState extends State {
         cancelGameBtn.disposeAssets();
     }
 }
-*/

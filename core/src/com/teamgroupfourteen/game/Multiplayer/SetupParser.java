@@ -10,6 +10,8 @@ import java.util.Arrays;
 public class SetupParser {
     private String setupLog;
     private ArrayList<String> logEntries;
+    private ArrayList<String> playerOneLog;
+    private ArrayList<String> playerTwoLog;
 
     public SetupParser(String setupLog){
         this.setupLog = setupLog;
@@ -18,6 +20,15 @@ public class SetupParser {
     public void buildLogEntries(){
         String[] strArr = setupLog.split(",");
         logEntries = new ArrayList<String>(Arrays.asList(strArr));
+        playerOneLog = new ArrayList<String>();
+        playerTwoLog = new ArrayList<String>();
+        for(int i = 0; i < 10; i++){
+            if(logEntries.get(i).charAt(0) == '0'){
+                playerOneLog.add(logEntries.get(i));
+            }else{
+                playerTwoLog.add(logEntries.get(i));
+            }
+        }
     }
 
     public void parseLogEntry(String logEntry){

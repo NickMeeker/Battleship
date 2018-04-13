@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.Multiplayer.MultiplayerGameManager;
 import com.teamgroupfourteen.game.Player.Player;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ public class PlayState extends State {
 
     //array of 2 players
     private Player[] players= new Player[2];
+
+    private MultiplayerGameManager mgm;
 
     //textures
     private Texture gameGrid;
@@ -178,6 +181,7 @@ public class PlayState extends State {
     //single player and online constructor
     public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, ArrayList setup, ArrayList moveList){
         super(gsm);
+        mgm = new MultiplayerGameManager("5ad130d23e4a8830ef268c77");
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
 
         //set the game type flags
@@ -281,14 +285,15 @@ public class PlayState extends State {
                 gsm.push(new PlayStateSetup(gsm, players[0], this));
                 for(int i = 0; i < 5; i++){
                     sb.append(0);
-                    sb.append((char)(((players[0].getShipPosition(i).y - 340) / 40) + 65));
-                    sb.append(((players[0].getShipPosition(i).x - 60) / 40));
+                    sb.append((char)(9-((players[0].getShipPosition(i).y - 340) / 40) + 65));
+                    sb.append((int)((players[0].getShipPosition(i).x - 60) / 40));
                     sb.append(players[0].getShipName(i));
                     sb.append(players[0].getShipOrientation(i));
                     sb.append(',');
                 }
 
                 //TODO: Send sb to database
+                mgm.updateSetupLog(sb.toString());
             }
             //advance to next step of setup
             setupCount++;
