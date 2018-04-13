@@ -11,10 +11,10 @@ import com.teamgroupfourteen.game.States.*;
 
 public class Battleship extends ApplicationAdapter {
 	// KEEP RELEVANT CONSTANTS HERE
-    public static final int WIDTH = 480;
-    public static final int HEIGHT = 800;
-    public static final String TITLE = "BATTLESHIP";
-    public static final String APIPREFIX = "http://localhost:3000/api/";
+	public static final int WIDTH = 480;
+	public static final int HEIGHT = 800;
+	public static final String TITLE = "BATTLESHIP";
+	public static final String APIPREFIX = "http://localhost:3000/api/";
 
 	private SpriteBatch batch;
 	private GameStateManager gsm;

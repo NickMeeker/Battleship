@@ -18,6 +18,7 @@ public class GameLoader  {
     private String gameID;
     private String hostPlayer;
     private String guestPlayer;
+    private String turnPlayer;
     String setupLog;
     String gameLog;
     private JSONObject gameData;
@@ -34,6 +35,8 @@ public class GameLoader  {
         hostPlayer = gameData.getString("hostPlayer");
         guestPlayer = gameData.getString("guestPlayer");
         setupLog = gameData.getString("setupLog");
+        gameLog = gameData.getString("gameLog");
+        turnPlayer = gameData.getString("turnPlayer");
     }
 
     public void buildGame(){
@@ -47,6 +50,14 @@ public class GameLoader  {
         for(int i = 0; i < l; i++){
             sp.parseLogEntry(sp.getLogEntries().get(i));
         }
+
+        GameLogParser glp = new GameLogParser(gameLog);
+        glp.buildLogEntries();
+        l = glp.getLogEntries().size();
+        for(int i = 0; i <l; i++){
+            glp.parseLogEntries(glp.getLogEntries().get(i));
+        }
+
     }
 
     private JSONObject getGameById(){

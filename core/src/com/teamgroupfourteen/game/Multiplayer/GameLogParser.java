@@ -9,6 +9,11 @@ import java.util.Arrays;
 
 public class GameLogParser {
     private String gameLog;
+
+    public ArrayList<String> getLogEntries() {
+        return logEntries;
+    }
+
     private ArrayList<String> logEntries;
 
     public GameLogParser(String gameLog){
