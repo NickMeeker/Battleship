@@ -1,5 +1,5 @@
 package com.teamgroupfourteen.game.States;
-
+/*
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -74,7 +74,7 @@ public class CurrentGamesState extends State {
         JSONArray gamesArray = user.getUserHostGames();
         System.out.println(gamesArray.getJSONObject(0));
 
-        //this is where the games will actually go
+        this is where the games will actually go
         for(i = 0; i < gamesArray.length(); i++){
             TextButton tmp = new TextButton("", skin);
             Image matchBar = new Image(barBlue);
@@ -146,3 +146,4 @@ public class CurrentGamesState extends State {
         cancelGameBtn.disposeAssets();
     }
 }
+*/

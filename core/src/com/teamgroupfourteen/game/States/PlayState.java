@@ -10,7 +10,6 @@ import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by nick on 2/28/18.
@@ -329,19 +328,19 @@ public class PlayState extends State {
             Vector3 touchPosition = super.getInputRegion();
 
             //move crosshair
-            if (isTouched(touchPosition, upBtn) && !crosshairMoving && crosshairVector.y < 700 && !seeYourBoard) {
+            if (isTouched(touchPosition, upBtn) && !crosshairMoving && crosshairVector.y < 700 && !seeYourBoard && !dropBombs) {
                 pressUp = true;
                 crosshairMoving = true;
             }
-            else if (isTouched(touchPosition, downBtn) && !crosshairMoving && crosshairVector.y > 340 && !seeYourBoard) {
+            else if (isTouched(touchPosition, downBtn) && !crosshairMoving && crosshairVector.y > 340 && !seeYourBoard && !dropBombs) {
                 pressDown = true;
                 crosshairMoving = true;
             }
-            else if (isTouched(touchPosition, leftBtn) && !crosshairMoving && crosshairVector.x > 60 && !seeYourBoard) {
+            else if (isTouched(touchPosition, leftBtn) && !crosshairMoving && crosshairVector.x > 60 && !seeYourBoard && !dropBombs) {
                 pressLeft = true;
                 crosshairMoving = true;
             }
-            else if (isTouched(touchPosition, rightBtn) && !crosshairMoving && crosshairVector.x < 420 && !seeYourBoard) {
+            else if (isTouched(touchPosition, rightBtn) && !crosshairMoving && crosshairVector.x < 420 && !seeYourBoard && !dropBombs) {
                 pressRight = true;
                 crosshairMoving = true;
             }

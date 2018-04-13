@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.teamgroupfourteen.game.Player.Player;
 import com.teamgroupfourteen.game.States.*;
+import com.teamgroupfourteen.game.User.User;
 
 public class Battleship extends ApplicationAdapter {
 	// KEEP RELEVANT CONSTANTS HERE
@@ -19,17 +20,19 @@ public class Battleship extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private GameStateManager gsm;
 
+	public boolean soundOn;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
-
+User user = new User();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Player player1= new Player(null);
 		Player player2 = new Player(null);
-		//gsm.push(new MainMenuState(gsm));
+		gsm.push(new MainMenuState(gsm, user));
 		//gsm.push(new CurrentGamesState(gsm));
-		gsm.push(new LoginState(gsm));
+		//gsm.push(new LoginState(gsm));
 		//gsm.push(new RegistrationState(gsm));
 	}
 

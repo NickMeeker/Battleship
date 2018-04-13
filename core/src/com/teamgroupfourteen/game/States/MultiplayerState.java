@@ -34,7 +34,7 @@ public class MultiplayerState extends State {
             if (Gdx.input.justTouched()) {
                 Vector3 touchPosition = super.getInputRegion();
                 if (isTouched(touchPosition, currentGameBtn)) {
-                    gsm.push(new CurrentGamesState(gsm, user));
+                    //gsm.push(new CurrentGamesState(gsm, user));
                 } else if (isTouched(touchPosition, createGameBtn)) {
                     System.out.println("Transition to create game");
                 }else if (isTouched(touchPosition, joinGameBtn)) {
