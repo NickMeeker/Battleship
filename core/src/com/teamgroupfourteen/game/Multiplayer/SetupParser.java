@@ -21,10 +21,13 @@ public class SetupParser {
     }
 
     public void parseLogEntry(String logEntry){
+        int playerNum;
         if(logEntry.charAt(0) == '0'){
             // THIS IS HOST PLAYER
+            playerNum = 0;
         } else if(logEntry.charAt(1) == '1'){
             // THIS IS GUEST PLAYER
+            playerNum = 1;
         }
 
         // Row will be uppercase A-J
