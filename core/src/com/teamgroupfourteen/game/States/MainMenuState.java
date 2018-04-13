@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
-import com.teamgroupfourteen.game.Multiplayer.GameLoader;
-import com.teamgroupfourteen.game.Multiplayer.HostGame;
 import com.teamgroupfourteen.game.Player.Player;
 
 
@@ -27,17 +25,15 @@ public class MainMenuState extends State {
     private GameButton creditsBtn;
 
 
-
     public MainMenuState(GameStateManager gsm){
         super(gsm);
-        cam.setToOrtho(false, Battleship.WIDTH/2, Battleship.HEIGHT/2);
-        // set the background as a texture region. 178x232 is the resolution of the image
-        background = new Texture("backgroundOcean.png");
-        mainBackground = new TextureRegion(background, 0, 0, 178, 232 );
-        singlePlayerBtn = new GameButton(cam.position.x - 169 / 2, cam.position.y + 50, 169, 42, "button_single-player.png");
-        multiPlayerBtn = new GameButton(cam.position.x - 158 / 2, cam.position.y, 158, 42, "button_multiplayer.png");
-        creditsBtn = new GameButton(cam.position.x - 114 / 2, cam.position.y - 50, 114, 42, "button_credits.png");
-        spectatorBtn = new GameButton(cam.position.x - 138 / 2, cam.position.y - 100, 138, 42, "button_spectator.png");
+        cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
+        background = new Texture("testPic.jpg");
+        mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
+        singlePlayerBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SinglePlayerButton.png");
+        multiPlayerBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "MultiPlayerButton.png");
+        creditsBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "CreditsButton.png");
+        spectatorBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "SpectatorButton.png");
 
     }
 
@@ -52,8 +48,7 @@ public class MainMenuState extends State {
                 gsm.push(new PlayState(gsm, player1, player2, true, false));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
                 System.out.println("Transition to multiplayer");
-                GameLoader gl = new GameLoader("5acfe31361542d1fb90f35d9");
-                // gsm.push(new MultiplayerState(gsm));
+                gsm.push(new MultiplayerState(gsm));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
             } else if(isTouched(touchPosition, creditsBtn)){
@@ -73,8 +68,7 @@ public class MainMenuState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        // TODO: Figure out why this works
-        sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.WIDTH);
+        sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(singlePlayerBtn.getImage(), singlePlayerBtn.getX(), singlePlayerBtn.getY(), singlePlayerBtn.getWidth(), singlePlayerBtn.getHeight());
         sb.draw(multiPlayerBtn.getImage(), multiPlayerBtn.getX(), multiPlayerBtn.getY(), multiPlayerBtn.getWidth(), multiPlayerBtn.getHeight());
         sb.draw(spectatorBtn.getImage(), spectatorBtn.getX(), spectatorBtn.getY(), spectatorBtn.getWidth(), spectatorBtn.getHeight());
