@@ -17,14 +17,15 @@ public class Ship {
 
     private Texture[] pictures = new Texture[4];
     private Texture currentPicture;
-    private String name;
+    private char name;
     private int size;
     private char orientation = 'd';
+    private boolean frontOfShip;
     private boolean[] damaged;
     private Vector3 position;
 
     //constructor
-    public Ship (int size, String name, int identifier){
+    public Ship (int size, char name, int identifier){
 
         this.name = name;
         this.size = size;
@@ -157,6 +158,10 @@ public class Ship {
 
     public Texture getTexture(){
         return this.currentPicture;
+    }
+
+    public char getName(){
+        return name;
     }
 
     public void setPosition(int x, int y, int z){

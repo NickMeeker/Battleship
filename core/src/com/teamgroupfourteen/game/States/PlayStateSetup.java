@@ -44,6 +44,8 @@ public class PlayStateSetup extends State {
 
     //data variables
     int currentShipNumber;
+    int x;
+    int y;
 
     public PlayStateSetup(GameStateManager gsm, Player player, PlayState playState){
         super(gsm);
