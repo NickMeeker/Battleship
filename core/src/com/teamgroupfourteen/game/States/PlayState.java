@@ -1,6 +1,7 @@
 package com.teamgroupfourteen.game.States;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by nick on 2/28/18.
@@ -33,6 +36,8 @@ public class PlayState extends State {
     private TextureRegion shipHitRegion;
     private Texture hitMarker;
     private TextureRegion hitMarkerRegion;
+    private Texture rocket;
+    private TextureRegion rocketRegion;
 
     //buttons
     private GameButton upBtn;
@@ -55,11 +60,24 @@ public class PlayState extends State {
     private Vector3 missVector;
     private Vector3 shipHitVector;
     private Vector3 hitMarkerVector;
+    private Vector3 rocketVector;
 
     private int setupCount = 0;
     private Player currentPlayer;
     private int currentPlayerNum = 0;
     private boolean seeYourBoard = false;
+
+    //animation flags
+    private boolean dropBombs;
+    private boolean pressUp;
+    private boolean pressDown;
+    private boolean pressLeft;
+    private boolean pressRight;
+    private boolean crosshairMoving;
+
+    //sounds
+    private Sound explosion;
+    private Sound splash;
 
     //Flags: type of game
     //  single player: singleplayer = true
@@ -134,6 +152,22 @@ public class PlayState extends State {
         hitMarker = new Texture("RedX.png");
         hitMarkerRegion = new TextureRegion(hitMarker, 0, 0, 40, 40);
         hitMarkerVector = new Vector3(0, 0, 0);
+
+        rocket = new Texture("rocket.png");
+        rocketRegion = new TextureRegion(rocket, 0, 0, 40, 40);
+        rocketVector = new Vector3(800, 800, 0);
+
+        //set animation flags
+        dropBombs = false;
+        pressDown = false;
+        pressUp = false;
+        pressRight = false;
+        pressLeft = false;
+        crosshairMoving = false;
+
+        //sounds
+        explosion = Gdx.audio.newSound(Gdx.files.internal("Explosion.mp3"));
+        splash = Gdx.audio.newSound(Gdx.files.internal("Splash.mp3"));
     }
 
     //single player and online constructor
@@ -210,6 +244,22 @@ public class PlayState extends State {
         hitMarker = new Texture("RedX.png");
         hitMarkerRegion = new TextureRegion(hitMarker, 0, 0, 40, 40);
         hitMarkerVector = new Vector3(0, 0, 0);
+
+        rocket = new Texture("rocket.png");
+        rocketRegion = new TextureRegion(rocket, 0, 0, 40, 40);
+        rocketVector = new Vector3(800, 800, 0);
+
+        //set animation flags
+        dropBombs = false;
+        pressDown = false;
+        pressUp = false;
+        pressRight = false;
+        pressLeft = false;
+        crosshairMoving = false;
+
+        //sounds
+        explosion = Gdx.audio.newSound(Gdx.files.internal("Explosion.mp3"));
+        splash = Gdx.audio.newSound(Gdx.files.internal("Splash.mp3"));
     }
 
     @Override
@@ -279,17 +329,21 @@ public class PlayState extends State {
             Vector3 touchPosition = super.getInputRegion();
 
             //move crosshair
-            if (isTouched(touchPosition, upBtn) && crosshairVector.y < 700 && !seeYourBoard) {
-                crosshairVector.add(0, 40, 0);
+            if (isTouched(touchPosition, upBtn) && !crosshairMoving && crosshairVector.y < 700 && !seeYourBoard) {
+                pressUp = true;
+                crosshairMoving = true;
             }
-            else if (isTouched(touchPosition, downBtn) && crosshairVector.y > 340 && !seeYourBoard) {
-                crosshairVector.add(0, -40, 0);
+            else if (isTouched(touchPosition, downBtn) && !crosshairMoving && crosshairVector.y > 340 && !seeYourBoard) {
+                pressDown = true;
+                crosshairMoving = true;
             }
-            else if (isTouched(touchPosition, leftBtn) && crosshairVector.x > 60 && !seeYourBoard) {
-                crosshairVector.add(-40, 0 , 0);
+            else if (isTouched(touchPosition, leftBtn) && !crosshairMoving && crosshairVector.x > 60 && !seeYourBoard) {
+                pressLeft = true;
+                crosshairMoving = true;
             }
-            else if (isTouched(touchPosition, rightBtn) && crosshairVector.x < 420 && !seeYourBoard) {
-                crosshairVector.add(40, 0, 0);
+            else if (isTouched(touchPosition, rightBtn) && !crosshairMoving && crosshairVector.x < 420 && !seeYourBoard) {
+                pressRight = true;
+                crosshairMoving = true;
             }
 
             //pan selectors
@@ -307,6 +361,9 @@ public class PlayState extends State {
 
                 //hit the other player at the position of the crosshair
                 players[(currentPlayerNum + 1) % 2].hitCell(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40);
+
+                rocketVector.set(crosshairVector.x, 820, 0);
+                dropBombs = true;
 
                 //if it is single player, have the computer take its turn
                 if(singlePlayer){
@@ -347,6 +404,7 @@ public class PlayState extends State {
             //draw the grid
             sb.draw(mainGrid, 20, 340, 440, 440);
             sb.draw(coordinateBackgroundRegion, 190, 120, 100, 100);
+
 
             //draw the buttons
             sb.draw(upBtn.getImage(), upBtn.getX(), upBtn.getY(), upBtn.getWidth(), upBtn.getHeight());
@@ -431,6 +489,55 @@ public class PlayState extends State {
 
                 //draw the crosshair
                 sb.draw(crosshairRegion, crosshairVector.x, crosshairVector.y, 40, 40);
+
+                //animate the crosshair
+                if(crosshairMoving){
+                    if(pressUp){
+                        crosshairVector.add(0, 8, 0);
+                        if((crosshairVector.y + 20) % 40 == 0){
+                            crosshairMoving = false;
+                            pressUp = false;
+                        }
+                    }
+                    else if(pressRight){
+                        crosshairVector.add(8, 0, 0);
+                        if((crosshairVector.x + 20) % 40 == 0){
+                            crosshairMoving = false;
+                            pressRight = false;
+                        }
+                    }
+                    else if(pressDown){
+                        crosshairVector.add(0, -8, 0);
+                        if((crosshairVector.y + 20) % 40 == 0){
+                            crosshairMoving = false;
+                            pressDown = false;
+                        }
+                    }
+                    else if(pressLeft){
+                        crosshairVector.add(-8, 0, 0);
+                        if((crosshairVector.x + 20) % 40 == 0){
+                            crosshairMoving = false;
+                            pressLeft = false;
+                        }
+                    }
+                }
+
+                sb.draw(rocketRegion, rocketVector.x, rocketVector.y, 40, 40);
+
+                if(dropBombs){
+                    rocketVector.add(0, -8, 0);
+                }
+
+                if(rocketVector.y == crosshairVector.y) {
+                    rocketVector.set(800, 800, 0);
+                    if(players[(currentPlayerNum + 1) % 2].cellContainsShip(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40)){
+                        explosion.play();
+                    }
+                    else{
+                        splash.play();
+                    }
+                    dropBombs = false;
+                }
 
                 //draw a grey fire button if the currently selected cell has already been hit
                 if(players[(currentPlayerNum + 1) % 2].cellIsHit(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40)){
