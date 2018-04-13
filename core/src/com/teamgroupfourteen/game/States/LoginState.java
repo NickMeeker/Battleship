@@ -12,6 +12,7 @@ import com.teamgroupfourteen.game.Authentication.LoginRequest;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
+import com.teamgroupfourteen.game.User.User;
 
 
 import java.io.File;
@@ -80,7 +81,8 @@ public class LoginState extends State {
                     resp.writeCredentials();
                     Player player = new Player(usernameField.getText());
                     Player player2 = new Player(usernameField.getText());
-                    gsm.set(new MainMenuState(gsm));
+                    User user = new User();
+                    gsm.set(new MainMenuState(gsm, user));
                 }
 
             }
@@ -94,7 +96,8 @@ public class LoginState extends State {
         if(loggedIn){
             System.out.println("The user is already logged in.");
             Player player = new Player(resp.getUsername());
-            gsm.set(new MainMenuState(gsm));
+            User user = new User();
+            gsm.set(new MainMenuState(gsm, user));
         }
         handleInput();
 

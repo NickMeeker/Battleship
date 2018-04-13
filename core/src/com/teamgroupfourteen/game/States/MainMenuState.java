@@ -18,6 +18,7 @@ import com.teamgroupfourteen.game.User.User;
 public class MainMenuState extends State {
     private Texture background;
     private TextureRegion mainBackground;
+    private User user;
     private GameButton singlePlayerBtn;
     private GameButton multiPlayerBtn;
     private GameButton spectatorBtn;
@@ -26,8 +27,9 @@ public class MainMenuState extends State {
     private GameButton creditsBtn;
 
 
-    public MainMenuState(GameStateManager gsm){
+    public MainMenuState(GameStateManager gsm, User user){
         super(gsm);
+        this.user = user;
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
@@ -48,10 +50,8 @@ public class MainMenuState extends State {
                 Player player2 = new Player(null);
                 gsm.push(new PlayState(gsm, player1, player2, true, false));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
-                User user = new User();
-                user.addFriend("muniba");
                 System.out.println("Transition to multiplayer");
-                gsm.push(new MultiplayerState(gsm));
+                gsm.push(new MultiplayerState(gsm, user));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
             } else if(isTouched(touchPosition, creditsBtn)){

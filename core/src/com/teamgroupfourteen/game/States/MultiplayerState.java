@@ -7,16 +7,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.User.User;
 
 public class MultiplayerState extends State {
+        private User user;
         private Texture background;
         private TextureRegion mainBackground;
         private GameButton currentGameBtn;
         private GameButton createGameBtn;
         private GameButton joinGameBtn;
 
-        public MultiplayerState(GameStateManager gsm) {
+        public MultiplayerState(GameStateManager gsm, User user) {
             super(gsm);
+            this.user = user;
             cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
             background = new Texture("testPic.jpg");
             mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
@@ -31,7 +34,7 @@ public class MultiplayerState extends State {
             if (Gdx.input.justTouched()) {
                 Vector3 touchPosition = super.getInputRegion();
                 if (isTouched(touchPosition, currentGameBtn)) {
-                    gsm.push(new CurrentGamesState(gsm));
+                    gsm.push(new CurrentGamesState(gsm, user));
                 } else if (isTouched(touchPosition, createGameBtn)) {
                     System.out.println("Transition to create game");
                 }else if (isTouched(touchPosition, joinGameBtn)) {

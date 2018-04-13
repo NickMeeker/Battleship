@@ -2,18 +2,31 @@ package com.teamgroupfourteen.game.States;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.teamgroupfourteen.game.Authentication.APIParser;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.User.User;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.awt.Font;
 
 public class CurrentGamesState extends State {
 
@@ -21,13 +34,17 @@ public class CurrentGamesState extends State {
     private TextureRegion mainBackground;
     private GameButton selectGameBtn;
     private GameButton cancelGameBtn;
+    private User user;
     private Texture barBlue;
+    private BitmapFont font;
     private Stage stage;
     private Table table;
+    private int i;
 
 
-    public CurrentGamesState(GameStateManager gsm) {
+    public CurrentGamesState(GameStateManager gsm, User user) {
         super(gsm);
+        this.user = user;
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
@@ -45,6 +62,7 @@ public class CurrentGamesState extends State {
         Gdx.input.setInputProcessor(stage);
         Table container = new Table();
         table = new Table();
+        table.setSkin(skin);
         ScrollPane pane = new ScrollPane(table, skin);
         pane.layout();
         //table.setBackground(bgImage.getDrawable());
@@ -53,15 +71,38 @@ public class CurrentGamesState extends State {
         container.setBounds(0, 15, Battleship.WIDTH, 1000);
         stage.addActor(container);
 
+        JSONArray gamesArray = user.getUserHostGames();
+        System.out.println(gamesArray.getJSONObject(0));
+
         //this is where the games will actually go
-        for(int i = 0; i < 10; i++){
+        for(i = 0; i < gamesArray.length(); i++){
             TextButton tmp = new TextButton("", skin);
             Image matchBar = new Image(barBlue);
             tmp.setText(i + "");
-            table.add(matchBar).width(454).height(40).padTop(10).padBottom(5);
+            Stack stack = new Stack();
+            stack.add(matchBar);
+            // TODO PLEASE SOMEONE MAKE THIS BETTER
+            stack.add(new Label("   Host: ", skin));
+            stack.add(new Label("             " + gamesArray.getJSONObject(i).getString("hostPlayer"), skin));
+            stack.add(new Label("                                                           Guest: ", skin));
+            stack.add(new Label("                                                                        " + gamesArray.getJSONObject(i).getString("guestPlayer"), skin));
+
+            stack.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    System.out.println("game selected");
+                }
+            });
+//            table.add(matchBar).width(454).height(40).padTop(10).padBottom(5);
+//            table.add("Host:").;
+            table.add(stack).width(454).height(40).padTop(10).padBottom(5);
+
             table.row();
+
         }
         table.add();
+
     }
 
     @Override
@@ -89,6 +130,9 @@ public class CurrentGamesState extends State {
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(selectGameBtn.getImage(), selectGameBtn.getX(), selectGameBtn.getY(), selectGameBtn.getWidth(), selectGameBtn.getHeight());
         sb.draw(cancelGameBtn.getImage(), cancelGameBtn.getX(), cancelGameBtn.getY(), cancelGameBtn.getWidth(), cancelGameBtn.getHeight());
+
+
+
         sb.end();
 
         stage.act();
