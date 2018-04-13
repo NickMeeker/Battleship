@@ -13,9 +13,38 @@ import java.util.Scanner;
  */
 
 public class CredentialsManager {
+    private boolean loggedIn;
     private String username;
     private String userId;
     private String token;
+
+
+    public boolean getLoggedIn(){
+        return this.loggedIn;
+    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     private HttpResponse<JsonNode> resp;
 
@@ -23,15 +52,18 @@ public class CredentialsManager {
 
     // the default constructor is for when you only need to read data
     public CredentialsManager(){
+        System.out.println("Attempting to read file");
         ifp = new File("authdata.txt");
         try{
-            if(ifp.exists())
+            if(!ifp.exists())
                 return;
             Scanner scan = new Scanner(ifp);
-            boolean loggedIn = scan.nextBoolean();
+            this.loggedIn = scan.nextBoolean();
+            scan.nextLine();
             this.username = scan.nextLine();
             this.userId = scan.nextLine();
             this.token = scan.nextLine();
+            System.out.println(this.token);
         }catch(IOException e) {
             return;
         }
@@ -72,15 +104,7 @@ public class CredentialsManager {
     }
 
     public boolean attemptInitAuth(){
-        try{
-            if(ifp.exists())
-                return false;
-            Scanner scan = new Scanner(ifp);
-            boolean loggedIn = scan.nextBoolean();
-            return loggedIn;
-        }catch(IOException e) {
-            return false;
-        }
+        return loggedIn;
     }
 
 }
