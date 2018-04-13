@@ -43,9 +43,9 @@ public class GameLoader  {
     private void buildSetup(){
         SetupParser sp = new SetupParser(setupLog);
         sp.buildLogEntries();
-        int l = sp.getLogEntries().length;
+        int l = sp.getLogEntries().size();
         for(int i = 0; i < l; i++){
-            sp.parseLogEntry(sp.getLogEntries()[i]);
+            sp.parseLogEntry(sp.getLogEntries().get(i));
         }
     }
 

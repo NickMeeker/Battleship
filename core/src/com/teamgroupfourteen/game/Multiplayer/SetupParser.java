@@ -1,19 +1,23 @@
 package com.teamgroupfourteen.game.Multiplayer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by nick on 4/12/18.
  */
 
 public class SetupParser {
     private String setupLog;
-    private String[] logEntries;
+    private ArrayList<String> logEntries;
 
     public SetupParser(String setupLog){
-        this.setSetupLog(setupLog);
+        this.setupLog = setupLog;
     }
 
     public void buildLogEntries(){
-        setLogEntries(getSetupLog().split(","));
+        String[] strArr = setupLog.split(",");
+        logEntries = new ArrayList<String>(Arrays.asList(strArr));
     }
 
     public void parseLogEntry(String logEntry){
@@ -56,6 +60,8 @@ public class SetupParser {
 
         char orientation = logEntry.charAt(4);
 
+        // Now you have player number, row, column, shipNum, and orientation to work with
+
     }
 
     public String getSetupLog() {
@@ -66,11 +72,8 @@ public class SetupParser {
         this.setupLog = setupLog;
     }
 
-    public String[] getLogEntries() {
-        return logEntries;
-    }
 
-    public void setLogEntries(String[] logEntries) {
-        this.logEntries = logEntries;
+    public ArrayList<String> getLogEntries() {
+        return logEntries;
     }
 }
