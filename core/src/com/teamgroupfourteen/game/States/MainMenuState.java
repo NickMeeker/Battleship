@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
+import com.teamgroupfourteen.game.User.User;
 
 
 /**
@@ -47,6 +48,8 @@ public class MainMenuState extends State {
                 Player player2 = new Player(null);
                 gsm.push(new PlayState(gsm, player1, player2, true, false));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
+                User user = new User();
+                user.addFriend("muniba");
                 System.out.println("Transition to multiplayer");
                 gsm.push(new MultiplayerState(gsm));
             } else if(isTouched(touchPosition, spectatorBtn)) {
