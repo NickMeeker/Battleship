@@ -51,7 +51,10 @@ public class MainMenuState extends State {
                 gsm.push(new PlayState(gsm, player1, player2, true, false, null, null));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
                 System.out.println("Transition to multiplayer");
-                gsm.push(new MultiplayerState(gsm, user));
+                // gsm.push(new MultiplayerState(gsm, user));
+                Player player1 = new Player("nickmeeker");
+                Player player2 = new Player("nickmeeker123");
+                gsm.push(new PlayState(gsm, player1, player2, false, true, null, null));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
             } else if(isTouched(touchPosition, creditsBtn)){

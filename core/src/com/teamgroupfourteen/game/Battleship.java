@@ -17,10 +17,11 @@ public class Battleship extends ApplicationAdapter {
 	public static final String TITLE = "BATTLESHIP";
 	public static final String APIPREFIX = "http://localhost:3000/api/";
 
+	public static boolean SOUNDON;
 	private SpriteBatch batch;
 	private GameStateManager gsm;
 
-	public boolean soundOn;
+
 
 	@Override
 	public void create () {
