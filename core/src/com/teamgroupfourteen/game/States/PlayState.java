@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.Multiplayer.SetupParser;
 import com.teamgroupfourteen.game.Player.Player;
+
+import java.util.ArrayList;
 
 
 /**
@@ -87,6 +90,10 @@ public class PlayState extends State {
     //                 online = false
     private boolean singlePlayer;
     private boolean online;
+
+    private ArrayList<String> setup;
+    private ArrayList<String> moveList;
+    private StringBuilder sb;
 
     //local multiplayer constructor
     public PlayState(GameStateManager gsm, Player player1, Player player2){
@@ -170,13 +177,19 @@ public class PlayState extends State {
     }
 
     //single player and online constructor
-    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online){
+    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, ArrayList<String> setup, ArrayList<String> moveList){
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
 
         //set the game type flags
         this.singlePlayer = singlePlayer;
         this.online = online;
+
+        if(online){
+            this.setup = setup;
+            this.moveList = moveList;
+            sb = new StringBuilder();
+        }
 
         //player one is always player one
         this.players[0] = player1;
@@ -265,12 +278,44 @@ public class PlayState extends State {
     public void handleInput(){
         //player 1 board setup
         if (setupCount == 0){
-            gsm.push(new PlayStateSetup(gsm, players[0], this));
+            if(online && setup == null) {
+                gsm.push(new PlayStateSetup(gsm, players[0], this));
+                for(int i = 0; i < 5; i++){
+                    sb.append(0);
+                    sb.append((char)(9-((players[0].getShipPosition(i).y - 340) / 40) + 65));
+                    sb.append((int)((players[0].getShipPosition(i).x - 60) / 40));
+                    sb.append(players[0].getShipName(i));
+                    sb.append(players[0].getShipOrientation(i));
+                    sb.append(',');
+                }
+                //TODO: Send sb to database
+            }
+            else if(online){
+                for(int i = 0; i < 5; i++){
+
+                    SetupParser setupParser = new SetupParser(setup.get(i));
+                    players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
+                    //players[0].setShipOrientation(i, setupParser.getOrientaion());
+                }
+            }
             //advance to next step of setup
             setupCount++;
         }
         //player 2 board setup
         else if(setupCount == 1){
+            if(online && setup.size() == 5) {
+                gsm.push(new PlayStateSetup(gsm, players[1], this));
+                for(int i = 0; i < 5; i++){
+                    sb.append(0);
+                    sb.append((char)(((players[1].getShipPosition(i).y - 340) / 40) + 65));
+                    sb.append(((players[1].getShipPosition(i).x - 60) / 40));
+                    sb.append(players[1].getShipName(i));
+                    sb.append(players[1].getShipOrientation(i));
+
+                    if(i != 4)
+                        sb.append(',');
+                }
+            }
 
             //if single player, have the computer build a board
             if(singlePlayer) {

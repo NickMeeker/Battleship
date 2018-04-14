@@ -16,6 +16,7 @@ public class GameLogParser {
 
     private ArrayList<String> logEntries;
 
+
     public GameLogParser(String gameLog){
         this.gameLog = gameLog;
     }

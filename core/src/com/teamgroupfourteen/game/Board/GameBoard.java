@@ -37,30 +37,30 @@ public class GameBoard {
 
     public void makeShip(int size){
 
-        String name;
+        char name;
 
         if(size == 2){
-            name = "minesweeper";
+            name = 'm';
             this.Ships[0] = new Ship(size, name, 0);
         }
         else if(size == 3){
 
             if(Ships[1] == null){
-                name = "frigate";
+                name = 'f';
                 this.Ships[1] = new Ship(size, name, 0);
             }
             else{
-                name = "submarine";
+                name = 's';
                 this.Ships[2] = new Ship(size, name, 1);
             }
 
         }
         else if(size == 4){
-            name = "battleship";
+            name = 'b';
             this.Ships[3] = new Ship(size, name, 0);
         }
         else if(size == 5){
-            name = "carrier";
+            name = 'c';
             this.Ships[4] = new Ship(size, name, 0);
         }
 
@@ -88,6 +88,10 @@ public class GameBoard {
 
     public void rotateShip(int shipNum){
         this.Ships[shipNum].changeOrientation();
+    }
+
+    public char getShipName(int shipNum){
+        return this.Ships[shipNum].getName();
     }
 
     public char getShipOrientation(int shipNum){

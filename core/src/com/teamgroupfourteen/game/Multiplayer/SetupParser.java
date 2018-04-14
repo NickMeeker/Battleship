@@ -10,6 +10,11 @@ import java.util.Arrays;
 public class SetupParser {
     private String setupLog;
     private ArrayList<String> logEntries;
+    int playerNum;
+    int row;
+    int column;
+    int shipNum;
+    char orientation;
 
     public SetupParser(String setupLog){
         this.setupLog = setupLog;
@@ -21,7 +26,7 @@ public class SetupParser {
     }
 
     public void parseLogEntry(String logEntry){
-        int playerNum;
+
         if(logEntry.charAt(0) == '0'){
             // THIS IS HOST PLAYER
             playerNum = 0;
@@ -31,13 +36,12 @@ public class SetupParser {
         }
 
         // Row will be uppercase A-J
-        char row = logEntry.charAt(1);
+        row = logEntry.charAt(1);
         row -= 65;
 
         // Column will be 0-9
-        char column = logEntry.charAt(2);
+        column = logEntry.charAt(2);
 
-        int shipNum;
         switch(logEntry.charAt(3)){
             case 'm':
                 // We are dealing with a minesweeper
@@ -61,7 +65,7 @@ public class SetupParser {
                 break;
         }
 
-        char orientation = logEntry.charAt(4);
+        orientation = logEntry.charAt(4);
 
         // Now you have player number, row, column, shipNum, and orientation to work with
 
@@ -75,8 +79,23 @@ public class SetupParser {
         this.setupLog = setupLog;
     }
 
-
     public ArrayList<String> getLogEntries() {
         return logEntries;
+    }
+
+    public int getRow(){
+        return this.row;
+    }
+
+    public int getColumn(){
+        return this.column;
+    }
+
+    public int getShipNum(){
+        return this.shipNum;
+    }
+
+    public char getOrientaion(){
+        return this.orientation;
     }
 }
