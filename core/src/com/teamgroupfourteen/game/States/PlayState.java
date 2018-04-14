@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.Multiplayer.GameLogParser;
 import com.teamgroupfourteen.game.Multiplayer.SetupParser;
 import com.teamgroupfourteen.game.Player.Player;
 
@@ -41,6 +42,9 @@ public class PlayState extends State {
     private Texture rocket;
     private TextureRegion rocketRegion;
 
+    private Texture[] powerUp;
+    private TextureRegion powerUpRegion;
+
     //buttons
     private GameButton upBtn;
     private GameButton downBtn;
@@ -50,6 +54,8 @@ public class PlayState extends State {
     private GameButton fireBtn;
     private GameButton panRight;
     private GameButton panLeft;
+    private GameButton rightPowerUp;
+    private GameButton leftPowerUp;
 
     //ship textures
     private Texture minesweeper1, frigate1, submarine1, battleship1, carrier1;
@@ -67,6 +73,9 @@ public class PlayState extends State {
     private int setupCount = 0;
     private Player currentPlayer;
     private int currentPlayerNum = 0;
+    private int currentPowerUpNum;
+    private int[] player1PowerUps;
+    private int[] player2PowerUps;
     private boolean seeYourBoard = false;
 
     //animation flags
@@ -206,6 +215,19 @@ public class PlayState extends State {
             this.players[1] = player2;
         }
 
+        if(online) {
+            player1PowerUps = new int[3];
+            player2PowerUps = new int[3];
+
+            player1PowerUps[0] = player1.getShieldCount();
+            player1PowerUps[0] = player1.getMultishotCount();
+            player1PowerUps[0] = player1.getDoubleShot();
+
+            player1PowerUps[1] = player2.getShieldCount();
+            player1PowerUps[1] = player2.getMultishotCount();
+            player1PowerUps[1] = player2.getDoubleShot();
+        }
+
         //set the current player to player 1
         currentPlayer = player1;
 
@@ -289,13 +311,14 @@ public class PlayState extends State {
                     sb.append(',');
                 }
                 //TODO: Send sb to database
+
+                gsm.pop();
             }
             else if(online){
                 for(int i = 0; i < 5; i++){
-
                     SetupParser setupParser = new SetupParser(setup.get(i));
                     players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
-                    //players[0].setShipOrientation(i, setupParser.getOrientaion());
+                    players[0].setShipOrientation(i, setupParser.getOrientaion());
                 }
             }
             //advance to next step of setup
@@ -315,6 +338,18 @@ public class PlayState extends State {
                     if(i != 4)
                         sb.append(',');
                 }
+
+                //TODO send sb to database
+
+                gsm.pop();
+            }
+
+            else if(online){
+                for(int i = 5; i < 10; i++){
+                    SetupParser setupParser = new SetupParser(setup.get(i));
+                    players[1].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
+                    players[1].setShipOrientation(i, setupParser.getOrientaion());
+                }
             }
 
             //if single player, have the computer build a board
@@ -332,10 +367,6 @@ public class PlayState extends State {
                     System.out.println();
                 }
             }
-            //if the game is online, only build 1 board? not sure yet
-            else if(online){
-
-            }
             //if the game is local multiplayer, make player 2's board
             else {
                 gsm.push(new PlayStateSetup(gsm, players[1], this));
@@ -346,6 +377,24 @@ public class PlayState extends State {
         //Now that the game boards are built, lets build the rest of the game
         else if(setupCount == 2){
 
+            if(online && moveList != null){
+                for(int i = 0; i < moveList.size(); i++){
+                    GameLogParser gameParser = new GameLogParser(moveList.get(i));
+                    if(gameParser.getMoveType() == 'n' || gameParser.getMoveType() == 'd'){
+                        players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn(), gameParser.getRow());
+                    }
+                    else if(gameParser.getMoveType() == 's'){
+                        players[gameParser.getPlayerNum()].placeShield(gameParser.getColumn(), gameParser.getRow());
+                    }
+                    else if(gameParser.getMoveType() == 'm'){
+                        players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn(), gameParser.getRow());
+                        players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn() + 1, gameParser.getRow());
+                        players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn(), gameParser.getRow() + 1);
+                        players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn() + 1, gameParser.getRow() + 1);
+                    }
+                }
+            }
+
             //initialize the board textures
             gameGrid  = new Texture("GameGrid.png");
             coordinateBackground  = new Texture("blackSquare.png");
@@ -353,6 +402,27 @@ public class PlayState extends State {
             //initialize board regions
             mainGrid = new TextureRegion(gameGrid, 0, 0, 440, 440);
             coordinateBackgroundRegion = new TextureRegion(coordinateBackground, 0, 0, 1536, 1478);
+
+            if(online) {
+                powerUp = new Texture[4];
+
+                for (int i = 0; i < 4; i++) {
+                    if (i == 0) {
+                        powerUp[i] = new Texture("RedX.png");
+                    }
+                    if (i == 1) {
+                        powerUp[i] = new Texture("Shield.png");
+                    }
+                    if (i == 2) {
+                        powerUp[i] = new Texture("multishot.png");
+                    }
+                    if (i == 3) {
+                        powerUp[i] = new Texture("doubleShot.png");
+                    }
+                }
+
+                powerUpRegion = new TextureRegion(powerUp[currentPowerUpNum], 0, 0, 40, 40);
+            }
 
             //buttons
             upBtn = new GameButton(190, 220, 100, 100, "Arrow_up.png");
@@ -363,6 +433,11 @@ public class PlayState extends State {
             panRight = new GameButton(410, 145, 50, 50, "Arrow_right.png");
             greyFireBtn = new GameButton(340, 20, 120, 60, "GrayFire.png");
             fireBtn = new GameButton(340, 20, 120, 60, "Fire.png");
+
+            if(online){
+                rightPowerUp = new GameButton(20, 20, 50, 50, "Arrow_right.png");
+                leftPowerUp = new GameButton(120, 20, 50, 50, "Arrow_left.png");
+            }
 
             //move the setup to the finished stage. Setup is now complete
             setupCount = 3;
@@ -398,6 +473,23 @@ public class PlayState extends State {
                 seeYourBoard = false;
             }
 
+            //power up selectors
+            else if(online && isTouched(touchPosition, leftPowerUp)){
+
+                /*TODO Query db for number of current power up quantity on hand and store in powerUpQOH
+                    current power up is denoted by the variable currentPowerUpNum
+                        1 = shield
+                        2 = multishot
+                        3 - double shot
+                 */
+
+                for(int i = 0; i < 3; i ++){
+
+                }
+            }
+            else if(online && isTouched(touchPosition, rightPowerUp)){
+
+            }
 
             //fire button: this conditional checks to make sure the fire button was pressed
             //  and that the cell that you want to hit has not been hit already
@@ -415,6 +507,7 @@ public class PlayState extends State {
                 }
                 //if the game is online update the database move list with the move that was just made
                 else if(online){
+                    sb = new StringBuilder();
 
                 }
                 //if the game is local, change player's turns
