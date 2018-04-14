@@ -43,7 +43,7 @@ public class User {
         userID = cm.getUserId();
         token = cm.getToken();
         getUserResp();
-        coins = userJSON.getInt("coins");
+/*        coins = userJSON.getInt("coins");
         exp = userJSON.getInt("exp");
         wins = userJSON.getInt("wins");
         losses = userJSON.getInt("losses");
@@ -52,6 +52,7 @@ public class User {
         numPowerUp3 = userJSON.getInt("powerUp3");
         friendsString = userJSON.getString("friends");
         friendsByName = getFriendsString().split(",");
+*/
     }
 
     private void getUserResp(){
@@ -192,4 +193,5 @@ public class User {
     public int getNumPowerUp3() {
         return numPowerUp3;
     }
+
 }

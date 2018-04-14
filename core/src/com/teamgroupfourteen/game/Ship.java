@@ -183,4 +183,8 @@ public class Ship {
     public char getOrientation(){
         return this.orientation;
     }
+
+    public void setOrientation(char orientation){
+        this.orientation = orientation;
+    }
 }

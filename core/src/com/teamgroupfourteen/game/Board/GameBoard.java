@@ -94,6 +94,10 @@ public class GameBoard {
         return this.Ships[shipNum].getName();
     }
 
+    public void  setShipOrientation(int shipNum, char orientation){
+        this.Ships[shipNum].setOrientation(orientation);
+    }
+
     public char getShipOrientation(int shipNum){
         return this.Ships[shipNum].getOrientation();
     }
@@ -112,6 +116,10 @@ public class GameBoard {
 
     public boolean isCellHit(int x, int y){
         return this.gameBoard[x][y].isHit();
+    }
+
+    public void placeShield(int x, int y){
+        this.gameBoard[x][y].placeShield();
     }
 
     public boolean allShipsDestroyed(){

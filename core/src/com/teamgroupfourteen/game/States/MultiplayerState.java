@@ -9,13 +9,19 @@ import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.User.User;
 
+/**
+ * Created by derek on 4/11/18.
+ */
+
 public class MultiplayerState extends State {
-        private User user;
-        private Texture background;
-        private TextureRegion mainBackground;
-        private GameButton currentGameBtn;
-        private GameButton createGameBtn;
-        private GameButton joinGameBtn;
+    private User user;
+    private Texture background;
+    private TextureRegion mainBackground;
+    private GameButton currentGameBtn;
+    private GameButton createGameBtn;
+    private GameButton joinGameBtn;
+
+    private GameButton backBtn;
 
         public MultiplayerState(GameStateManager gsm, User user) {
             super(gsm);
@@ -26,6 +32,7 @@ public class MultiplayerState extends State {
             currentGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "CurrentButton.png");
             createGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "CreateButton.png");
             joinGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "JoinButton.png");
+            backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
 
         }
 
@@ -39,8 +46,9 @@ public class MultiplayerState extends State {
                     System.out.println("Transition to create game");
                 }else if (isTouched(touchPosition, joinGameBtn)) {
                     System.out.println("Transition to join game");
+                }else if (isTouched(touchPosition, backBtn)) {
+                    gsm.pop();
                 }
-
             }
         }
 
@@ -57,6 +65,7 @@ public class MultiplayerState extends State {
             sb.draw(currentGameBtn.getImage(), currentGameBtn.getX(), currentGameBtn.getY(), currentGameBtn.getWidth(), currentGameBtn.getHeight());
             sb.draw(createGameBtn.getImage(), createGameBtn.getX(), createGameBtn.getY(), createGameBtn.getWidth(), createGameBtn.getHeight());
             sb.draw(joinGameBtn.getImage(), joinGameBtn.getX(), joinGameBtn.getY(), joinGameBtn.getWidth(), joinGameBtn.getHeight());
+            sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
             sb.end();
         }
 

@@ -13,12 +13,14 @@ public class BoardCell {
     private boolean shipFront;
     private boolean hit;
     private Ship ship;
+    private boolean hasShield;
 
     public BoardCell(){
-        containsShip = false;
-        shipFront = false;
-        hit = false;
-        ship = null;
+        this.containsShip = false;
+        this.shipFront = false;
+        this.hit = false;
+        this.ship = null;
+        this.hasShield = false;
     }
 
     public void fill(){
@@ -35,5 +37,9 @@ public class BoardCell {
 
     public boolean isHit(){
         return hit;
+    }
+
+    public void placeShield(){
+        this.hasShield = true;
     }
 }
