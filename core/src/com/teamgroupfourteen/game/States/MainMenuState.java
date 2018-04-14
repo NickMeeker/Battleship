@@ -50,9 +50,9 @@ public class MainMenuState extends State {
                 System.out.println("Transition to singleplayer");
                 Player player1 = new Player(null);
                 Player player2 = new Player(null);
-                gsm.push(new PlayState(gsm, player1, player2, true, false));
+                //gsm.push(new PlayState(gsm, player1, player2, true, false));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
-                //gsm.push(new MultiplayerTypeState(gsm, user));
+                gsm.push(new MultiplayerTypeState(gsm, user));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
             } else if(isTouched(touchPosition, optionsBtn)){
