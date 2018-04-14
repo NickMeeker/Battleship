@@ -27,6 +27,7 @@ public class LoginState extends State {
     private Stage stage;
     private TextField usernameField;
     private TextField passwordField;
+    private GameButton titleBtn;
     private GameButton loginButton;
     private File ifp;
     private LoginRequest resp;
@@ -45,6 +46,7 @@ public class LoginState extends State {
         resp = new LoginRequest("", "");
         loggedIn = resp.attemptInitAuth();
 
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         loginButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
 
         // Initialize the stage for text fields
@@ -94,6 +96,8 @@ public class LoginState extends State {
 
     @Override
     public void update(float dt) {
+
+        // Setup touch reactions
         if(loggedIn){
             System.out.println("The user is already logged in.");
             Player player = new Player(resp.getUsername());
@@ -109,6 +113,7 @@ public class LoginState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(loginButton.getImage(), loginButton.getX(), loginButton.getY(), loginButton.getWidth(), loginButton.getHeight());
         sb.end();
 

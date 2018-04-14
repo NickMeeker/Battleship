@@ -31,13 +31,15 @@ public class OptionsState extends State{
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         soundFXBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SoundFXButton.png");
-        soundOnBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 300, 300, 300, "soundOn.png");
-        soundOffBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 300, 300, 300, "soundOff.png");
+        soundOnBtn = new GameButton(Battleship.WIDTH/2 - 150, cam.position.y - 300, 300, 300, "soundOn.png");
+        soundOffBtn = new GameButton(Battleship.WIDTH/2 -150, cam.position.y - 300, 300, 300, "soundOff.png");
         backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
     }
 
     @Override
     public void handleInput() {
+
+        // Setup touch reactions
         if (Gdx.input.justTouched()) {
             Vector3 touchPosition = super.getInputRegion();
             if (isTouched(touchPosition, soundFXBtn)) {

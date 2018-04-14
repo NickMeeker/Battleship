@@ -38,6 +38,8 @@ public class MultiplayerState extends State {
 
         @Override
         public void handleInput() {
+
+            // Setup touch reactions
             if (Gdx.input.justTouched()) {
                 Vector3 touchPosition = super.getInputRegion();
                 if (isTouched(touchPosition, currentGameBtn)) {

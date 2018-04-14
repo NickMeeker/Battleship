@@ -23,6 +23,7 @@ public class RegistrationState extends State {
     private TextField usernameField;
     private TextField passwordField;
     private TextField confirmPasswordField;
+    private GameButton titleBtn;
     private GameButton registerButton;
     private boolean loggedIn;
     Skin uiSkin;
@@ -33,6 +34,7 @@ public class RegistrationState extends State {
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         registerButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
 
         // Initialize the stage for text fields
@@ -67,6 +69,8 @@ public class RegistrationState extends State {
 
     @Override
     protected void handleInput() {
+
+        // Setup touch reactions
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, registerButton)){
@@ -82,9 +86,7 @@ public class RegistrationState extends State {
                 if(registered){
                     gsm.set(new LoginState(gsm));
                 }
-
             }
-
         }
     }
 
@@ -98,6 +100,7 @@ public class RegistrationState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(registerButton.getImage(), registerButton.getX(), registerButton.getY(), registerButton.getWidth(), registerButton.getHeight());
         sb.end();
 

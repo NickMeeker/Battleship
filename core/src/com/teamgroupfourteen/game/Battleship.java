@@ -33,7 +33,7 @@ public class Battleship extends ApplicationAdapter {
 		gsm.push(new MainMenuState(gsm, user));
 		//gsm.push(new CurrentGamesState(gsm));
 		//gsm.push(new LoginState(gsm));
-		//gsm.push(new RegistrationState(gsm))
+		//gsm.push(new RegistrationState(gsm));
 	}
 
 	@Override

@@ -13,8 +13,6 @@ import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
 import com.teamgroupfourteen.game.User.User;
 
-
-
 /**
  * Created by derek on 4/13/18.
  */
@@ -87,6 +85,8 @@ public class StoreState extends State{
     }
 
     public void handleInput(){
+
+        // Setup touch reactions
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, buyShieldBtn)){

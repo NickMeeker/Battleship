@@ -26,16 +26,22 @@ public class MultiplayerTypeState extends State {
     public MultiplayerTypeState(GameStateManager gsm, User user) {
         super(gsm);
         this.user = user;
+
+        // Setup background
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+
+        // Setup buttons
         localPlayBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "LocalMultiplayer.png");
         onlinePlayBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "OnlineMultiplayer.png");
-        backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
+        backBtn = new GameButton(0, Battleship.HEIGHT - 100, 100, 100, "Arrow_left.png");
     }
 
     @Override
     public void handleInput() {
+
+        // Setup touch reactions
         if (Gdx.input.justTouched()) {
             Vector3 touchPosition = super.getInputRegion();
             if (isTouched(touchPosition, localPlayBtn)) {
