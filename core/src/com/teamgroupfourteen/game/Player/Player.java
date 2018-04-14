@@ -270,7 +270,9 @@ public class Player {
         return this.board.getShipName(shipNum);
     }
 
-
+    public void setShipOrientation(int shipNum, char orientation){
+        this.board.setShipOrientation(shipNum, orientation);
+    }
 
     public char getShipOrientation(int shipNum){
         return this.board.getShipOrientation(shipNum);
@@ -294,6 +296,22 @@ public class Player {
 
     public boolean cellIsHit(int x, int y){
         return this.board.isCellHit(x, y);
+    }
+
+    public int getShieldCount(){
+        return this.numPowerUp1;
+    }
+
+    public int getMultishotCount(){
+        return this.numPowerUp2;
+    }
+
+    public int getDoubleShot(){
+        return this.numPowerUp3;
+    }
+
+    public void placeShield(int x, int y){
+        this.board.placeShield(x, y);
     }
 
     public boolean allShipsDestroyed(){
