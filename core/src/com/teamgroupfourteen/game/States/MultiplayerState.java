@@ -16,6 +16,7 @@ public class MultiplayerState extends State {
     private GameButton currentGameBtn;
     private GameButton createGameBtn;
     private GameButton joinGameBtn;
+
     private GameButton backBtn;
 
         public MultiplayerState(GameStateManager gsm, User user) {

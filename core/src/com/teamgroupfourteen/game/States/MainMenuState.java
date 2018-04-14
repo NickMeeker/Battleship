@@ -38,6 +38,7 @@ public class MainMenuState extends State {
         multiPlayerBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "MultiPlayerButton.png");
         creditsBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "CreditsButton.png");
         spectatorBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "SpectatorButton.png");
+        storeBtn = new GameButton(Battleship.WIDTH-64, 0 , 64, 64, "StoreButton.png");
         optionsBtn = new GameButton(Battleship.WIDTH-64, Battleship.HEIGHT - 64, 64, 64, "Options.png");
 
     }
@@ -55,6 +56,8 @@ public class MainMenuState extends State {
                 gsm.push(new MultiplayerTypeState(gsm, user));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
+            } else if(isTouched(touchPosition, storeBtn)){
+                gsm.push(new StoreState(gsm, user));
             } else if(isTouched(touchPosition, optionsBtn)){
                 gsm.push(new OptionsState(gsm));
             }
@@ -76,6 +79,7 @@ public class MainMenuState extends State {
         sb.draw(multiPlayerBtn.getImage(), multiPlayerBtn.getX(), multiPlayerBtn.getY(), multiPlayerBtn.getWidth(), multiPlayerBtn.getHeight());
         sb.draw(spectatorBtn.getImage(), spectatorBtn.getX(), spectatorBtn.getY(), spectatorBtn.getWidth(), spectatorBtn.getHeight());
         sb.draw(creditsBtn.getImage(), creditsBtn.getX(), creditsBtn.getY(), creditsBtn.getWidth(), creditsBtn.getHeight());
+        sb.draw(storeBtn.getImage(), storeBtn.getX(), storeBtn.getY(), storeBtn.getWidth(), storeBtn.getHeight());
         sb.draw(optionsBtn.getImage(), optionsBtn.getX(), optionsBtn.getY(), optionsBtn.getWidth(), optionsBtn.getHeight());
         sb.end();
     }

@@ -40,7 +40,7 @@ public class MultiplayerTypeState extends State {
                 gsm.push(new PlayState(gsm, player1, player2));
             } else if (isTouched(touchPosition, onlinePlayBtn)) {
                 gsm.push(new MultiplayerState(gsm, user));
-            }else if (isTouched(touchPosition, backBtn)) {
+            } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
             }
         }
