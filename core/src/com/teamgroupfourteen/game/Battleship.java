@@ -17,20 +17,20 @@ public class Battleship extends ApplicationAdapter {
 	public static final String TITLE = "BATTLESHIP";
 	public static final String APIPREFIX = "http://localhost:3000/api/";
 
+	public static boolean soundOn = true;
+
 	private SpriteBatch batch;
 	private GameStateManager gsm;
-
-	public boolean soundOn;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
-User user = new User();
+        User user = new User();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Player player1= new Player(null);
 		Player player2 = new Player(null);
-		gsm.push(new MainMenuState(gsm, user));
+		//gsm.push(new MainMenuState(gsm, user));
 		//gsm.push(new CurrentGamesState(gsm));
 		//gsm.push(new LoginState(gsm));
 		//gsm.push(new RegistrationState(gsm));

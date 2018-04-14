@@ -37,16 +37,15 @@ public class LoginState extends State {
 
     public LoginState(GameStateManager gsm) {
         super(gsm);
-        cam.setToOrtho(false, Battleship.WIDTH/2, Battleship.HEIGHT/2);
-        // set the background as a texture region. 178x232 is the resolution of the image
-        background = new Texture("backgroundOcean.png");
-        mainBackground = new TextureRegion(background, 0, 0, 178, 232 );
+        cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
+        background = new Texture("testPic.jpg");
+        mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
         // attempts a login check using stored authentication data if applicable
         resp = new LoginRequest("", "");
         loggedIn = resp.attemptInitAuth();
 
-        loginButton = new GameButton(cam.position.x/2, 300, 120, 60, "Confirm.png");
+        loginButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
 
         // Initialize the stage for text fields
         stage = new Stage();
@@ -56,15 +55,17 @@ public class LoginState extends State {
 
         // initialize text fields and add them to stage
         usernameField = new TextField("", uiSkin);
-        usernameField.setPosition(cam.position.x/2, 200);
+        usernameField.setPosition(cam.position.x/2-20, 500);
         usernameField.setSize(300, 40);
+        usernameField.setMessageText("Username");
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
-        passwordField.setPosition(cam.position.x/2, 100);
+        passwordField.setPosition(cam.position.x/2-20, 400);
         passwordField.setSize(300, 40);
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
+        passwordField.setMessageText("Password");
         stage.addActor(passwordField);
         //stage.setKeyboardFocus(usernameField);
     }
@@ -107,8 +108,7 @@ public class LoginState extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        // TODO: Figure out why this works
-        sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.WIDTH);
+        sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(loginButton.getImage(), loginButton.getX(), loginButton.getY(), loginButton.getWidth(), loginButton.getHeight());
         sb.end();
 
