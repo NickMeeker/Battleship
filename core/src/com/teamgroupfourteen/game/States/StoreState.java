@@ -62,8 +62,7 @@ public class StoreState extends State{
     public void update(float dt) {
         handleInput();
     }
-
-
+    
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
