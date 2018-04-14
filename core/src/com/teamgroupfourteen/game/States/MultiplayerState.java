@@ -9,6 +9,10 @@ import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.User.User;
 
+/**
+ * Created by derek on 4/11/18.
+ */
+
 public class MultiplayerState extends State {
     private User user;
     private Texture background;

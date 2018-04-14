@@ -30,6 +30,10 @@ import org.json.JSONObject;
 import java.awt.Font;
 import java.util.ArrayList;
 
+/**
+ * Created by derek on 4/11/18.
+ */
+
 public class CurrentGamesState extends State {
 
     private Texture background;

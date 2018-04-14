@@ -10,7 +10,9 @@ import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
 import com.teamgroupfourteen.game.User.User;
 
-
+/**
+ * Created by derek on 4/13/18.
+ */
 
 public class StoreState extends State{
     private Texture background;
@@ -62,7 +64,7 @@ public class StoreState extends State{
     public void update(float dt) {
         handleInput();
     }
-    
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
