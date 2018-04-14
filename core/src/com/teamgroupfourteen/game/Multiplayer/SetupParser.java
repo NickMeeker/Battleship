@@ -10,11 +10,11 @@ import java.util.Arrays;
 public class SetupParser {
     private String setupLog;
     private ArrayList<String> logEntries;
-    int playerNum;
-    int row;
-    int column;
-    int shipNum;
-    char orientation;
+    private int playerNum;
+    private int row;
+    private int column;
+    private int shipNum;
+    private char orientation;
 
     public SetupParser(String setupLog){
         this.setupLog = setupLog;

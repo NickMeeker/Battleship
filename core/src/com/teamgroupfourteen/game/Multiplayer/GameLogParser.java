@@ -9,6 +9,74 @@ import java.util.Arrays;
 
 public class GameLogParser {
     private String gameLog;
+    private int playerNum;
+    private int row;
+    private int column;
+    private int shipNum;
+    private int shotResult;
+    private int rowShot1;
+    private int columnShot1;
+    private int multiShotResult1;
+    private int rowShot2;
+
+    public int getPlayerNum() {
+        return playerNum;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public int getShipNum() {
+        return shipNum;
+    }
+
+    public int getShotResult() {
+        return shotResult;
+    }
+
+    public int getRowShot1() {
+        return rowShot1;
+    }
+
+    public int getColumnShot1() {
+        return columnShot1;
+    }
+
+    public int getMultiShotResult1() {
+        return multiShotResult1;
+    }
+
+    public int getRowShot2() {
+        return rowShot2;
+    }
+
+    public int getColumnShot2() {
+        return columnShot2;
+    }
+
+    public int getMultiShotResult2() {
+        return multiShotResult2;
+    }
+
+    public char getOrientation() {
+        return orientation;
+    }
+
+    public char getMoveType() {
+        return moveType;
+    }
+
+    private int columnShot2;
+    private int multiShotResult2;
+    private char orientation;
+    private char moveType;
+
+
 
     public ArrayList<String> getLogEntries() {
         return logEntries;
@@ -27,7 +95,6 @@ public class GameLogParser {
     }
 
     public void parseLogEntries(String logEntry){
-        int playerNum;
         if(logEntry.charAt(1) == '0')
             playerNum = 0;
         else if(logEntry.charAt(1) == '1')
@@ -36,22 +103,22 @@ public class GameLogParser {
 
         if(logEntry.charAt(0) == 'n'){
             // we're dealing with a normal move of firing one shot
-            int row = logEntry.charAt(2);
+            row = logEntry.charAt(2);
             row -= 65;
 
-            int column = logEntry.charAt(3);
+            column = logEntry.charAt(3);
 
             // result with either be h or o
             // h represents a hit and o represents a miss
             // we can change it to x and o if it's easier to read
-            char result = logEntry.charAt(4);
+            shotResult = logEntry.charAt(4);
 
         } else if(logEntry.charAt(0) == 's'){
             // we're dealing with a shield placement
-            int row = logEntry.charAt(2);
+            row = logEntry.charAt(2);
             row -= 65;
 
-            int column = logEntry.charAt(3);
+            column = logEntry.charAt(3);
 
             // yields the row and column of the shield
 
@@ -59,7 +126,6 @@ public class GameLogParser {
             // we're dealing with an evade
 
             // get the type of ship evading
-            int shipNum;
             switch(logEntry.charAt(2)){
                 case 'm':
                     // We are dealing with a minesweeper
@@ -83,29 +149,29 @@ public class GameLogParser {
                     break;
             }
 
-            int row = logEntry.charAt(3);
+            row = logEntry.charAt(3);
             row -= 65;
 
-            int column = logEntry.charAt(4);
+            column = logEntry.charAt(4);
 
             // orientation, d for down and r for right
-            char orientation = logEntry.charAt(5);
+            orientation = logEntry.charAt(5);
 
         } else if(logEntry.charAt(0) == 'm'){
             // we're dealing with a multishot
-            int rowShot1 = logEntry.charAt(2);
+            rowShot1 = logEntry.charAt(2);
             rowShot1 -= 65;
 
-            int columnShot1 = logEntry.charAt(3);
-            char result1 = logEntry.charAt(4);
+            columnShot1 = logEntry.charAt(3);
+            multiShotResult1 = logEntry.charAt(4);
 
             // and again for the next shot
 
-            int rowShot2 = logEntry.charAt(5);
+            rowShot2 = logEntry.charAt(5);
             rowShot2 -= 65;
 
-            int columnShot2 = logEntry.charAt(6);
-            char result2 = logEntry.charAt(7);
+            columnShot2 = logEntry.charAt(6);
+            multiShotResult2 = logEntry.charAt(7);
         } else{
             // bad text, this should never happen
             System.out.println("Error: game log incorrect");
