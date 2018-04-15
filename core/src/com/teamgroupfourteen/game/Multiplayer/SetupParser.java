@@ -10,11 +10,11 @@ import java.util.Arrays;
 public class SetupParser {
     private String setupLog;
     private ArrayList<String> logEntries;
-    static int playerNum;
-    static int row;
-    static int column;
-    static int shipNum;
-    static char orientation;
+    int playerNum;
+    int row;
+    int column;
+    int shipNum;
+    char orientation;
 
     public SetupParser(String setupLog){
         this.setupLog = setupLog;
@@ -23,9 +23,13 @@ public class SetupParser {
     public void buildLogEntries(){
         String[] strArr = setupLog.split(",");
         logEntries = new ArrayList<String>(Arrays.asList(strArr));
+
+        for(int i = 0; i < logEntries.size() - 1; i++){
+            parseLogEntry(logEntries.get(i));
+        }
     }
 
-    public static void parseLogEntry(String logEntry){
+    public void parseLogEntry(String logEntry){
 
         if(logEntry.charAt(0) == '0'){
             // THIS IS HOST PLAYER

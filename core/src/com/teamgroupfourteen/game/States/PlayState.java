@@ -329,6 +329,9 @@ public class PlayState extends State {
                     players[0].setShipOrientation(i, setupParser.getOrientaion());
                 }
             }
+            else if(singlePlayer){
+                gsm.push(new PlayStateSetup(gsm, players[0], this));
+            }
             //advance to next step of setup
             setupCount++;
         }
@@ -576,15 +579,14 @@ public class PlayState extends State {
                     if(players[1].allShipsDestroyed()){
                         //TODO player win state
 
-                        gsm.pop();
+                        gsm.set(new WinState(gsm, "Player 1"));
                     }
 
                     players[1].makeMove(players[0]);
 
-                    if(players[0].allShipsDestroyed()){
+                    if(players[0].allShipsDestroyed()){System.out.println("check");
                         //TODO computer win state
-
-                        gsm.pop();
+                        gsm.set(new WinState(gsm, "Computer"));
                     }
                 }
                 //if the game is online update the database move list with the move that was just made
