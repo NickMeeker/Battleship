@@ -51,39 +51,45 @@ public class CreditsState extends State{
 
         // initialize text fields and add them to stage
         creator1 = new TextField("Nick Meeker", uiSkin);
-        creator1.setPosition(cam.position.x/2-20, 600);
-        creator1.setSize(300, 40);
+        creator1.setPosition(Battleship.WIDTH/2-100, 500);
+        creator1.setSize(200, 40);
         creator1.setColor(52,52,51,1);
+        creator1.setDisabled(true);
         stage.addActor(creator1);
 
         creator2 = new TextField("Derek Workman", uiSkin);
-        creator2.setPosition(cam.position.x/2-20, 500);
-        creator2.setSize(300, 40);
+        creator2.setPosition(Battleship.WIDTH/2-100, 450);
+        creator2.setSize(200, 40);
         creator2.setColor(52,52,51,1);
+        creator2.setDisabled(true);
         stage.addActor(creator2);
 
         creator3 = new TextField("Jeremy Burns", uiSkin);
-        creator3.setPosition(cam.position.x/2-20, 400);
-        creator3.setSize(300, 40);
+        creator3.setPosition(Battleship.WIDTH/2-100, 400);
+        creator3.setSize(200, 40);
         creator3.setColor(52,52,51,1);
+        creator3.setDisabled(true);
         stage.addActor(creator3);
 
         creator4 = new TextField("Fazle Akbar", uiSkin);
-        creator4.setPosition(cam.position.x/2-20, 300);
-        creator4.setSize(300, 40);
+        creator4.setPosition(Battleship.WIDTH/2-100, 350);
+        creator4.setSize(200, 40);
         creator4.setColor(52,52,51,1);
+        creator4.setDisabled(true);
         stage.addActor(creator4);
 
         creator5 = new TextField("Jacqueline van der Meulen", uiSkin);
-        creator5.setPosition(cam.position.x/2-20, 200);
-        creator5.setSize(300, 40);
+        creator5.setPosition(Battleship.WIDTH/2-100, 300);
+        creator5.setSize(200, 40);
         creator5.setColor(52,52,51,1);
+        creator5.setDisabled(true);
         stage.addActor(creator5);
 
         creator6 = new TextField("Gianni Thomas", uiSkin);
-        creator6.setPosition(cam.position.x/2-20, 100);
-        creator6.setSize(300, 40);
+        creator6.setPosition(Battleship.WIDTH/2-100, 250);
+        creator6.setSize(200, 40);
         creator6.setColor(52,52,51,1);
+        creator6.setDisabled(true);
         stage.addActor(creator6);
     }
 
