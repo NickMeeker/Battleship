@@ -58,8 +58,10 @@ public class CurrentGamesState extends State {
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
 
         // Setup background
-        background = new Texture("testPic.jpg");
+        background = new Texture("MainBackground.png");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+
+        // Setup buttons
         selectGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "SelectButton.png");
         cancelGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 300, 360, 100, "CancelButton.png");
 

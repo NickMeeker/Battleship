@@ -27,10 +27,10 @@ public class MultiplayerTypeState extends State {
     public MultiplayerTypeState(GameStateManager gsm, User user) {
         super(gsm);
         this.user = user;
+        cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
 
         // Setup background
-        cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
-        background = new Texture("testPic.jpg");
+        background = new Texture("MainBackground.png");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
 
         // Setup buttons & title

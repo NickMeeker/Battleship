@@ -33,7 +33,7 @@ public class MainMenuState extends State {
 
         // Setup background
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
-        background = new Texture("testPic.jpg");
+        background = new Texture("MainBackground.png");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
         // Setup buttons & title
@@ -57,7 +57,7 @@ public class MainMenuState extends State {
                 System.out.println("Transition to singleplayer");
                 Player player1 = new Player(null);
                 Player player2 = new Player(null);
-                //gsm.push(new PlayState(gsm, player1, player2, true, false));
+                gsm.push(new PlayState(gsm, player1, player2, true, false, null, null));
             } else if(isTouched(touchPosition, multiPlayerBtn)){
                 gsm.push(new MultiplayerTypeState(gsm, user));
             } else if(isTouched(touchPosition, spectatorBtn)) {

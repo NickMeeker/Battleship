@@ -329,6 +329,9 @@ public class PlayState extends State {
                     players[0].setShipOrientation(i, setupParser.getOrientaion());
                 }
             }
+            else if(singlePlayer){
+                gsm.push(new PlayStateSetup(gsm, players[0], this));
+            }
             //advance to next step of setup
             setupCount++;
         }
@@ -576,15 +579,14 @@ public class PlayState extends State {
                     if(players[1].allShipsDestroyed()){
                         //TODO player win state
 
-                        gsm.pop();
+                        gsm.set(new WinState(gsm, "Player 1"));
                     }
 
                     players[1].makeMove(players[0]);
 
-                    if(players[0].allShipsDestroyed()){
+                    if(players[0].allShipsDestroyed()){System.out.println("check");
                         //TODO computer win state
-
-                        gsm.pop();
+                        gsm.set(new WinState(gsm, "Computer"));
                     }
                 }
                 //if the game is online update the database move list with the move that was just made
@@ -849,6 +851,46 @@ public class PlayState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        gameGrid.dispose();
+        coordinateBackground.dispose();
+        crosshair.dispose();
+        crosshair2.dispose();
+        crosshair3.dispose();
+        crosshair4.dispose();
+        miss.dispose();
+        shipHit.dispose();
+        hitMarker.dispose();
+        rocket.dispose();
+
+        for(int i = 0; i < powerUp.length - 1; i++){
+            powerUp[i].dispose();
+        }
+
+        upBtn.disposeAssets();
+        downBtn.disposeAssets();
+        leftBtn.disposeAssets();
+        rightBtn.disposeAssets();
+        greyFireBtn.disposeAssets();
+        fireBtn.disposeAssets();
+        panRight.disposeAssets();
+        panLeft.disposeAssets();
+        rightPowerUp.disposeAssets();
+        leftPowerUp.disposeAssets();
+
+        minesweeper1.dispose();
+        minesweeper2.dispose();
+        frigate1.dispose();
+        frigate2.dispose();
+        submarine1.dispose();
+        submarine2.dispose();
+        battleship1.dispose();
+        battleship2.dispose();
+        carrier1.dispose();
+        carrier2.dispose();
+
+        explosion.dispose();
+        splash.dispose();
+
         System.out.println("Play State Disposed");
     }
 
