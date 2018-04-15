@@ -60,6 +60,7 @@ public class LoginState extends State {
         usernameField.setPosition(cam.position.x/2-20, 500);
         usernameField.setSize(300, 40);
         usernameField.setMessageText("Username");
+        usernameField.setColor(52,52,51,1);
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
@@ -68,6 +69,7 @@ public class LoginState extends State {
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
         passwordField.setMessageText("Password");
+        passwordField.setColor(52,52,51,1);
         stage.addActor(passwordField);
         //stage.setKeyboardFocus(usernameField);
     }

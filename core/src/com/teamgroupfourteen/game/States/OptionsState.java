@@ -23,7 +23,6 @@ public class OptionsState extends State{
     private GameButton soundOffBtn;
     private GameButton backBtn;
 
-
     public OptionsState(GameStateManager gsm) {
         super(gsm);
 
@@ -80,7 +79,5 @@ public class OptionsState extends State{
         soundFXBtn.disposeAssets();
         soundOnBtn.disposeAssets();
     }
-
-
 
 }

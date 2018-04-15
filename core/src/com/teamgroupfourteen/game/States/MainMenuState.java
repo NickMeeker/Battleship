@@ -10,7 +10,6 @@ import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
 import com.teamgroupfourteen.game.User.User;
 
-
 /**
  * Created by nick on 2/28/18.
  */
@@ -27,7 +26,6 @@ public class MainMenuState extends State {
     private GameButton friendsBtn;
     private GameButton creditsBtn;
     private GameButton optionsBtn;
-
 
     public MainMenuState(GameStateManager gsm, User user){
         super(gsm);
@@ -102,5 +100,4 @@ public class MainMenuState extends State {
         creditsBtn.disposeAssets();
         System.out.println("Menu State Disposed");
     }
-
 }

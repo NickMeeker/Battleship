@@ -21,6 +21,7 @@ public class StoreState extends State{
     private Texture background;
     private TextureRegion mainBackground;
     private User user;
+    private GameButton coinBtn;
     private GameButton buyShieldBtn;
     private GameButton buyMultishotBtn;
     private GameButton buyDoubleshotBtn;
@@ -34,6 +35,7 @@ public class StoreState extends State{
     private TextField shieldAmount;
     private TextField multishotAmount;
     private TextField doubleshotAmount;
+    private TextField coinAmount;
     private GameButton backBtn;
     Skin uiSkin;
 
@@ -44,15 +46,16 @@ public class StoreState extends State{
         // Setup background
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
         background = new Texture("testPic.jpg");
+        mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
         // Setup buttons & power-up buying options
-        mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
+        coinBtn = new GameButton(Battleship.WIDTH-50, Battleship.HEIGHT - 50, 50, 50, "coin.png");
         buyShieldBtn = new GameButton(Battleship.WIDTH/8+50, cam.position.y + 100, 360, 100, "ShieldButton.png");
         buyMultishotBtn = new GameButton(Battleship.WIDTH/8+50, cam.position.y, 360, 100, "MultishotButton.png");
         buyDoubleshotBtn = new GameButton(Battleship.WIDTH/8+50, cam.position.y - 100, 360, 100, "DoubleshotButton.png");
-        shieldBtn = new GameButton(0, cam.position.y + 100, 100, 100, "shield.png");
+        shieldBtn = new GameButton(0, cam.position.y+100, 100, 100, "shield.png");
         multishotBtn = new GameButton(0, cam.position.y, 100, 100, "multishot.png");
-        doubleshotBtn = new GameButton(0, cam.position.y - 100, 100, 100, "doubleshot.png");
+        doubleshotBtn = new GameButton(0, cam.position.y-100, 100, 100, "doubleshot.png");
         countShieldBtn = new GameButton(Battleship.WIDTH/4-50, 0, 50, 50, "shield.png");
         countMultishotBtn = new GameButton(Battleship.WIDTH/2-25, 0, 50, 50, "multishot.png");
         countDoubleshotBtn = new GameButton(Battleship.WIDTH*3/4, 0, 50, 50, "doubleshot.png");
@@ -65,22 +68,32 @@ public class StoreState extends State{
         uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
 
         // initialize text fields for power-up amounts
-        shieldAmount = new TextField("5", uiSkin);
+        coinAmount = new TextField(Integer.toString(user.getCoins()), uiSkin);
+        coinAmount.setPosition(Battleship.WIDTH-100, Battleship.HEIGHT-50);
+        coinAmount.setSize(50, 50);
+        coinAmount.setDisabled(true);
+        coinAmount.setColor(52,52,51,1);
+        stage.addActor(coinAmount);
+
+        shieldAmount = new TextField(Integer.toString(user.getNumPowerUp1()), uiSkin);
         shieldAmount.setPosition(Battleship.WIDTH/4-50, 50);
         shieldAmount.setSize(50, 50);
         shieldAmount.setDisabled(true);
+        shieldAmount.setColor(52,52,51,1);
         stage.addActor(shieldAmount);
 
-        multishotAmount = new TextField("5", uiSkin);
+        multishotAmount = new TextField(Integer.toString(user.getNumPowerUp2()), uiSkin);
         multishotAmount.setPosition(Battleship.WIDTH/2-25, 50);
         multishotAmount.setSize(50, 50);
         multishotAmount.setDisabled(true);
+        multishotAmount.setColor(52,52,51,1);
         stage.addActor(multishotAmount);
 
-        doubleshotAmount = new TextField("5", uiSkin);
+        doubleshotAmount = new TextField(Integer.toString(user.getNumPowerUp3()), uiSkin);
         doubleshotAmount.setPosition(Battleship.WIDTH*3/4, 50);
         doubleshotAmount.setSize(50, 50);
         doubleshotAmount.setDisabled(true);
+        doubleshotAmount.setColor(52,52,51,1);
         stage.addActor(doubleshotAmount);
     }
 
@@ -90,11 +103,11 @@ public class StoreState extends State{
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, buyShieldBtn)){
-                // TODO: update coin count
+                // TODO: update coin count & power-up count
             } else if(isTouched(touchPosition, buyMultishotBtn)){
-                // TODO: update coin count
+                // TODO: update coin count & power-up count
             } else if(isTouched(touchPosition, buyDoubleshotBtn)){
-                // TODO: update coin count
+                // TODO: update coin count & power-up count
             } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
             }
@@ -111,6 +124,7 @@ public class StoreState extends State{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(coinBtn.getImage(), coinBtn.getX(), coinBtn.getY(), coinBtn.getWidth(), coinBtn.getHeight());
         sb.draw(buyShieldBtn.getImage(), buyShieldBtn.getX(), buyShieldBtn.getY(), buyShieldBtn.getWidth(), buyShieldBtn.getHeight());
         sb.draw(buyMultishotBtn.getImage(), buyMultishotBtn.getX(), buyMultishotBtn.getY(), buyMultishotBtn.getWidth(), buyMultishotBtn.getHeight());
         sb.draw(buyDoubleshotBtn.getImage(), buyDoubleshotBtn.getX(), buyDoubleshotBtn.getY(), buyDoubleshotBtn.getWidth(), buyDoubleshotBtn.getHeight());

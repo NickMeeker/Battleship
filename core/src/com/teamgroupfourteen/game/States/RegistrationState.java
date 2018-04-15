@@ -48,6 +48,7 @@ public class RegistrationState extends State {
         usernameField.setPosition(cam.position.x/2-20, 600);
         usernameField.setSize(300, 40);
         usernameField.setMessageText("Username");
+        usernameField.setColor(52,52,51,1);
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
@@ -56,6 +57,7 @@ public class RegistrationState extends State {
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
         passwordField.setMessageText("Password");
+        passwordField.setColor(52,52,51,1);
         stage.addActor(passwordField);
 
         confirmPasswordField = new TextField("", uiSkin);
@@ -64,6 +66,7 @@ public class RegistrationState extends State {
         confirmPasswordField.setPasswordMode(true);
         confirmPasswordField.setPasswordCharacter('*');
         confirmPasswordField.setMessageText("Confirm Password");
+        confirmPasswordField.setColor(52,52,51,1);
         stage.addActor(confirmPasswordField);
     }
 
