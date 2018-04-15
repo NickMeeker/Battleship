@@ -10,11 +10,11 @@ import java.util.Arrays;
 public class SetupParser {
     private String setupLog;
     private ArrayList<String> logEntries;
-    int playerNum;
-    int row;
-    int column;
-    int shipNum;
-    char orientation;
+    static int playerNum;
+    static int row;
+    static int column;
+    static int shipNum;
+    static char orientation;
 
     public SetupParser(String setupLog){
         this.setupLog = setupLog;
@@ -25,12 +25,12 @@ public class SetupParser {
         logEntries = new ArrayList<String>(Arrays.asList(strArr));
     }
 
-    public void parseLogEntry(String logEntry){
+    public static void parseLogEntry(String logEntry){
 
         if(logEntry.charAt(0) == '0'){
             // THIS IS HOST PLAYER
             playerNum = 0;
-        } else if(logEntry.charAt(1) == '1'){
+        } else if(logEntry.charAt(0) == '1'){
             // THIS IS GUEST PLAYER
             playerNum = 1;
         }
