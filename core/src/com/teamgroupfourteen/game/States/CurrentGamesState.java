@@ -42,6 +42,7 @@ public class CurrentGamesState extends State {
     private GameButton cancelGameBtn;
     private User user;
     private Texture barBlue;
+    private Texture barSelected;
     private BitmapFont font;
     private Stage stage;
     private Table table;
@@ -64,6 +65,7 @@ public class CurrentGamesState extends State {
 
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         barBlue = new Texture("barBlue.png");
+        barSelected = new Texture("barSelected.png");
 
         // Initialize the stage for text fields
         stage = new Stage();
@@ -78,13 +80,47 @@ public class CurrentGamesState extends State {
         container.setBounds(0, 15, Battleship.WIDTH, 1000);
         stage.addActor(container);
 
+        //used for testing without reading the database yet.
+        //
+        //
+/*
+        for(int i = 0; i < 20; i++){
+            TextButton tmp = new TextButton("", skin);
+            Image matchBar = new Image(barBlue);
+            tmp.setText(i + "");
+            final Stack stack = new Stack();
+            stack.add(matchBar);
+            stack.setName(Integer.toString(i));
+            stack.add(new Label("   Host: ", skin));
+            String spaces =  "";
+            stack.add(new Label(String.format("%1$" + 13 + "s", spaces) + "Safa", skin));
+            stack.add(new Label(String.format("%1$" + 59 + "s", spaces) + "Guest: ", skin));
+            stack.add(new Label(String.format("%1$" + 72 + "s", spaces) + "John", skin));
+            table.add(stack).width(454).height(40).padTop(10).padBottom(5);
+            stack.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    launchGame = true;
+                    launchGameID = "123";
+                    Image matchBar = new Image(barSelected);
+                    stack.add(matchBar);
+                }
+            });
+
+            table.row();
+        }
+        table.add();
+*/
+
+
         final JSONArray gamesArray = user.getUserHostGames();
         System.out.println(gamesArray.getJSONObject(0));
 
         rowsList = new ArrayList<Stack>();
 
 
-        //this is where the games will actually go
+       //this is where the games will actually go
         for(i = 0; i < gamesArray.length(); i++){
             TextButton tmp = new TextButton("", skin);
             Image matchBar = new Image(barBlue);
@@ -103,7 +139,8 @@ public class CurrentGamesState extends State {
                     super.clicked(event, x, y);
                     launchGame = true;
                     launchGameID = gamesArray.getJSONObject(rowsList.indexOf(stack)).getString("_id");
-
+                    Image matchBar = new Image(barSelected);
+                    stack.add(matchBar);
                 }
             });
 
@@ -112,6 +149,8 @@ public class CurrentGamesState extends State {
             rowsList.add(stack);
         }
         table.add();
+
+
     }
 
     @Override
@@ -120,7 +159,9 @@ public class CurrentGamesState extends State {
         if (Gdx.input.justTouched()) {
             Vector3 touchPosition = super.getInputRegion();
             if (isTouched(touchPosition, selectGameBtn)) {
-                // todo select game from list
+                if(launchGame){
+                    // todo launch selected game
+                }
             } else if (isTouched(touchPosition, cancelGameBtn)) {
                 gsm.pop();
             }
