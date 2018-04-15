@@ -55,18 +55,17 @@ public class CurrentGamesState extends State {
         super(gsm);
         this.user = user;
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
+
+        // Setup background
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         selectGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "SelectButton.png");
         cancelGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 300, 360, 100, "CancelButton.png");
 
-        //Image bgImage = new Image();
-        //bgImage.setDrawable(new TextureRegionDrawable(new TextureRegion(background)));
-
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-
         barBlue = new Texture("barBlue.png");
 
+        // Initialize the stage for text fields
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         Table container = new Table();
@@ -74,7 +73,6 @@ public class CurrentGamesState extends State {
         table.setSkin(skin);
         ScrollPane pane = new ScrollPane(table, skin);
         pane.layout();
-        //table.setBackground(bgImage.getDrawable());
         container.add(pane).width(Battleship.WIDTH).height(350);
         container.row();
         container.setBounds(0, 15, Battleship.WIDTH, 1000);
@@ -84,6 +82,8 @@ public class CurrentGamesState extends State {
         System.out.println(gamesArray.getJSONObject(0));
 
         rowsList = new ArrayList<Stack>();
+
+
         //this is where the games will actually go
         for(i = 0; i < gamesArray.length(); i++){
             TextButton tmp = new TextButton("", skin);
@@ -91,11 +91,11 @@ public class CurrentGamesState extends State {
             tmp.setText(i + "");
             final Stack stack = new Stack();
             stack.add(matchBar);
-            // TODO PLEASE SOMEONE MAKE THIS BETTER
+            String spaces =  "";
             stack.add(new Label("   Host: ", skin));
-            stack.add(new Label("             " + gamesArray.getJSONObject(i).getString("hostPlayer"), skin));
-            stack.add(new Label("                                                           Guest: ", skin));
-            stack.add(new Label("                                                                        " + gamesArray.getJSONObject(i).getString("guestPlayer"), skin));
+            stack.add(new Label(String.format("%1$" + 13 + "s", spaces) + gamesArray.getJSONObject(i).getString("hostPlayer"), skin));
+            stack.add(new Label(String.format("%1$" + 59 + "s", spaces) + "Guest: ", skin));
+            stack.add(new Label(String.format("%1$" + 72 + "s", spaces) + gamesArray.getJSONObject(i).getString("guestPlayer"), skin));
 
             stack.addListener(new ClickListener(){
                 @Override
