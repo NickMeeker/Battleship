@@ -69,7 +69,6 @@ public class OptionsState extends State{
         } else if(Battleship.soundOn == false){
             sb.draw(soundOffBtn.getImage(), soundOffBtn.getX(), soundOffBtn.getY(), soundOffBtn.getWidth(), soundOffBtn.getHeight());
         }
-
         sb.end();
     }
 

@@ -103,11 +103,17 @@ public class StoreState extends State{
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, buyShieldBtn)){
-                // TODO: update coin count & power-up count
+                if(user.getCoins() >= 3) {
+                    // TODO: update coin count & power-up count
+                }
             } else if(isTouched(touchPosition, buyMultishotBtn)){
-                // TODO: update coin count & power-up count
+                if(user.getCoins() >= 5) {
+                    // TODO: update coin count & power-up count
+                }
             } else if(isTouched(touchPosition, buyDoubleshotBtn)){
-                // TODO: update coin count & power-up count
+                if(user.getCoins() >= 10) {
+                    // TODO: update coin count & power-up count
+                }
             } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
             }
