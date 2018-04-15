@@ -22,6 +22,7 @@ public class OptionsState extends State{
     private GameButton soundFXBtn;
     private GameButton soundOnBtn;
     private GameButton soundOffBtn;
+    private GameButton logoutBtn;
     private GameButton backBtn;
 
     public OptionsState(GameStateManager gsm) {
@@ -35,8 +36,9 @@ public class OptionsState extends State{
         // Setup buttons & title
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         soundFXBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SoundFXButton.png");
-        soundOnBtn = new GameButton(Battleship.WIDTH/2 - 150, cam.position.y - 300, 300, 300, "soundOn.png");
-        soundOffBtn = new GameButton(Battleship.WIDTH/2 -150, cam.position.y - 300, 300, 300, "soundOff.png");
+        soundOnBtn = new GameButton(Battleship.WIDTH/2 - 100, 300, 200, 200, "soundOn.png");
+        soundOffBtn = new GameButton(Battleship.WIDTH/2 -100, 300, 200, 200, "soundOff.png");
+        logoutBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "LogoutButton.png");
         backBtn = new GameButton(0, Battleship.HEIGHT-64, 64, 64, "Arrow_left.png");
     }
 
@@ -47,11 +49,16 @@ public class OptionsState extends State{
         if (Gdx.input.justTouched()) {
             Vector3 touchPosition = super.getInputRegion();
             if (isTouched(touchPosition, soundFXBtn)) {
-
+                Battleship.soundOn = !(Battleship.soundOn);
             } else if (isTouched(touchPosition, soundOnBtn)) {
+                    Battleship.soundOn = !(Battleship.soundOn);
+            } else if (isTouched(touchPosition, soundOffBtn)) {
                 Battleship.soundOn = !(Battleship.soundOn);
             } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
+            } else if (isTouched(touchPosition, logoutBtn)) {
+                // todo not sure when is needed to delete local stored account so it doesn't auto log in again.
+                gsm.set(new LoginState(gsm));
             }
         }
     }
@@ -68,6 +75,7 @@ public class OptionsState extends State{
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(soundFXBtn.getImage(), soundFXBtn.getX(), soundFXBtn.getY(), soundFXBtn.getWidth(), soundFXBtn.getHeight());
+        sb.draw(logoutBtn.getImage(), logoutBtn.getX(), logoutBtn.getY(), logoutBtn.getWidth(), logoutBtn.getHeight());
         sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
 
         // display correct icon per sound options selected.
