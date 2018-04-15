@@ -12,10 +12,10 @@ import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 
 /**
- * Created by derek on 4/13/18.
+ * Created by derek on 4/14/18.
  */
 
-public class WinState extends State {
+public class TransitionState extends State {
     private Texture background;
     private TextureRegion mainBackground;
     private GameButton titleBtn;
@@ -25,7 +25,7 @@ public class WinState extends State {
     Skin uiSkin;
 
 
-    public WinState(GameStateManager gsm, String user){
+    public TransitionState(GameStateManager gsm, String user){
         super(gsm);
 
         // Setup background
@@ -45,7 +45,7 @@ public class WinState extends State {
         uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
 
         // initialize text fields for power-up amounts
-        userInfo = new TextField("Congratulations " + user + ", you won!", uiSkin);
+        userInfo = new TextField(user + ", it's your turn!!", uiSkin);
         userInfo.setPosition(Battleship.WIDTH/2-200, cam.position.y);
         userInfo.setSize(400, 50);
         userInfo.setDisabled(true);
@@ -87,6 +87,4 @@ public class WinState extends State {
     public void dispose() {
         background.dispose();
     }
-
-
 }
