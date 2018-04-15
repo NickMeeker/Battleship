@@ -110,7 +110,6 @@ public class RegistrationState extends State {
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(registerButton.getImage(), registerButton.getX(), registerButton.getY(), registerButton.getWidth(), registerButton.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }

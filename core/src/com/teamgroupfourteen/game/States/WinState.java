@@ -24,7 +24,6 @@ public class WinState extends State {
     private TextField userInfo;
     Skin uiSkin;
 
-
     public WinState(GameStateManager gsm, String user){
         super(gsm);
 
@@ -78,7 +77,6 @@ public class WinState extends State {
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(confirmBtn.getImage(), confirmBtn.getX(), confirmBtn.getY(), confirmBtn.getWidth(), confirmBtn.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }
@@ -90,6 +88,4 @@ public class WinState extends State {
         confirmBtn.disposeAssets();
         userInfo.remove();
     }
-
-
 }

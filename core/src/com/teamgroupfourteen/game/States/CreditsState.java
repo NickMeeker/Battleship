@@ -118,7 +118,6 @@ public class CreditsState extends State{
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }

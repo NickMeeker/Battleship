@@ -34,8 +34,6 @@ public class LoginState extends State {
     private boolean loggedIn;
     Skin uiSkin;
 
-
-
     public LoginState(GameStateManager gsm) {
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
@@ -76,6 +74,8 @@ public class LoginState extends State {
 
     @Override
     protected void handleInput() {
+
+        // Setup touch reactions
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, loginButton)){
@@ -93,13 +93,12 @@ public class LoginState extends State {
             }
 
         }
-
     }
 
     @Override
     public void update(float dt) {
 
-        // Setup touch reactions
+        // Check if user is already logged in
         if(loggedIn){
             System.out.println("The user is already logged in.");
             Player player = new Player(resp.getUsername());
@@ -107,7 +106,6 @@ public class LoginState extends State {
             gsm.set(new MainMenuState(gsm, user));
         }
         handleInput();
-
     }
 
     @Override
@@ -118,7 +116,6 @@ public class LoginState extends State {
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(loginButton.getImage(), loginButton.getX(), loginButton.getY(), loginButton.getWidth(), loginButton.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }

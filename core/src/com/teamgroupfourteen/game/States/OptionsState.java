@@ -26,10 +26,13 @@ public class OptionsState extends State{
 
     public OptionsState(GameStateManager gsm) {
         super(gsm);
-
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
+
+        // Setup background
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+
+        // Setup buttons & title
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         soundFXBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SoundFXButton.png");
         soundOnBtn = new GameButton(Battleship.WIDTH/2 - 150, cam.position.y - 300, 300, 300, "soundOn.png");
@@ -67,6 +70,7 @@ public class OptionsState extends State{
         sb.draw(soundFXBtn.getImage(), soundFXBtn.getX(), soundFXBtn.getY(), soundFXBtn.getWidth(), soundFXBtn.getHeight());
         sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
 
+        // display correct icon per sound options selected.
         if(Battleship.soundOn == true){
             sb.draw(soundOnBtn.getImage(), soundOnBtn.getX(), soundOnBtn.getY(), soundOnBtn.getWidth(), soundOnBtn.getHeight());
         } else if(Battleship.soundOn == false){

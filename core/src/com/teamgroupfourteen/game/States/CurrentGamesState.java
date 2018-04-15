@@ -97,7 +97,6 @@ public class CurrentGamesState extends State {
             stack.add(new Label("                                                           Guest: ", skin));
             stack.add(new Label("                                                                        " + gamesArray.getJSONObject(i).getString("guestPlayer"), skin));
 
-
             stack.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -111,18 +110,17 @@ public class CurrentGamesState extends State {
             table.add(stack).width(454).height(40).padTop(10).padBottom(5);
             table.row();
             rowsList.add(stack);
-
         }
         table.add();
-
     }
 
     @Override
     public void handleInput() {
+        // Setup touch reactions
         if (Gdx.input.justTouched()) {
             Vector3 touchPosition = super.getInputRegion();
             if (isTouched(touchPosition, selectGameBtn)) {
-                System.out.println("Transition to select game");
+                // todo select game from list
             } else if (isTouched(touchPosition, cancelGameBtn)) {
                 gsm.pop();
             }
@@ -142,17 +140,12 @@ public class CurrentGamesState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(selectGameBtn.getImage(), selectGameBtn.getX(), selectGameBtn.getY(), selectGameBtn.getWidth(), selectGameBtn.getHeight());
         sb.draw(cancelGameBtn.getImage(), cancelGameBtn.getX(), cancelGameBtn.getY(), cancelGameBtn.getWidth(), cancelGameBtn.getHeight());
-
-
-
         sb.end();
-
         stage.act();
         stage.draw();
     }

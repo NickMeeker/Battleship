@@ -142,7 +142,6 @@ public class StoreState extends State{
         sb.draw(countDoubleshotBtn.getImage(), countDoubleshotBtn.getX(), countDoubleshotBtn.getY(), countDoubleshotBtn.getWidth(), countDoubleshotBtn.getHeight());
         sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }
