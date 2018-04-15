@@ -32,7 +32,7 @@ public class OptionsState extends State{
         soundFXBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SoundFXButton.png");
         soundOnBtn = new GameButton(Battleship.WIDTH/2 - 150, cam.position.y - 300, 300, 300, "soundOn.png");
         soundOffBtn = new GameButton(Battleship.WIDTH/2 -150, cam.position.y - 300, 300, 300, "soundOff.png");
-        backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
+        backBtn = new GameButton(0, Battleship.HEIGHT-64, 64, 64, "Arrow_left.png");
     }
 
     @Override

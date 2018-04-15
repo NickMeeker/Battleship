@@ -31,9 +31,13 @@ public class RegistrationState extends State {
     public RegistrationState(GameStateManager gsm) {
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
+
+        // Setup background
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
+
+        // Setup buttons & title
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         registerButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
 

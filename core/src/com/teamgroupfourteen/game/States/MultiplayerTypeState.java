@@ -35,7 +35,7 @@ public class MultiplayerTypeState extends State {
         // Setup buttons
         localPlayBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "LocalMultiplayer.png");
         onlinePlayBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "OnlineMultiplayer.png");
-        backBtn = new GameButton(0, Battleship.HEIGHT - 100, 100, 100, "Arrow_left.png");
+        backBtn = new GameButton(0, Battleship.HEIGHT - 64, 64, 64, "Arrow_left.png");
     }
 
     @Override

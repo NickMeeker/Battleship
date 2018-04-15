@@ -40,8 +40,8 @@ public class MainMenuState extends State {
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         singlePlayerBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SinglePlayerButton.png");
         multiPlayerBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "MultiPlayerButton.png");
-        creditsBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "CreditsButton.png");
-        spectatorBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "SpectatorButton.png");
+        spectatorBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "SpectatorButton.png");
+        creditsBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "CreditsButton.png");
         storeBtn = new GameButton(Battleship.WIDTH - 64, 0 , 64, 64, "StoreButton.png");
         optionsBtn = new GameButton(Battleship.WIDTH - 50, Battleship.HEIGHT - 50, 50, 50, "Options.png");
 
@@ -62,6 +62,8 @@ public class MainMenuState extends State {
                 gsm.push(new MultiplayerTypeState(gsm, user));
             } else if(isTouched(touchPosition, spectatorBtn)) {
                 System.out.println("Transition to spectator button");
+            } else if(isTouched(touchPosition, creditsBtn)){
+                gsm.push(new CreditsState(gsm));
             } else if(isTouched(touchPosition, storeBtn)){
                 gsm.push(new StoreState(gsm, user));
             } else if(isTouched(touchPosition, optionsBtn)){

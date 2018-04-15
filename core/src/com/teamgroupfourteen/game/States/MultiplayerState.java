@@ -29,10 +29,10 @@ public class MultiplayerState extends State {
             cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
             background = new Texture("testPic.jpg");
             mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
-            currentGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "CurrentButton.png");
+            currentGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y+100, 360, 100, "CurrentButton.png");
             createGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "CreateButton.png");
-            joinGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "JoinButton.png");
-            backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
+            joinGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y-100, 360, 100, "JoinButton.png");
+            backBtn = new GameButton(0, Battleship.HEIGHT-64, 64, 64, "Arrow_left.png");
 
         }
 

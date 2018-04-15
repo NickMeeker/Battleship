@@ -59,7 +59,7 @@ public class StoreState extends State{
         countShieldBtn = new GameButton(Battleship.WIDTH/4-50, 0, 50, 50, "shield.png");
         countMultishotBtn = new GameButton(Battleship.WIDTH/2-25, 0, 50, 50, "multishot.png");
         countDoubleshotBtn = new GameButton(Battleship.WIDTH*3/4, 0, 50, 50, "doubleshot.png");
-        backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
+        backBtn = new GameButton(0, Battleship.HEIGHT-64, 64, 64, "Arrow_left.png");
 
         // Initialize the stage for text fields
         stage = new Stage();
