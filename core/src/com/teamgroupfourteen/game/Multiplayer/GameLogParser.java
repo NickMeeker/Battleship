@@ -43,7 +43,7 @@ public class GameLogParser {
 
         if(logEntry.charAt(1) == '0')
             playerNum = 0;
-        else if(logEntry.charAt(1) == '1')
+        else if(logEntry.charAt(0) == '1')
             playerNum = 1;
 
 

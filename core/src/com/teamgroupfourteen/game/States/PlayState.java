@@ -324,9 +324,11 @@ public class PlayState extends State {
             }
             else if(online){
                 for(int i = 0; i < 5; i++){
-                    SetupParser setupParser = new SetupParser(setup.get(i));
-                    players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
-                    players[0].setShipOrientation(i, setupParser.getOrientaion());
+                    SetupParser setupParser = new SetupParser("stinrg");
+                    setupParser.parseLogEntry(setup.get(i));
+                    System.out.println(setupParser.getRow());
+//                    players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
+//                    players[0].setShipOrientation(i, setupParser.getOrientaion());
                 }
             }
             else if(singlePlayer){
@@ -357,9 +359,9 @@ public class PlayState extends State {
 
             else if(online){
                 for(int i = 5; i < 10; i++){
-                    SetupParser setupParser = new SetupParser(setup.get(i));
-                    players[1].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
-                    players[1].setShipOrientation(i, setupParser.getOrientaion());
+                    //SetupParser setupParser = new SetupParser(setup.get(i));
+//                    players[1].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
+//                    players[1].setShipOrientation(i, setupParser.getOrientaion());
                 }
             }
 
