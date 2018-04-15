@@ -146,10 +146,6 @@ public class StoreState extends State{
         background.dispose();
         buyShieldBtn.disposeAssets();
         buyMultishotBtn.disposeAssets();
-
         System.out.println("Menu State Disposed");
     }
-
-
-
 }
