@@ -125,7 +125,11 @@ public class LoginState extends State {
 
     @Override
     public void dispose() {
-
+        background.dispose();
+        usernameField.remove();
+        passwordField.remove();
+        titleBtn.disposeAssets();
+        loginButton.disposeAssets();
     }
 
 }

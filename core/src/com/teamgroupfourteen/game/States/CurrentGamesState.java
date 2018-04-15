@@ -160,6 +160,7 @@ public class CurrentGamesState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        barBlue.dispose();
         selectGameBtn.disposeAssets();
         cancelGameBtn.disposeAssets();
     }

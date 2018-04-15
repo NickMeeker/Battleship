@@ -118,6 +118,10 @@ public class RegistrationState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        usernameField.remove();
+        passwordField.remove();
+        confirmPasswordField.remove();
+        titleBtn.disposeAssets();
         registerButton.disposeAssets();
     }
 }

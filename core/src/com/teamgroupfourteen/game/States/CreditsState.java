@@ -126,9 +126,13 @@ public class CreditsState extends State{
     @Override
     public void dispose() {
         background.dispose();
+        creator1.remove();
+        creator2.remove();
+        creator3.remove();
+        creator4.remove();
+        creator5.remove();
+        creator6.remove();
+        titleBtn.disposeAssets();
+        backBtn.disposeAssets();
     }
-    
-    
-    
-    
 }

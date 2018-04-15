@@ -18,6 +18,7 @@ public class OptionsState extends State{
 
     private Texture background;
     private TextureRegion mainBackground;
+    private GameButton titleBtn;
     private GameButton soundFXBtn;
     private GameButton soundOnBtn;
     private GameButton soundOffBtn;
@@ -29,6 +30,7 @@ public class OptionsState extends State{
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         soundFXBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "SoundFXButton.png");
         soundOnBtn = new GameButton(Battleship.WIDTH/2 - 150, cam.position.y - 300, 300, 300, "soundOn.png");
         soundOffBtn = new GameButton(Battleship.WIDTH/2 -150, cam.position.y - 300, 300, 300, "soundOff.png");
@@ -61,6 +63,7 @@ public class OptionsState extends State{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(soundFXBtn.getImage(), soundFXBtn.getX(), soundFXBtn.getY(), soundFXBtn.getWidth(), soundFXBtn.getHeight());
         sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
 
@@ -75,8 +78,11 @@ public class OptionsState extends State{
     @Override
     public void dispose() {
         background.dispose();
+        titleBtn.disposeAssets();
         soundFXBtn.disposeAssets();
         soundOnBtn.disposeAssets();
+        soundOffBtn.disposeAssets();
+        backBtn.disposeAssets();
     }
 
 }

@@ -150,8 +150,20 @@ public class StoreState extends State{
     @Override
     public void dispose() {
         background.dispose();
+        backBtn.disposeAssets();
+        coinBtn.disposeAssets();
         buyShieldBtn.disposeAssets();
         buyMultishotBtn.disposeAssets();
-        System.out.println("Menu State Disposed");
+        buyDoubleshotBtn.disposeAssets();
+        shieldBtn.disposeAssets();
+        multishotBtn.disposeAssets();
+        doubleshotBtn.disposeAssets();
+        countShieldBtn.disposeAssets();
+        countMultishotBtn.disposeAssets();
+        countDoubleshotBtn.disposeAssets();
+        shieldAmount.remove();
+        multishotAmount.remove();
+        doubleshotAmount.remove();
+        coinAmount.remove();
     }
 }

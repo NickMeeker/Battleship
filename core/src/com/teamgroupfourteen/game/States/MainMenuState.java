@@ -96,10 +96,12 @@ public class MainMenuState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        titleBtn.disposeAssets();
         singlePlayerBtn.disposeAssets();
         multiPlayerBtn.disposeAssets();
         spectatorBtn.disposeAssets();
         creditsBtn.disposeAssets();
-        System.out.println("Menu State Disposed");
+        storeBtn.disposeAssets();
+        optionsBtn.disposeAssets();
     }
 }

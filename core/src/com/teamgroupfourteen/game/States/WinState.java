@@ -86,6 +86,9 @@ public class WinState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        titleBtn.disposeAssets();
+        confirmBtn.disposeAssets();
+        userInfo.remove();
     }
 
 
