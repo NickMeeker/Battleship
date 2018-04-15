@@ -37,7 +37,9 @@ public class LoginState extends State {
     public LoginState(GameStateManager gsm) {
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
-        background = new Texture("testPic.jpg");
+
+        // Setup background
+        background = new Texture("MainBackground.png");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
         // attempts a login check using stored authentication data if applicable
@@ -89,9 +91,7 @@ public class LoginState extends State {
                     User user = new User();
                     gsm.set(new MainMenuState(gsm, user));
                 }
-
             }
-
         }
     }
 
