@@ -19,6 +19,7 @@ public class MultiplayerTypeState extends State {
     private User user;
     private Texture background;
     private TextureRegion mainBackground;
+    private GameButton titleBtn;
     private GameButton localPlayBtn;
     private GameButton onlinePlayBtn;
     private GameButton backBtn;
@@ -26,16 +27,23 @@ public class MultiplayerTypeState extends State {
     public MultiplayerTypeState(GameStateManager gsm, User user) {
         super(gsm);
         this.user = user;
+
+        // Setup background
         cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+
+        // Setup buttons & title
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         localPlayBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "LocalMultiplayer.png");
         onlinePlayBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "OnlineMultiplayer.png");
-        backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
+        backBtn = new GameButton(0, Battleship.HEIGHT - 64, 64, 64, "Arrow_left.png");
     }
 
     @Override
     public void handleInput() {
+
+        // Setup touch reactions
         if (Gdx.input.justTouched()) {
             Vector3 touchPosition = super.getInputRegion();
             if (isTouched(touchPosition, localPlayBtn)) {
@@ -60,6 +68,7 @@ public class MultiplayerTypeState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(localPlayBtn.getImage(), localPlayBtn.getX(), localPlayBtn.getY(), localPlayBtn.getWidth(), localPlayBtn.getHeight());
         sb.draw(onlinePlayBtn.getImage(), onlinePlayBtn.getX(), onlinePlayBtn.getY(), onlinePlayBtn.getWidth(), onlinePlayBtn.getHeight());
         sb.draw(backBtn.getImage(), backBtn.getX(), backBtn.getY(), backBtn.getWidth(), backBtn.getHeight());
@@ -69,7 +78,9 @@ public class MultiplayerTypeState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        titleBtn.disposeAssets();
         localPlayBtn.disposeAssets();
         onlinePlayBtn.disposeAssets();
+        backBtn.disposeAssets();
     }
 }

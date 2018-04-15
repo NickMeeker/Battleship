@@ -306,7 +306,7 @@ public class Player {
         return this.numPowerUp2;
     }
 
-    public int getDoubleShot(){
+    public int getDoubleShotCount(){
         return this.numPowerUp3;
     }
 

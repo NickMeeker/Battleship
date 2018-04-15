@@ -27,13 +27,12 @@ public class LoginState extends State {
     private Stage stage;
     private TextField usernameField;
     private TextField passwordField;
+    private GameButton titleBtn;
     private GameButton loginButton;
     private File ifp;
     private LoginRequest resp;
     private boolean loggedIn;
     Skin uiSkin;
-
-
 
     public LoginState(GameStateManager gsm) {
         super(gsm);
@@ -45,6 +44,7 @@ public class LoginState extends State {
         resp = new LoginRequest("", "");
         loggedIn = resp.attemptInitAuth();
 
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         loginButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
 
         // Initialize the stage for text fields
@@ -58,6 +58,7 @@ public class LoginState extends State {
         usernameField.setPosition(cam.position.x/2-20, 500);
         usernameField.setSize(300, 40);
         usernameField.setMessageText("Username");
+        usernameField.setColor(52,52,51,1);
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
@@ -66,12 +67,15 @@ public class LoginState extends State {
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
         passwordField.setMessageText("Password");
+        passwordField.setColor(52,52,51,1);
         stage.addActor(passwordField);
         //stage.setKeyboardFocus(usernameField);
     }
 
     @Override
     protected void handleInput() {
+
+        // Setup touch reactions
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, loginButton)){
@@ -89,11 +93,12 @@ public class LoginState extends State {
             }
 
         }
-
     }
 
     @Override
     public void update(float dt) {
+
+        // Check if user is already logged in
         if(loggedIn){
             System.out.println("The user is already logged in.");
             Player player = new Player(resp.getUsername());
@@ -101,7 +106,6 @@ public class LoginState extends State {
             gsm.set(new MainMenuState(gsm, user));
         }
         handleInput();
-
     }
 
     @Override
@@ -109,16 +113,20 @@ public class LoginState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(loginButton.getImage(), loginButton.getX(), loginButton.getY(), loginButton.getWidth(), loginButton.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }
 
     @Override
     public void dispose() {
-
+        background.dispose();
+        usernameField.remove();
+        passwordField.remove();
+        titleBtn.disposeAssets();
+        loginButton.disposeAssets();
     }
 
 }

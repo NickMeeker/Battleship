@@ -17,6 +17,7 @@ public class MultiplayerState extends State {
     private User user;
     private Texture background;
     private TextureRegion mainBackground;
+    private GameButton titleBtn;
     private GameButton currentGameBtn;
     private GameButton createGameBtn;
     private GameButton joinGameBtn;
@@ -27,21 +28,28 @@ public class MultiplayerState extends State {
             super(gsm);
             this.user = user;
             cam.setToOrtho(false, Battleship.WIDTH , Battleship.HEIGHT );
+
+            // Setup background
             background = new Texture("testPic.jpg");
             mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
-            currentGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y + 100, 360, 100, "CurrentButton.png");
+
+            // Setup buttons & title
+            titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
+            currentGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y+100, 360, 100, "CurrentButton.png");
             createGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y, 360, 100, "CreateButton.png");
-            joinGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 100, 360, 100, "JoinButton.png");
-            backBtn = new GameButton(0, 700, 100, 100, "Arrow_left.png");
+            joinGameBtn = new GameButton(Battleship.WIDTH/8, cam.position.y-100, 360, 100, "JoinButton.png");
+            backBtn = new GameButton(0, Battleship.HEIGHT-64, 64, 64, "Arrow_left.png");
 
         }
 
         @Override
         public void handleInput() {
+
+            // Setup touch reactions
             if (Gdx.input.justTouched()) {
                 Vector3 touchPosition = super.getInputRegion();
                 if (isTouched(touchPosition, currentGameBtn)) {
-                    //gsm.push(new CurrentGamesState(gsm, user));
+                    gsm.push(new CurrentGamesState(gsm, user));
                 } else if (isTouched(touchPosition, createGameBtn)) {
                     System.out.println("Transition to create game");
                 }else if (isTouched(touchPosition, joinGameBtn)) {
@@ -62,6 +70,7 @@ public class MultiplayerState extends State {
             sb.setProjectionMatrix(cam.combined);
             sb.begin();
             sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+            sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
             sb.draw(currentGameBtn.getImage(), currentGameBtn.getX(), currentGameBtn.getY(), currentGameBtn.getWidth(), currentGameBtn.getHeight());
             sb.draw(createGameBtn.getImage(), createGameBtn.getX(), createGameBtn.getY(), createGameBtn.getWidth(), createGameBtn.getHeight());
             sb.draw(joinGameBtn.getImage(), joinGameBtn.getX(), joinGameBtn.getY(), joinGameBtn.getWidth(), joinGameBtn.getHeight());
@@ -72,7 +81,10 @@ public class MultiplayerState extends State {
         @Override
         public void dispose() {
             background.dispose();
+            titleBtn.disposeAssets();
             currentGameBtn.disposeAssets();
             createGameBtn.disposeAssets();
+            joinGameBtn.disposeAssets();
+            backBtn.disposeAssets();
         }
     }

@@ -33,6 +33,12 @@ public class PlayState extends State {
     private TextureRegion mainBackground;
     private Texture crosshair;
     private TextureRegion crosshairRegion;
+    private Texture crosshair2;
+    private TextureRegion crosshairRegion2;
+    private Texture crosshair3;
+    private TextureRegion crosshairRegion3;
+    private Texture crosshair4;
+    private TextureRegion crosshairRegion4;
     private Texture miss;
     private TextureRegion missRegion;
     private Texture shipHit;
@@ -65,6 +71,9 @@ public class PlayState extends State {
 
     //board sprite vectors
     private Vector3 crosshairVector;
+    private Vector3 crosshairVector2;
+    private Vector3 crosshairVector3;
+    private Vector3 crosshairVector4;
     private Vector3 missVector;
     private Vector3 shipHitVector;
     private Vector3 hitMarkerVector;
@@ -74,8 +83,7 @@ public class PlayState extends State {
     private Player currentPlayer;
     private int currentPlayerNum = 0;
     private int currentPowerUpNum;
-    private int[] player1PowerUps;
-    private int[] player2PowerUps;
+    private int[] playerPowerUps;
     private boolean seeYourBoard = false;
 
     //animation flags
@@ -215,19 +223,6 @@ public class PlayState extends State {
             this.players[1] = player2;
         }
 
-        if(online) {
-            player1PowerUps = new int[3];
-            player2PowerUps = new int[3];
-
-            player1PowerUps[0] = player1.getShieldCount();
-            player1PowerUps[0] = player1.getMultishotCount();
-            player1PowerUps[0] = player1.getDoubleShot();
-
-            player1PowerUps[1] = player2.getShieldCount();
-            player1PowerUps[1] = player2.getMultishotCount();
-            player1PowerUps[1] = player2.getDoubleShot();
-        }
-
         //set the current player to player 1
         currentPlayer = player1;
 
@@ -265,6 +260,19 @@ public class PlayState extends State {
         crosshair = new Texture("crosshair.png");
         crosshairRegion = new TextureRegion(crosshair, 0, 0, 40, 40);
         crosshairVector = new Vector3(60, 700, 0);
+
+        //multishot Crosshairs
+        if(online) {
+            crosshair2 = new Texture("crosshair.png");
+            crosshair3 = new Texture("crosshair.png");
+            crosshair4 = new Texture("crosshair.png");
+            crosshairRegion2 = new TextureRegion(crosshair2, 0, 0, 40, 40);
+            crosshairRegion3 = new TextureRegion(crosshair3, 0, 0, 40, 40);
+            crosshairRegion4 = new TextureRegion(crosshair4, 0, 0, 40, 40);
+            crosshairVector2 = new Vector3(100, 740, 0);
+            crosshairVector3 = new Vector3(60, 740, 0);
+            crosshairVector4 = new Vector3(100, 740, 0);
+        }
 
         //board sprites
         miss = new Texture("miss.png");
@@ -393,7 +401,22 @@ public class PlayState extends State {
                         players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn() + 1, gameParser.getRow() + 1);
                     }
                 }
+
+                GameLogParser gameParser = new GameLogParser(moveList.get(moveList.size() - 1));
+
+                if(gameParser.getMoveType() != 'd') {
+                    currentPlayerNum = (gameParser.getPlayerNum() + 1) % 2;
+                }
+                else{
+                    currentPlayerNum = gameParser.getPlayerNum();
+                }
+
+                playerPowerUps[0] = players[currentPlayerNum].getShieldCount();
+                playerPowerUps[1] = players[currentPlayerNum].getMultishotCount();
+                playerPowerUps[2] = players[currentPlayerNum].getDoubleShotCount();
             }
+
+
 
             //initialize the board textures
             gameGrid  = new Texture("GameGrid.png");
@@ -449,8 +472,16 @@ public class PlayState extends State {
 
             //move crosshair
             if (isTouched(touchPosition, upBtn) && !crosshairMoving && crosshairVector.y < 700 && !seeYourBoard && !dropBombs) {
-                pressUp = true;
-                crosshairMoving = true;
+                if(online && currentPowerUpNum == 2){
+                    if(crosshairVector.y < 660){
+                        pressUp = true;
+                        crosshairMoving = true;
+                    }
+                }
+                else {
+                    pressUp = true;
+                    crosshairMoving = true;
+                }
             }
             else if (isTouched(touchPosition, downBtn) && !crosshairMoving && crosshairVector.y > 340 && !seeYourBoard && !dropBombs) {
                 pressDown = true;
@@ -461,8 +492,16 @@ public class PlayState extends State {
                 crosshairMoving = true;
             }
             else if (isTouched(touchPosition, rightBtn) && !crosshairMoving && crosshairVector.x < 420 && !seeYourBoard && !dropBombs) {
-                pressRight = true;
-                crosshairMoving = true;
+                if(online && currentPowerUpNum == 2){
+                    if(crosshairVector.x < 380){
+                        pressUp = true;
+                        crosshairMoving = true;
+                    }
+                }
+                else {
+                    pressRight = true;
+                    crosshairMoving = true;
+                }
             }
 
             //pan selectors
@@ -475,20 +514,50 @@ public class PlayState extends State {
 
             //power up selectors
             else if(online && isTouched(touchPosition, leftPowerUp)){
+                for(int i = 0; i < 3; i++){
+                    if(currentPowerUpNum == 0){
+                        currentPowerUpNum = 3;
+                        break;
+                    }
+                    else if(playerPowerUps[2 - currentPowerUpNum] != 0){
+                        currentPowerUpNum--;
+                        break;
+                    }
+                    else{
+                        currentPowerUpNum--;
+                    }
+                }
 
-                /*TODO Query db for number of current power up quantity on hand and store in powerUpQOH
-                    current power up is denoted by the variable currentPowerUpNum
-                        1 = shield
-                        2 = multishot
-                        3 - double shot
-                 */
+                powerUpRegion.setTexture(powerUp[currentPowerUpNum]);
 
-                for(int i = 0; i < 3; i ++){
-
+                if(currentPowerUpNum == 2 && crosshairVector.y >= 700){
+                    crosshairVector.add(0, -40, 0);
+                }
+                if(currentPowerUpNum == 2 && crosshairVector.x >= 420){
+                    crosshairVector.add(-40, 0, 0);
+                }
+                if(currentPowerUpNum == 2){
+                    crosshairVector2.set(crosshairVector.x + 40, crosshairVector.y, 0);
+                    crosshairVector3.set(crosshairVector.x, crosshairVector.y + 40, 0);
+                    crosshairVector4.set(crosshairVector.x + 40, crosshairVector.y + 40, 0);
                 }
             }
             else if(online && isTouched(touchPosition, rightPowerUp)){
+                for(int i = 0; i < 3; i++){
+                    if(currentPowerUpNum == 3){
+                        currentPowerUpNum = 0;
+                        break;
+                    }
+                    else if(playerPowerUps[currentPowerUpNum] != 0){
+                        currentPowerUpNum++;
+                        break;
+                    }
+                    else{
+                        currentPowerUpNum++;
+                    }
+                }
 
+                powerUpRegion.setTexture(powerUp[currentPowerUpNum]);
             }
 
             //fire button: this conditional checks to make sure the fire button was pressed
@@ -503,15 +572,68 @@ public class PlayState extends State {
 
                 //if it is single player, have the computer take its turn
                 if(singlePlayer){
+
+                    if(players[1].allShipsDestroyed()){
+                        //TODO player win state
+
+                        gsm.pop();
+                    }
+
                     players[1].makeMove(players[0]);
+
+                    if(players[0].allShipsDestroyed()){
+                        //TODO computer win state
+
+                        gsm.pop();
+                    }
                 }
                 //if the game is online update the database move list with the move that was just made
                 else if(online){
                     sb = new StringBuilder();
 
+                    if(currentPowerUpNum == 0){
+                        sb.append(currentPlayerNum);
+                        sb.append('n');
+                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append(((int)crosshairVector.x - 60) / 40);
+                    }
+                    else if(currentPowerUpNum == 1){
+                        sb.append(currentPlayerNum);
+                        sb.append('s');
+                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append(((int)crosshairVector.x - 60) / 40);
+                    }
+                    else if(currentPowerUpNum == 2){
+                        sb.append(currentPlayerNum);
+                        sb.append('m');
+                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append(((int)crosshairVector.x - 60) / 40);
+                    }
+                    else if(currentPowerUpNum == 3){
+                        sb.append(currentPlayerNum);
+                        sb.append('d');
+                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append(((int)crosshairVector.x - 60) / 40);
+                    }
+
+                    //TODO push sb to database
+
+                    if(players[(currentPlayerNum + 1) % 2].allShipsDestroyed()){
+                        //TODO end game state
+
+                        //TODO let database know about the win
+                    }
+
                 }
                 //if the game is local, change player's turns
                 else{
+
+                    if(players[(currentPlayerNum + 1) % 2].allShipsDestroyed()){
+                        //TODO end game state
+
+                        gsm.pop();
+                    }
+
                     currentPlayerNum = (currentPlayerNum + 1) % 2;
                 }
             }
@@ -608,6 +730,12 @@ public class PlayState extends State {
                 //draw the appropriate pan button
                 sb.draw(panLeft.getImage(), panLeft.getX(), panLeft.getY(), panLeft.getWidth(), panLeft.getHeight());
 
+                if(online){
+                    sb.draw(leftPowerUp.getImage(), leftPowerUp.getX(), leftPowerUp.getY(), leftPowerUp.getWidth(), leftPowerUp.getHeight());
+                    sb.draw(rightPowerUp.getImage(), rightPowerUp.getX(), rightPowerUp.getY(), rightPowerUp.getWidth(), rightPowerUp.getHeight());
+                    sb.draw(powerUpRegion, 70, 20, 50, 50);
+                }
+
                 //check if all cells to see if there were any hits
                 for(int i = 0; i < 10; i++){
                     for(int j = 0; j < 10; j++){
@@ -627,10 +755,21 @@ public class PlayState extends State {
                 //draw the crosshair
                 sb.draw(crosshairRegion, crosshairVector.x, crosshairVector.y, 40, 40);
 
+                if(online && currentPowerUpNum == 2){
+                    sb.draw(crosshairRegion2, crosshairVector2.x, crosshairVector2.y, 40, 40);
+                    sb.draw(crosshairRegion3, crosshairVector3.x, crosshairVector3.y, 40, 40);
+                    sb.draw(crosshairRegion4, crosshairVector4.x, crosshairVector4.y, 40, 40);
+                }
+
                 //animate the crosshair
                 if(crosshairMoving){
                     if(pressUp){
                         crosshairVector.add(0, 8, 0);
+                        if(online && currentPowerUpNum == 2){
+                            crosshairVector2.add(0, 8, 0);
+                            crosshairVector3.add(0, 8, 0);
+                            crosshairVector4.add(0, 8, 0);
+                        }
                         if((crosshairVector.y + 20) % 40 == 0){
                             crosshairMoving = false;
                             pressUp = false;
@@ -638,6 +777,11 @@ public class PlayState extends State {
                     }
                     else if(pressRight){
                         crosshairVector.add(8, 0, 0);
+                        if(online && currentPowerUpNum == 2){
+                            crosshairVector2.add(8, 0, 0);
+                            crosshairVector3.add(8, 0, 0);
+                            crosshairVector4.add(8, 0, 0);
+                        }
                         if((crosshairVector.x + 20) % 40 == 0){
                             crosshairMoving = false;
                             pressRight = false;
@@ -645,6 +789,11 @@ public class PlayState extends State {
                     }
                     else if(pressDown){
                         crosshairVector.add(0, -8, 0);
+                        if(online && currentPowerUpNum == 2){
+                            crosshairVector2.add(0, -8, 0);
+                            crosshairVector3.add(0, -8, 0);
+                            crosshairVector4.add(0, -8, 0);
+                        }
                         if((crosshairVector.y + 20) % 40 == 0){
                             crosshairMoving = false;
                             pressDown = false;
@@ -652,6 +801,11 @@ public class PlayState extends State {
                     }
                     else if(pressLeft){
                         crosshairVector.add(-8, 0, 0);
+                        if(online && currentPowerUpNum == 2){
+                            crosshairVector2.add(-8, 0, 0);
+                            crosshairVector3.add(-8, 0, 0);
+                            crosshairVector4.add(-8, 0, 0);
+                        }
                         if((crosshairVector.x + 20) % 40 == 0){
                             crosshairMoving = false;
                             pressLeft = false;
@@ -668,10 +822,12 @@ public class PlayState extends State {
                 if(rocketVector.y == crosshairVector.y) {
                     rocketVector.set(800, 800, 0);
                     if(players[(currentPlayerNum + 1) % 2].cellContainsShip(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40)){
-                        explosion.play();
+                        if(Battleship.soundOn)
+                            explosion.play();
                     }
                     else{
-                        splash.play();
+                        if(Battleship.soundOn)
+                            splash.play();
                     }
                     dropBombs = false;
                 }

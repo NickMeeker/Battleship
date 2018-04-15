@@ -23,6 +23,7 @@ public class RegistrationState extends State {
     private TextField usernameField;
     private TextField passwordField;
     private TextField confirmPasswordField;
+    private GameButton titleBtn;
     private GameButton registerButton;
     private boolean loggedIn;
     Skin uiSkin;
@@ -30,9 +31,14 @@ public class RegistrationState extends State {
     public RegistrationState(GameStateManager gsm) {
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
+
+        // Setup background
         background = new Texture("testPic.jpg");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
+
+        // Setup buttons & title
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         registerButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
 
         // Initialize the stage for text fields
@@ -46,6 +52,7 @@ public class RegistrationState extends State {
         usernameField.setPosition(cam.position.x/2-20, 600);
         usernameField.setSize(300, 40);
         usernameField.setMessageText("Username");
+        usernameField.setColor(52,52,51,1);
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
@@ -54,6 +61,7 @@ public class RegistrationState extends State {
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
         passwordField.setMessageText("Password");
+        passwordField.setColor(52,52,51,1);
         stage.addActor(passwordField);
 
         confirmPasswordField = new TextField("", uiSkin);
@@ -62,11 +70,14 @@ public class RegistrationState extends State {
         confirmPasswordField.setPasswordMode(true);
         confirmPasswordField.setPasswordCharacter('*');
         confirmPasswordField.setMessageText("Confirm Password");
+        confirmPasswordField.setColor(52,52,51,1);
         stage.addActor(confirmPasswordField);
     }
 
     @Override
     protected void handleInput() {
+
+        // Setup touch reactions
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, registerButton)){
@@ -82,9 +93,7 @@ public class RegistrationState extends State {
                 if(registered){
                     gsm.set(new LoginState(gsm));
                 }
-
             }
-
         }
     }
 
@@ -98,9 +107,9 @@ public class RegistrationState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(registerButton.getImage(), registerButton.getX(), registerButton.getY(), registerButton.getWidth(), registerButton.getHeight());
         sb.end();
-
         stage.act();
         stage.draw();
     }
@@ -108,6 +117,10 @@ public class RegistrationState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        usernameField.remove();
+        passwordField.remove();
+        confirmPasswordField.remove();
+        titleBtn.disposeAssets();
         registerButton.disposeAssets();
     }
 }
