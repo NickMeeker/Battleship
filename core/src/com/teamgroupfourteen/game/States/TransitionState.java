@@ -44,7 +44,7 @@ public class TransitionState extends State {
         Gdx.input.setInputProcessor(stage);
         uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        // initialize text fields for power-up amounts
+        // initialize text fields for user info
         userInfo = new TextField(user + ", it's your turn!!", uiSkin);
         userInfo.setPosition(Battleship.WIDTH/2-200, cam.position.y);
         userInfo.setSize(400, 50);
