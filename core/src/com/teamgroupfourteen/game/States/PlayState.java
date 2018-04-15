@@ -851,6 +851,46 @@ public class PlayState extends State {
     @Override
     public void dispose() {
         background.dispose();
+        gameGrid.dispose();
+        coordinateBackground.dispose();
+        crosshair.dispose();
+        crosshair2.dispose();
+        crosshair3.dispose();
+        crosshair4.dispose();
+        miss.dispose();
+        shipHit.dispose();
+        hitMarker.dispose();
+        rocket.dispose();
+
+        for(int i = 0; i < powerUp.length - 1; i++){
+            powerUp[i].dispose();
+        }
+
+        upBtn.disposeAssets();
+        downBtn.disposeAssets();
+        leftBtn.disposeAssets();
+        rightBtn.disposeAssets();
+        greyFireBtn.disposeAssets();
+        fireBtn.disposeAssets();
+        panRight.disposeAssets();
+        panLeft.disposeAssets();
+        rightPowerUp.disposeAssets();
+        leftPowerUp.disposeAssets();
+
+        minesweeper1.dispose();
+        minesweeper2.dispose();
+        frigate1.dispose();
+        frigate2.dispose();
+        submarine1.dispose();
+        submarine2.dispose();
+        battleship1.dispose();
+        battleship2.dispose();
+        carrier1.dispose();
+        carrier2.dispose();
+
+        explosion.dispose();
+        splash.dispose();
+
         System.out.println("Play State Disposed");
     }
 
