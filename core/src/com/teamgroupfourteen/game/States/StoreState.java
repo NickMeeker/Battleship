@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
@@ -31,12 +32,15 @@ public class StoreState extends State{
     private GameButton countShieldBtn;
     private GameButton countMultishotBtn;
     private GameButton countDoubleshotBtn;
+    private GameButton titleBtn;
+    private GameButton backBtn;
     private Stage stage;
     private TextField shieldAmount;
     private TextField multishotAmount;
     private TextField doubleshotAmount;
     private TextField coinAmount;
-    private GameButton backBtn;
+    //private TextField powerCost;
+    private TextArea powerCost;
     Skin uiSkin;
 
     public StoreState(GameStateManager gsm, User user){
@@ -49,6 +53,7 @@ public class StoreState extends State{
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
         // Setup buttons & power-up buying options
+        titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         coinBtn = new GameButton(Battleship.WIDTH-50, Battleship.HEIGHT - 50, 50, 50, "coin.png");
         buyShieldBtn = new GameButton(Battleship.WIDTH/8+50, cam.position.y + 100, 360, 100, "ShieldButton.png");
         buyMultishotBtn = new GameButton(Battleship.WIDTH/8+50, cam.position.y, 360, 100, "MultishotButton.png");
@@ -95,6 +100,15 @@ public class StoreState extends State{
         doubleshotAmount.setDisabled(true);
         doubleshotAmount.setColor(52,52,51,1);
         stage.addActor(doubleshotAmount);
+
+
+        powerCost = new TextArea("Coin cost per power-up:\nShield = 3 coins\nMultishot = 5 coins\nDoubleshot = 10 coins", uiSkin);
+        powerCost.setPosition(Battleship.WIDTH/2-100, 150);
+        powerCost.setSize(200, 100);
+        powerCost.setDisabled(true);
+        powerCost.setColor(52,52,51,1);
+        stage.addActor(powerCost);
+
     }
 
     public void handleInput(){
@@ -130,6 +144,7 @@ public class StoreState extends State{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
+        sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(coinBtn.getImage(), coinBtn.getX(), coinBtn.getY(), coinBtn.getWidth(), coinBtn.getHeight());
         sb.draw(buyShieldBtn.getImage(), buyShieldBtn.getX(), buyShieldBtn.getY(), buyShieldBtn.getWidth(), buyShieldBtn.getHeight());
         sb.draw(buyMultishotBtn.getImage(), buyMultishotBtn.getX(), buyMultishotBtn.getY(), buyMultishotBtn.getWidth(), buyMultishotBtn.getHeight());
