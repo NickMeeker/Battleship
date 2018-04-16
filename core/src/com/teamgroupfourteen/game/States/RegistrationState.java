@@ -25,6 +25,7 @@ public class RegistrationState extends State {
     private TextField confirmPasswordField;
     private GameButton titleBtn;
     private GameButton registerButton;
+    private GameButton logintBtn;
     private boolean loggedIn;
     Skin uiSkin;
 
@@ -40,6 +41,7 @@ public class RegistrationState extends State {
         // Setup buttons & title
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         registerButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
+        logintBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 300, 360, 100, "LoginButton.png");
 
         // Initialize the stage for text fields
         stage = new Stage();
@@ -93,6 +95,8 @@ public class RegistrationState extends State {
                 if(registered){
                     gsm.set(new LoginState(gsm));
                 }
+            } else if(isTouched(touchPosition, logintBtn)){
+                gsm.set(new LoginState(gsm));
             }
         }
     }
@@ -109,6 +113,7 @@ public class RegistrationState extends State {
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(registerButton.getImage(), registerButton.getX(), registerButton.getY(), registerButton.getWidth(), registerButton.getHeight());
+        sb.draw(logintBtn.getImage(), logintBtn.getX(), logintBtn.getY(), logintBtn.getWidth(), logintBtn.getHeight());
         sb.end();
         stage.act();
         stage.draw();
