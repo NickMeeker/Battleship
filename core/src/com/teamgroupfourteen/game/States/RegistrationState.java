@@ -49,14 +49,14 @@ public class RegistrationState extends State {
 
         // initialize text fields and add them to stage
         usernameField = new TextField("", uiSkin);
-        usernameField.setPosition(cam.position.x/2-20, 600);
+        usernameField.setPosition(Battleship.WIDTH/2-150, 600);
         usernameField.setSize(300, 40);
         usernameField.setMessageText("Username");
         usernameField.setColor(52,52,51,1);
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
-        passwordField.setPosition(cam.position.x/2-20, 500);
+        passwordField.setPosition(Battleship.WIDTH/2-150, 500);
         passwordField.setSize(300, 40);
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
@@ -65,7 +65,7 @@ public class RegistrationState extends State {
         stage.addActor(passwordField);
 
         confirmPasswordField = new TextField("", uiSkin);
-        confirmPasswordField.setPosition(cam.position.x/2-20, 400);
+        confirmPasswordField.setPosition(Battleship.WIDTH/2-150, 400);
         confirmPasswordField.setSize(300, 40);
         confirmPasswordField.setPasswordMode(true);
         confirmPasswordField.setPasswordCharacter('*');
