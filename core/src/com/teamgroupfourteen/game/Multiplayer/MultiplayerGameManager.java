@@ -43,15 +43,7 @@ public class MultiplayerGameManager {
     public MultiplayerGameManager(String gameID){
         user = new User();
         this.gameID = gameID;
-        getGameDataByID(this.gameID);
-        move = gameData.getString("move");
-        setupLog = gameData.getString("setupLog");
-        gameLog = gameData.getString("gameLog");
-        turnPlayer = gameData.getString("turnPlayer");
-        hostPlayer = gameData.getString("hostPlayer");
-        guestPlayer = gameData.getString("guestPlayer");
-        timeElapsed = gameData.getInt("timeElapsed");
-        active = gameData.getBoolean("active");
+        setLocalGameData();
     }
 
     private void getGameDataByID(String gameID){
@@ -72,7 +64,7 @@ public class MultiplayerGameManager {
             HttpResponse<JsonNode> resp = Unirest.put(Battleship.APIPREFIX + "games/" + gameID)
                     .header("Authorization", user.getToken())
                     .field("move", move)
-                    .field("setupLog", setupLog)
+                    .field("setupLog", this.setupLog)
                     .field("gameLog", gameLog)
                     .field("turnPlayer", turnPlayer)
                     .field("hostPlayer", hostPlayer)
@@ -81,10 +73,23 @@ public class MultiplayerGameManager {
                     .field("active", active)
                     .asJson();
 
-
+            System.out.println(resp.getBody());
+            setLocalGameData();
         }catch(UnirestException e){
 
         }
+    }
+
+    public void setLocalGameData(){
+        getGameDataByID(this.gameID);
+        move = gameData.getString("move");
+        setupLog = gameData.getString("setupLog");
+        gameLog = gameData.getString("gameLog");
+        turnPlayer = gameData.getString("turnPlayer");
+        hostPlayer = gameData.getString("hostPlayer");
+        guestPlayer = gameData.getString("guestPlayer");
+        timeElapsed = gameData.getInt("timeElapsed");
+        active = gameData.getBoolean("active");
     }
 
 
@@ -94,12 +99,12 @@ public class MultiplayerGameManager {
     }
 
     public void updateSetupLog(String setupLog){
-        this.setupLog = setupLog;System.out.println(setupLog);
+        this.setupLog = setupLog;
         putUpdatedData();
     }
 
     public void updateGameLog(String gameLog){
-        this.gameLog = gameLog;
+        this.gameLog += gameLog;
         putUpdatedData();
     }
 
@@ -127,5 +132,8 @@ public class MultiplayerGameManager {
         return this.guestPlayer;
     }
 
+    public String getSetupLog(){
+        return this.setupLog;
+    }
 
 }
