@@ -360,22 +360,28 @@ public class PlayState extends State {
         else if(setupCount == 1){System.out.println("player2");
             if(online && setup.equals("")) {
                 popOnlineFlag = false;
-                gsm.push(new PlayStateSetup(gsm, players[1], popOnlineFlag, this));
-                for(int i = 0; i < 5; i++){
-                    sb.append(1);
-                    sb.append((char)(((players[1].getShipPosition(i).y - 340) / 40) + 65));
-                    sb.append(((players[1].getShipPosition(i).x - 60) / 40));
-                    sb.append(players[1].getShipName(i));
-                    sb.append(players[1].getShipOrientation(i));
-
-                    if(i != 4)
-                        sb.append(',');
+                if(!popOnlineFlag.booleanValue()) {
+                    gsm.push(new PlayStateSetup(gsm, players[1], popOnlineFlag, this));
                 }
+                if(popOnlineFlag.booleanValue()) {
+                    for (int i = 0; i < 5; i++) {
+                        sb.append(1);
+                        sb.append((char) (((players[1].getShipPosition(i).y - 340) / 40) + 65));
+                        sb.append(((players[1].getShipPosition(i).x - 60) / 40));
+                        sb.append(players[1].getShipName(i));
+                        sb.append(players[1].getShipOrientation(i));
 
-                //TODO send sb to database
-                mgm.updateSetupLog(sb.toString());
+                        if (i != 4)
+                            sb.append(',');
+                    }
 
-                gsm.pop();
+                    //TODO send sb to database
+
+                    mgm.updateSetupLog(sb.toString());
+                    System.out.println(mgm.getSetupLog());
+
+                    gsm.pop();
+                }
             }
 
             else if(online){
@@ -387,10 +393,12 @@ public class PlayState extends State {
                     players[1].setShipPosition(i - 5, setupParser.getRow(), setupParser.getColumn(), 0);
                     players[1].setShipOrientation(i - 5, setupParser.getOrientaion());
                 }
+
+                setupCount++;
             }
 
             //if single player, have the computer build a board
-            if(singlePlayer) {
+            else if(singlePlayer) {
                 players[1].makeBoard();
                 for(int i = 0; i < 10; i ++){
                     for(int j = 0; j < 10; j++){
@@ -403,13 +411,14 @@ public class PlayState extends State {
                     }
                     System.out.println();
                 }
+                setupCount++;
             }
             //if the game is local multiplayer, make player 2's board
             else {
                 gsm.push(new PlayStateSetup(gsm, players[1], false, this));
+                setupCount++;
             }
-            //advance to next step of setup
-            setupCount++;
+
         }
         //Now that the game boards are built, lets build the rest of the game
         else if(setupCount == 2){
@@ -882,45 +891,48 @@ public class PlayState extends State {
     @Override
     public void dispose() {
         background.dispose();
-        gameGrid.dispose();
-        coordinateBackground.dispose();
-        crosshair.dispose();
-        crosshair2.dispose();
-        crosshair3.dispose();
-        crosshair4.dispose();
-        miss.dispose();
-        shipHit.dispose();
-        hitMarker.dispose();
-        rocket.dispose();
 
-        for(int i = 0; i < powerUp.length - 1; i++){
-            powerUp[i].dispose();
+        if(setupCount > 2) {
+            gameGrid.dispose();
+            coordinateBackground.dispose();
+            crosshair.dispose();
+            crosshair2.dispose();
+            crosshair3.dispose();
+            crosshair4.dispose();
+            miss.dispose();
+            shipHit.dispose();
+            hitMarker.dispose();
+            rocket.dispose();
+
+            for (int i = 0; i < powerUp.length - 1; i++) {
+                powerUp[i].dispose();
+            }
+
+            upBtn.disposeAssets();
+            downBtn.disposeAssets();
+            leftBtn.disposeAssets();
+            rightBtn.disposeAssets();
+            greyFireBtn.disposeAssets();
+            fireBtn.disposeAssets();
+            panRight.disposeAssets();
+            panLeft.disposeAssets();
+            rightPowerUp.disposeAssets();
+            leftPowerUp.disposeAssets();
+
+            minesweeper1.dispose();
+            minesweeper2.dispose();
+            frigate1.dispose();
+            frigate2.dispose();
+            submarine1.dispose();
+            submarine2.dispose();
+            battleship1.dispose();
+            battleship2.dispose();
+            carrier1.dispose();
+            carrier2.dispose();
+
+            explosion.dispose();
+            splash.dispose();
         }
-
-        upBtn.disposeAssets();
-        downBtn.disposeAssets();
-        leftBtn.disposeAssets();
-        rightBtn.disposeAssets();
-        greyFireBtn.disposeAssets();
-        fireBtn.disposeAssets();
-        panRight.disposeAssets();
-        panLeft.disposeAssets();
-        rightPowerUp.disposeAssets();
-        leftPowerUp.disposeAssets();
-
-        minesweeper1.dispose();
-        minesweeper2.dispose();
-        frigate1.dispose();
-        frigate2.dispose();
-        submarine1.dispose();
-        submarine2.dispose();
-        battleship1.dispose();
-        battleship2.dispose();
-        carrier1.dispose();
-        carrier2.dispose();
-
-        explosion.dispose();
-        splash.dispose();
 
         System.out.println("Play State Disposed");
     }
