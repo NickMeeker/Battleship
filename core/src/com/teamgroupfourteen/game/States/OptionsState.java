@@ -57,7 +57,7 @@ public class OptionsState extends State{
             } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
             } else if (isTouched(touchPosition, logoutBtn)) {
-                // todo not sure when is needed to delete local stored account so it doesn't auto log in again.
+                // todo not sure what is needed to delete local stored account so it doesn't auto log in again.
                 gsm.set(new LoginState(gsm));
             }
         }
