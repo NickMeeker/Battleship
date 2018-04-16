@@ -108,7 +108,7 @@ public class PlayState extends State {
     //                 online = false
     private boolean singlePlayer;
     private boolean online;
-    private boolean popOnlineFlag;
+    public Boolean popOnlineFlag;
 
     private String setup;
     private String moveList;
@@ -313,23 +313,27 @@ public class PlayState extends State {
     public void handleInput(){
         //player 1 board setup
         if (setupCount == 0){
-            if(online && setup.equals("")) {System.out.println("player1");
-                gsm.push(new PlayStateSetup(gsm, players[0], this));
-                for(int i = 0; i < 5; i++){
-                    sb.append(0);
-                    sb.append((char)(9-((players[0].getShipPosition(i).y - 340) / 40) + 65));
-                    sb.append((int)((players[0].getShipPosition(i).x - 60) / 40));
-                    sb.append(players[0].getShipName(i));
-                    sb.append(players[0].getShipOrientation(i));
-                    sb.append(',');
+            if(online && setup.equals("")) {System.out.println(popOnlineFlag.booleanValue());
+                if(!popOnlineFlag.booleanValue()) {
+                    gsm.push(new PlayStateSetup(gsm, players[0], popOnlineFlag, this));
                 }
-                //TODO: Send sb to database
+                if(popOnlineFlag.booleanValue()) {
+                    for (int i = 0; i < 5; i++) {
+                        System.out.println("Check" + i);
+                        sb.append(0);
+                        sb.append((char) (9 - ((players[0].getShipPosition(i).y - 340) / 40) + 65));
+                        sb.append((int) ((players[0].getShipPosition(i).x - 60) / 40));
+                        sb.append(players[0].getShipName(i));
+                        sb.append(players[0].getShipOrientation(i));
+                        sb.append(',');
+                    }
+                    //TODO: Send sb to database
 
-                mgm.updateSetupLog(sb.toString());
+                    mgm.updateSetupLog(sb.toString());
 
-                if(popOnlineFlag) {
                     gsm.pop();
                 }
+
             }
             else if(online){
                 this.players[0].createShips();
@@ -340,17 +344,21 @@ public class PlayState extends State {
                     players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
                     players[0].setShipOrientation(i, setupParser.getOrientaion());
                 }
+
+                setupCount++;
             }
             else if(singlePlayer){
-                gsm.push(new PlayStateSetup(gsm, players[0], this));
+                gsm.push(new PlayStateSetup(gsm, players[0], false, this));
+                setupCount++;
             }
             //advance to next step of setup
-            setupCount++;
+
         }
         //player 2 board setup
         else if(setupCount == 1){System.out.println("player2");
             if(online && setup.equals("")) {
-                gsm.push(new PlayStateSetup(gsm, players[1], this));
+                popOnlineFlag = false;
+                gsm.push(new PlayStateSetup(gsm, players[1], popOnlineFlag, this));
                 for(int i = 0; i < 5; i++){
                     sb.append(1);
                     sb.append((char)(((players[1].getShipPosition(i).y - 340) / 40) + 65));
@@ -396,7 +404,7 @@ public class PlayState extends State {
             }
             //if the game is local multiplayer, make player 2's board
             else {
-                gsm.push(new PlayStateSetup(gsm, players[1], this));
+                gsm.push(new PlayStateSetup(gsm, players[1], false, this));
             }
             //advance to next step of setup
             setupCount++;
@@ -915,4 +923,7 @@ public class PlayState extends State {
         System.out.println("Play State Disposed");
     }
 
+    public void setBoolean(){
+        popOnlineFlag = !popOnlineFlag.booleanValue();
+    }
 }

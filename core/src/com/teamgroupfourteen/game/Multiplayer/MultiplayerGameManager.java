@@ -94,7 +94,7 @@ public class MultiplayerGameManager {
     }
 
     public void updateSetupLog(String setupLog){
-        this.setupLog = setupLog;
+        this.setupLog = setupLog;System.out.println(setupLog);
         putUpdatedData();
     }
 

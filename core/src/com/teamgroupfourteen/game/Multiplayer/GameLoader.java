@@ -36,7 +36,7 @@ public class GameLoader  {
         Player player1 = new Player(hostPlayer);
         Player player2 = new Player(guestPlayer);
 
-        gsm.push(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog));
+        gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog));
     }
 
     public void assignDataFields(){

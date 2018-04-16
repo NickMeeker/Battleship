@@ -58,10 +58,8 @@ public class MultiplayerState extends State {
                     gsm.push(new CurrentGamesState(gsm, user));
                 } else if (isTouched(touchPosition, createGameBtn)) {
                     System.out.println("Transition to create game");
-                    // render loading state
-                    HostGame hostGame = new HostGame(user.getUsername());
-                    gameID = hostGame.gameID;
-                    this.hosting = true;
+                    GameLoader gameLoader = new GameLoader("5ad3f5e771a0dc467698dc0a", gsm);
+                    //gsm.pop();System.out.println("what the hell?!?!?!");
                 }else if (isTouched(touchPosition, joinGameBtn)) {
                     System.out.println("Transition to join game");
                     JoinGame joinGame = new JoinGame(user.getUsername(), user);

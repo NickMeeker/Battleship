@@ -46,12 +46,17 @@ public class PlayStateSetup extends State {
     int currentShipNumber;
     int x;
     int y;
+    public Boolean popOnlineFlag;
+    PlayState playState;
 
-    public PlayStateSetup(GameStateManager gsm, Player player, PlayState playState){
+    public PlayStateSetup(GameStateManager gsm, Player player, Boolean popOnlineFlag, PlayState playState){
         super(gsm);
         this.player = player;
         currentShipNumber = 0;
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
+
+        this.popOnlineFlag = popOnlineFlag;
+        this.playState = playState;
 
         // set the background as a texture region. 178x232 is the resolution of the image
         background = new Texture("backgroundFinal.png");
@@ -216,6 +221,7 @@ public class PlayStateSetup extends State {
                             player.fillCell((((int)player.getShipPosition(i).x + (40 * j)) - 60) / 40, ((int)player.getShipPosition(i).y - 340) / 40, i);
                     }
                 }
+                playState.setBoolean();
                 gsm.pop();
             }
         }

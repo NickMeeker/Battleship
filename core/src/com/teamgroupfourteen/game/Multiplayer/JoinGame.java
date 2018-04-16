@@ -46,7 +46,7 @@ public class JoinGame {
                 String gameID = gamesList.get(tryIndex).getString("gameID");
                 MultiplayerGameManager mgm = new MultiplayerGameManager(gameID);
                 mgm.updateGuestPlayer(guestName);
-                GameLoader gameLoader = new GameLoader(gameID);
+                //GameLoader gameLoader = new GameLoader(gameID);
             }
         }
     }
