@@ -23,13 +23,11 @@ public class SetupParser {
     public void buildLogEntries(){
         String[] strArr = setupLog.split(",");
         logEntries = new ArrayList<String>(Arrays.asList(strArr));
-
-        for(int i = 0; i < logEntries.size() - 1; i++){
-            parseLogEntry(logEntries.get(i));
-        }
     }
 
-    public void parseLogEntry(String logEntry){
+    public void parseLogEntry(int entryNum){
+
+        String logEntry = this.logEntries.get(entryNum);
 
         if(logEntry.charAt(0) == '0'){
             // THIS IS HOST PLAYER
@@ -45,6 +43,7 @@ public class SetupParser {
 
         // Column will be 0-9
         column = logEntry.charAt(2);
+        column -= 48;
 
         switch(logEntry.charAt(3)){
             case 'm':

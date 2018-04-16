@@ -39,7 +39,9 @@ public class GameLogParser {
         logEntries = new ArrayList<String>(Arrays.asList(strArr));
     }
 
-    public void parseLogEntries(String logEntry){
+    public void parseLogEntries(int entryNum){
+
+        String logEntry = this.logEntries.get(entryNum);
 
         if(logEntry.charAt(1) == '0')
             playerNum = 0;
@@ -55,6 +57,7 @@ public class GameLogParser {
             row -= 65;
 
             column = logEntry.charAt(3);
+            column -= 48;
 
         } else if(logEntry.charAt(0) == 's'){
             // we're dealing with a shield placement
@@ -63,6 +66,7 @@ public class GameLogParser {
             row -= 65;
 
             column = logEntry.charAt(3);
+            column -= 48;
 
 
         } else if(logEntry.charAt(0) == 'd'){
@@ -74,6 +78,7 @@ public class GameLogParser {
             row -= 65;
 
             column = logEntry.charAt(3);
+            column -= 48;
 
 
         } else if(logEntry.charAt(0) == 'm'){
@@ -84,10 +89,15 @@ public class GameLogParser {
             row -= 65;
 
             column = logEntry.charAt(3);
+            column -= 48;
         } else{
             // bad text, this should never happen
             System.out.println("Error: game log incorrect");
         }
+    }
+
+    public  int getMoveCount(){
+        return  this.logEntries.size();
     }
 
     public int getRow(){

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Multiplayer.GameLogParser;
+import com.teamgroupfourteen.game.Multiplayer.MultiplayerGameManager;
 import com.teamgroupfourteen.game.Multiplayer.SetupParser;
 import com.teamgroupfourteen.game.Player.Player;
 
@@ -107,10 +108,13 @@ public class PlayState extends State {
     //                 online = false
     private boolean singlePlayer;
     private boolean online;
+    private boolean popOnlineFlag;
 
-    private ArrayList<String> setup;
-    private ArrayList<String> moveList;
+    private String setup;
+    private String moveList;
     private StringBuilder sb;
+
+    MultiplayerGameManager mgm;
 
     //local multiplayer constructor
     public PlayState(GameStateManager gsm, Player player1, Player player2){
@@ -194,10 +198,10 @@ public class PlayState extends State {
     }
 
     //single player and online constructor
-    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, ArrayList<String> setup, ArrayList<String> moveList){
+    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, String setup, String moveList){
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
-
+        mgm = new MultiplayerGameManager("5ad3dbef2211db4208082b2c");
         //set the game type flags
         this.singlePlayer = singlePlayer;
         this.online = online;
@@ -205,6 +209,7 @@ public class PlayState extends State {
         if(online){
             this.setup = setup;
             this.moveList = moveList;
+            popOnlineFlag = false;
             sb = new StringBuilder();
         }
 
@@ -308,7 +313,7 @@ public class PlayState extends State {
     public void handleInput(){
         //player 1 board setup
         if (setupCount == 0){
-            if(online && setup == null) {
+            if(online && setup.equals("")) {System.out.println("player1");
                 gsm.push(new PlayStateSetup(gsm, players[0], this));
                 for(int i = 0; i < 5; i++){
                     sb.append(0);
@@ -320,16 +325,20 @@ public class PlayState extends State {
                 }
                 //TODO: Send sb to database
 
+                mgm.updateSetupLog(sb.toString());
 
-                gsm.pop();
+                if(popOnlineFlag) {
+                    gsm.pop();
+                }
             }
             else if(online){
+                this.players[0].createShips();
+                SetupParser setupParser = new SetupParser(setup);
+                setupParser.buildLogEntries();
                 for(int i = 0; i < 5; i++){
-                    SetupParser setupParser = new SetupParser("stinrg");
-                    setupParser.parseLogEntry(setup.get(i));
-                    System.out.println(setupParser.getRow());
-//                    players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
-//                    players[0].setShipOrientation(i, setupParser.getOrientaion());
+                    setupParser.parseLogEntry(i);System.out.println("i: " + i + " row "  + setupParser.getRow() + " column " + setupParser.getColumn());
+                    players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
+                    players[0].setShipOrientation(i, setupParser.getOrientaion());
                 }
             }
             else if(singlePlayer){
@@ -339,11 +348,11 @@ public class PlayState extends State {
             setupCount++;
         }
         //player 2 board setup
-        else if(setupCount == 1){
-            if(online && setup.size() == 5) {
+        else if(setupCount == 1){System.out.println("player2");
+            if(online && setup.equals("")) {
                 gsm.push(new PlayStateSetup(gsm, players[1], this));
                 for(int i = 0; i < 5; i++){
-                    sb.append(0);
+                    sb.append(1);
                     sb.append((char)(((players[1].getShipPosition(i).y - 340) / 40) + 65));
                     sb.append(((players[1].getShipPosition(i).x - 60) / 40));
                     sb.append(players[1].getShipName(i));
@@ -354,15 +363,19 @@ public class PlayState extends State {
                 }
 
                 //TODO send sb to database
+                mgm.updateSetupLog(sb.toString());
 
                 gsm.pop();
             }
 
             else if(online){
+                this.players[1].createShips();
+                SetupParser setupParser = new SetupParser(setup);
+                setupParser.buildLogEntries();
                 for(int i = 5; i < 10; i++){
-                    //SetupParser setupParser = new SetupParser(setup.get(i));
-//                    players[1].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
-//                    players[1].setShipOrientation(i, setupParser.getOrientaion());
+                    setupParser.parseLogEntry(i);
+                    players[1].setShipPosition(i - 5, setupParser.getRow(), setupParser.getColumn(), 0);
+                    players[1].setShipOrientation(i - 5, setupParser.getOrientaion());
                 }
             }
 
@@ -391,9 +404,11 @@ public class PlayState extends State {
         //Now that the game boards are built, lets build the rest of the game
         else if(setupCount == 2){
 
-            if(online && moveList != null){
-                for(int i = 0; i < moveList.size(); i++){
-                    GameLogParser gameParser = new GameLogParser(moveList.get(i));
+            if(online && !moveList.equals("")){
+                GameLogParser gameParser = new GameLogParser(moveList);
+                gameParser.buildLogEntries();
+                for(int i = 0; i < gameParser.getMoveCount() - 1; i++){
+                    gameParser.parseLogEntries(i);
                     if(gameParser.getMoveType() == 'n' || gameParser.getMoveType() == 'd'){
                         players[(gameParser.getPlayerNum() + 1) % 2].hitCell(gameParser.getColumn(), gameParser.getRow());
                     }
@@ -408,7 +423,7 @@ public class PlayState extends State {
                     }
                 }
 
-                GameLogParser gameParser = new GameLogParser(moveList.get(moveList.size() - 1));
+                gameParser.parseLogEntries(gameParser.getMoveCount() - 1);
 
                 if(gameParser.getMoveType() != 'd') {
                     currentPlayerNum = (gameParser.getPlayerNum() + 1) % 2;
@@ -627,6 +642,9 @@ public class PlayState extends State {
                         //TODO end game state
 
                         //TODO let database know about the win
+                        //TODO update winner coin by 1
+                        //TODO update exp by 10
+                        //TODO update win/loss
                     }
 
                 }

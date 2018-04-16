@@ -7,6 +7,9 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.teamgroupfourteen.game.Authentication.APIParser;
 import com.teamgroupfourteen.game.Authentication.CredentialsManager;
 import com.teamgroupfourteen.game.Battleship;
+import com.teamgroupfourteen.game.Player.Player;
+import com.teamgroupfourteen.game.States.GameStateManager;
+import com.teamgroupfourteen.game.States.PlayState;
 
 import org.json.JSONObject;
 
@@ -24,11 +27,16 @@ public class GameLoader  {
     private JSONObject gameData;
     CredentialsManager cm;
 
-    public GameLoader(String gameID){
+    public GameLoader(String gameID, GameStateManager gsm){
         this.gameID = gameID;
         this.cm = new CredentialsManager();
         gameData = getGameById();
         assignDataFields();
+
+        Player player1 = new Player(hostPlayer);
+        Player player2 = new Player(guestPlayer);
+
+        gsm.push(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog));
     }
 
     public void assignDataFields(){
@@ -37,27 +45,6 @@ public class GameLoader  {
         setupLog = gameData.getString("setupLog");
         gameLog = gameData.getString("gameLog");
         turnPlayer = gameData.getString("turnPlayer");
-    }
-
-    public void buildGame(){
-        buildSetup();
-    }
-
-    private void buildSetup(){
-        SetupParser sp = new SetupParser(setupLog);
-        sp.buildLogEntries();
-        int l = sp.getLogEntries().size();
-        for(int i = 0; i < l; i++){
-            sp.parseLogEntry(sp.getLogEntries().get(i));
-        }
-
-        GameLogParser glp = new GameLogParser(gameLog);
-        glp.buildLogEntries();
-        l = glp.getLogEntries().size();
-        for(int i = 0; i <l; i++){
-            glp.parseLogEntries(glp.getLogEntries().get(i));
-        }
-
     }
 
     private JSONObject getGameById(){
