@@ -31,7 +31,7 @@ public class JoinGame {
         this.gsm = gsm;
     }
 
-    public void pairGames(){
+    public boolean pairGames(){
         JSONArray gamesArray = getGames();
         gamesList = new ArrayList<JSONObject>();
         for(int i = 0; i < gamesArray.length(); i++){
@@ -52,6 +52,9 @@ public class JoinGame {
                 GameLoader gameLoader = new GameLoader(gameID, gsm);
             }
         }
+
+        // if we made it here, we were unable to join a game so there needs to be some functionality for that
+        return false;
     }
 
     public JSONArray getGames(){

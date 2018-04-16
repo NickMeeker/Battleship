@@ -66,7 +66,11 @@ public class MultiplayerState extends State {
                 }else if (isTouched(touchPosition, joinGameBtn)) {
                     System.out.println("Transition to join game");
                     JoinGame joinGame = new JoinGame(user.getUsername(), user, gsm);
-                    joinGame.pairGames();
+                    boolean foundGame = joinGame.pairGames();
+                    if(!foundGame){
+                        // TODO: UNABLE TO FIND GAME
+                        gsm.set(new MultiplayerState(gsm, user));
+                    }
                 }else if (isTouched(touchPosition, backBtn)) {
                     gsm.pop();
                 }
