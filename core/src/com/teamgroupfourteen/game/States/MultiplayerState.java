@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
+import com.teamgroupfourteen.game.Multiplayer.GameLoader;
+import com.teamgroupfourteen.game.Multiplayer.HostGame;
+import com.teamgroupfourteen.game.Multiplayer.JoinGame;
+import com.teamgroupfourteen.game.Multiplayer.MultiplayerGameManager;
 import com.teamgroupfourteen.game.User.User;
 
 /**
@@ -21,7 +25,9 @@ public class MultiplayerState extends State {
     private GameButton currentGameBtn;
     private GameButton createGameBtn;
     private GameButton joinGameBtn;
-
+    private boolean hosting;
+    private String gameID;
+    MultiplayerGameManager mgm;
     private GameButton backBtn;
 
         public MultiplayerState(GameStateManager gsm, User user) {
@@ -52,8 +58,14 @@ public class MultiplayerState extends State {
                     gsm.push(new CurrentGamesState(gsm, user));
                 } else if (isTouched(touchPosition, createGameBtn)) {
                     System.out.println("Transition to create game");
+                    // render loading state
+                    HostGame hostGame = new HostGame(user.getUsername());
+                    gameID = hostGame.gameID;
+                    this.hosting = true;
                 }else if (isTouched(touchPosition, joinGameBtn)) {
                     System.out.println("Transition to join game");
+                    JoinGame joinGame = new JoinGame(user.getUsername(), user);
+                    joinGame.pairGames();
                 }else if (isTouched(touchPosition, backBtn)) {
                     gsm.pop();
                 }
@@ -63,6 +75,12 @@ public class MultiplayerState extends State {
         @Override
         public void update(float dt) {
             handleInput();
+            if(hosting){
+                MultiplayerGameManager mgm = new MultiplayerGameManager(gameID);
+                if(!mgm.getGuestPlayer().equals(""));
+                mgm.updateActive(true);
+                GameLoader gameLoader = new GameLoader(gameID, gsm);
+            }
         }
 
         @Override

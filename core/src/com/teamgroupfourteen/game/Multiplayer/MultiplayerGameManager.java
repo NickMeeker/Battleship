@@ -118,5 +118,14 @@ public class MultiplayerGameManager {
         putUpdatedData();
     }
 
+    public void updateGuestPlayer(String guestPlayer){
+        this.guestPlayer = guestPlayer;
+        putUpdatedData();
+    }
+
+    public String getGuestPlayer(){
+        return this.guestPlayer;
+    }
+
 
 }

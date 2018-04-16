@@ -320,6 +320,7 @@ public class PlayState extends State {
                 }
                 //TODO: Send sb to database
 
+
                 gsm.pop();
             }
             else if(online){

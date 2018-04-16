@@ -17,6 +17,7 @@ public class HostGame {
     private String host;
     private HttpResponse<JsonNode> resp;
     private CredentialsManager cm;
+    public String gameID;
     public HostGame(String host){
         this.host = host;
         this.cm = new CredentialsManager();
@@ -32,6 +33,8 @@ public class HostGame {
                 .field("timeElapsed", 0)
                 .field("active", false)
                 .asJson();
+
+            gameID = this.resp.getBody().getObject().getJSONObject("data").getString("_id");
         }catch(UnirestException e){
             // TODO: Implement error handling
             System.out.println(e);
