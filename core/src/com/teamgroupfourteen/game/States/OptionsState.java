@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
+import com.teamgroupfourteen.game.Authentication.CredentialsManager;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Board.GameButton;
 import com.teamgroupfourteen.game.Player.Player;
@@ -57,7 +58,8 @@ public class OptionsState extends State{
             } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
             } else if (isTouched(touchPosition, logoutBtn)) {
-                // todo not sure what is needed to delete local stored account so it doesn't auto log in again.
+                CredentialsManager cm = new CredentialsManager();
+                cm.deleteAuthData();
                 gsm.set(new LoginState(gsm));
             }
         }
