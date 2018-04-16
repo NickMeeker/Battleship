@@ -28,6 +28,54 @@ public class User {
     private int coins;
     private int exp;
     private int wins;
+
+    public void setCoins(int coins) {
+        this.coins = coins;
+        this.putUser();
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
+        this.putUser();
+
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+        this.putUser();
+
+    }
+
+    public void setLosses(int losses) {
+        this.losses = losses;
+        this.putUser();
+
+    }
+
+    public void setNumPowerUp1(int numPowerUp1) {
+        this.numPowerUp1 = numPowerUp1;
+        this.putUser();
+
+    }
+
+    public void setNumPowerUp2(int numPowerUp2) {
+        this.numPowerUp2 = numPowerUp2;
+        this.putUser();
+
+    }
+
+    public void setNumPowerUp3(int numPowerUp3) {
+        this.numPowerUp3 = numPowerUp3;
+        this.putUser();
+
+    }
+
+    public void setFriendsString(String friendsString) {
+        this.friendsString = friendsString;
+        this.putUser();
+    }
+
+
     private int losses;
     private int numPowerUp1;
     private int numPowerUp2;
@@ -43,7 +91,7 @@ public class User {
         userID = cm.getUserId();
         token = cm.getToken();
         getUserResp();
-/*        coins = userJSON.getInt("coins");
+        coins = userJSON.getInt("coins");
         exp = userJSON.getInt("exp");
         wins = userJSON.getInt("wins");
         losses = userJSON.getInt("losses");
@@ -52,7 +100,6 @@ public class User {
         numPowerUp3 = userJSON.getInt("powerUp3");
         friendsString = userJSON.getString("friends");
         friendsByName = getFriendsString().split(",");
-*/
     }
 
     private void getUserResp(){
@@ -132,6 +179,20 @@ public class User {
         HttpResponse<JsonNode> searchGames;
         try{
             searchGames = Unirest.get(Battleship.APIPREFIX + "games/hostPlayer/" + getUsername())
+                    .header("Authorization", getToken())
+                    .asJson();
+
+            return searchGames.getBody().getArray();
+        }catch(UnirestException e){
+
+        }
+        return null;
+    }
+
+    public JSONArray getUserGuestGames(){
+        HttpResponse<JsonNode> searchGames;
+        try{
+            searchGames = Unirest.get(Battleship.APIPREFIX + "games/guestPlayer/" + getUsername())
                     .header("Authorization", getToken())
                     .asJson();
 

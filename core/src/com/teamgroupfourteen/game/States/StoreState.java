@@ -118,15 +118,18 @@ public class StoreState extends State{
             Vector3 touchPosition = super.getInputRegion();
             if(isTouched(touchPosition, buyShieldBtn)){
                 if(user.getCoins() >= 3) {
-                    // TODO: update coin count & power-up count
+                    user.setCoins(user.getCoins() -3);
+                    user.setNumPowerUp1(user.getNumPowerUp1() + 1);
                 }
             } else if(isTouched(touchPosition, buyMultishotBtn)){
                 if(user.getCoins() >= 5) {
-                    // TODO: update coin count & power-up count
+                    user.setCoins(user.getCoins() - 5);
+                    user.setNumPowerUp2(user.getNumPowerUp2() + 1);
                 }
             } else if(isTouched(touchPosition, buyDoubleshotBtn)){
                 if(user.getCoins() >= 10) {
-                    // TODO: update coin count & power-up count
+                    user.setCoins(user.getCoins() - 10);
+                    user.setNumPowerUp3(user.getNumPowerUp3() + 1);
                 }
             } else if (isTouched(touchPosition, backBtn)) {
                 gsm.pop();
@@ -137,6 +140,9 @@ public class StoreState extends State{
     @Override
     public void update(float dt) {
         handleInput();
+        shieldAmount.setText(Integer.toString(user.getNumPowerUp1()));
+        multishotAmount.setText(Integer.toString(user.getNumPowerUp2()));
+        doubleshotAmount.setText(Integer.toString(user.getNumPowerUp3()));
     }
 
     @Override
