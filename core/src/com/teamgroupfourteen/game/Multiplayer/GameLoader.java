@@ -29,14 +29,16 @@ public class GameLoader  {
 
     public GameLoader(String gameID, GameStateManager gsm){
         this.gameID = gameID;
+        System.out.println(gameID);
         this.cm = new CredentialsManager();
         gameData = getGameById();
+        System.out.println(gameData);
         assignDataFields();
 
         Player player1 = new Player(hostPlayer);
         Player player2 = new Player(guestPlayer);
 
-        gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog));
+        gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog, gameID));
     }
 
     public void assignDataFields(){
@@ -53,7 +55,9 @@ public class GameLoader  {
                     .header("Authorization", cm.getToken())
                     .asJson();
 
+            System.out.println(resp.getBody().getObject());
             JSONObject respAsJson = APIParser.getJsonObject(resp);
+            System.out.println(respAsJson);
             return respAsJson;
         } catch(UnirestException e){
             return null;

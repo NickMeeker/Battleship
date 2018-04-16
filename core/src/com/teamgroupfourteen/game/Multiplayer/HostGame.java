@@ -37,6 +37,7 @@ public class HostGame {
             gameID = this.resp.getBody().getObject().getJSONObject("data").getString("_id");
         }catch(UnirestException e){
             // TODO: Implement error handling
+            System.out.println("error here");
             System.out.println(e);
         }
     }

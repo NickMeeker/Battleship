@@ -14,6 +14,16 @@ import org.json.JSONObject;
  * Created by nick on 4/13/18.
  */
 
+/*
+*
+*
+* To wipe:
+mongo
+use battleshipserver
+db.games.remove({})
+*
+* */
+
 public class MultiplayerGameManager {
     /*
     * Game Schema:
@@ -43,7 +53,9 @@ public class MultiplayerGameManager {
     public MultiplayerGameManager(String gameID){
         user = new User();
         this.gameID = gameID;
+        getGameDataByID(this.gameID);
         setLocalGameData();
+        System.out.println(this.setupLog);
     }
 
     private void getGameDataByID(String gameID){
@@ -53,9 +65,10 @@ public class MultiplayerGameManager {
                     .asJson();
 
             gameData = APIParser.getJsonObject(resp);
+            System.out.println(gameData);
         } catch(UnirestException e){
             // TODO
-            System.out.println("helo");
+
         }
     }
 
@@ -76,7 +89,7 @@ public class MultiplayerGameManager {
             System.out.println(resp.getBody());
             setLocalGameData();
         }catch(UnirestException e){
-
+            System.out.println("PUT GAME ERROR");
         }
     }
 
@@ -84,6 +97,7 @@ public class MultiplayerGameManager {
         getGameDataByID(this.gameID);
         move = gameData.getString("move");
         setupLog = gameData.getString("setupLog");
+        System.out.println(setupLog);
         gameLog = gameData.getString("gameLog");
         turnPlayer = gameData.getString("turnPlayer");
         hostPlayer = gameData.getString("hostPlayer");

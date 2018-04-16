@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.teamgroupfourteen.game.Authentication.APIParser;
 import com.teamgroupfourteen.game.Battleship;
+import com.teamgroupfourteen.game.States.GameStateManager;
 import com.teamgroupfourteen.game.User.User;
 
 import org.json.JSONArray;
@@ -23,9 +24,11 @@ public class JoinGame {
     private User user;
     private String guestName;
     private ArrayList<JSONObject> gamesList;
-    public JoinGame(String guestName, User user){
+    GameStateManager gsm;
+    public JoinGame(String guestName, User user, GameStateManager gsm){
         this.user = user;
         this.guestName = guestName;
+        this.gsm = gsm;
     }
 
     public void pairGames(){
@@ -38,15 +41,15 @@ public class JoinGame {
             Random rand = new Random();
             int tryIndex = rand.nextInt(gamesList.size());
             String hostPlayer = gamesList.get(tryIndex).getString("hostPlayer");
-            if(hostPlayer.equals(guestName) || gamesList.get(tryIndex).getBoolean("Active")){
+            if(hostPlayer.equals(guestName) || gamesList.get(tryIndex).getBoolean("active")){
                 gamesList.remove(tryIndex);
                 continue;
             } else{
                 // WE FOUND A GAME
-                String gameID = gamesList.get(tryIndex).getString("gameID");
+                String gameID = gamesList.get(tryIndex).getString("_id");
                 MultiplayerGameManager mgm = new MultiplayerGameManager(gameID);
                 mgm.updateGuestPlayer(guestName);
-                //GameLoader gameLoader = new GameLoader(gameID);
+                GameLoader gameLoader = new GameLoader(gameID, gsm);
             }
         }
     }

@@ -58,11 +58,14 @@ public class MultiplayerState extends State {
                     gsm.push(new CurrentGamesState(gsm, user));
                 } else if (isTouched(touchPosition, createGameBtn)) {
                     System.out.println("Transition to create game");
-                    GameLoader gameLoader = new GameLoader("5ad3f5e771a0dc467698dc0a", gsm);
+                    HostGame hostGame = new HostGame(user.getUsername());
+                    hosting = true;
+                    gameID = hostGame.gameID;
+
                     //gsm.pop();System.out.println("what the hell?!?!?!");
                 }else if (isTouched(touchPosition, joinGameBtn)) {
                     System.out.println("Transition to join game");
-                    JoinGame joinGame = new JoinGame(user.getUsername(), user);
+                    JoinGame joinGame = new JoinGame(user.getUsername(), user, gsm);
                     joinGame.pairGames();
                 }else if (isTouched(touchPosition, backBtn)) {
                     gsm.pop();
@@ -74,10 +77,13 @@ public class MultiplayerState extends State {
         public void update(float dt) {
             handleInput();
             if(hosting){
+                System.out.println(gameID);
                 MultiplayerGameManager mgm = new MultiplayerGameManager(gameID);
-                if(!mgm.getGuestPlayer().equals(""));
-                mgm.updateActive(true);
-                GameLoader gameLoader = new GameLoader(gameID, gsm);
+                if(!mgm.getGuestPlayer().equals("")) {
+                    System.out.println(mgm.getGuestPlayer());
+                    mgm.updateActive(true);
+                    GameLoader gameLoader = new GameLoader(gameID, gsm);
+                }
             }
         }
 

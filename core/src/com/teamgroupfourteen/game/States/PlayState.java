@@ -15,6 +15,8 @@ import com.teamgroupfourteen.game.Player.Player;
 
 import java.util.ArrayList;
 
+import static java.lang.System.exit;
+
 
 /**
  * Created by nick on 2/28/18.
@@ -198,10 +200,10 @@ public class PlayState extends State {
     }
 
     //single player and online constructor
-    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, String setup, String moveList){
+    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, String setup, String moveList, String gameID){
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
-        mgm = new MultiplayerGameManager("5ad3dbef2211db4208082b2c");
+        mgm = new MultiplayerGameManager(gameID);
         //set the game type flags
         this.singlePlayer = singlePlayer;
         this.online = online;
@@ -330,7 +332,7 @@ public class PlayState extends State {
                     //TODO: Send sb to database
 
                     mgm.updateSetupLog(sb.toString());
-
+                    System.out.println(mgm.getSetupLog());
                     gsm.pop();
                 }
 
