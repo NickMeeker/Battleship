@@ -45,7 +45,7 @@ public class LoginState extends State {
 
         // attempts a login check using stored authentication data if applicable
         resp = new LoginRequest("", "");
-        //loggedIn = resp.attemptInitAuth();
+        loggedIn = resp.attemptInitAuth();
 
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         loginButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
