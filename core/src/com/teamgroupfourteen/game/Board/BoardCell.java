@@ -32,7 +32,10 @@ public class BoardCell {
     }
 
     public void hit(){
-        this.hit = true;
+        if(hasShield)
+            hasShield = false;
+        else
+            this.hit = true;
     }
 
     public boolean isHit(){
@@ -41,5 +44,9 @@ public class BoardCell {
 
     public void placeShield(){
         this.hasShield = true;
+    }
+
+    public boolean hasShield(){
+        return this.hasShield;
     }
 }

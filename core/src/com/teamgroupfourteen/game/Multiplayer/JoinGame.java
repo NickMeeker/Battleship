@@ -43,7 +43,6 @@ public class JoinGame {
             String hostPlayer = gamesList.get(tryIndex).getString("hostPlayer");
             if(hostPlayer.equals(guestName) || gamesList.get(tryIndex).getBoolean("active")){
                 gamesList.remove(tryIndex);
-                continue;
             } else{
                 // WE FOUND A GAME
                 String gameID = gamesList.get(tryIndex).getString("_id");

@@ -185,14 +185,25 @@ public class Player {
         Random rand = new Random();
 
         if(!possibleX.isEmpty() && !possibleY.isEmpty()){
-            setX = possibleX.remove();
-            setY = possibleY.remove();
-
-            while((setX > 9 || setX < 0 || setY > 9 || setY < 0 || otherPlayer.cellIsHit(setX, setY)) && (!possibleX.isEmpty() && !possibleY.isEmpty())){
+            if (otherPlayer.hasShield(possibleX.peek(), possibleY.peek())) {System.out.println("check1");
+                setX = possibleX.peek();
+                setY = possibleY.peek();
+            }
+            else {System.out.println("check2");
                 setX = possibleX.remove();
                 setY = possibleY.remove();
             }
 
+            while((setX > 9 || setX < 0 || setY > 9 || setY < 0 || otherPlayer.cellIsHit(setX, setY)) && (!possibleX.isEmpty() && !possibleY.isEmpty())) {
+                if (otherPlayer.hasShield(possibleX.peek(), possibleY.peek())) {System.out.println("check3");
+                    setX = possibleX.peek();
+                    setY = possibleY.peek();
+                }
+                else {System.out.println("check4");
+                    setX = possibleX.remove();
+                    setY = possibleY.remove();
+                }
+            }
             if(!((setX > 9 || setX < 0 || setY > 9 || setY < 0 || otherPlayer.cellIsHit(setX, setY)) && (possibleX.isEmpty() && possibleY.isEmpty()))){
                 otherPlayer.hitCell(setX, setY);
 
@@ -228,18 +239,25 @@ public class Player {
 
             if(otherPlayer.cellContainsShip(setX, setY)){
                 //up
-                possibleX.add(setX);
-                possibleY.add(setY + 1);
+                if(setY + 1 < 10) {
+                    possibleX.add(setX);
+                    possibleY.add(setY + 1);
+                }
                 //right
-                possibleX.add(setX + 1);
-                possibleY.add(setY);
+                if(setX + 1 < 10) {
+                    possibleX.add(setX + 1);
+                    possibleY.add(setY);
+                }
                 //down
-                possibleX.add(setX);
-                possibleY.add(setY - 1);
+                if(setY - 1 > 0) {
+                    possibleX.add(setX);
+                    possibleY.add(setY - 1);
+                }
                 //left
-                possibleX.add(setX - 1);
-                possibleY.add(setY);
-
+                if(setX - 1 > 0) {
+                    possibleX.add(setX - 1);
+                    possibleY.add(setY);
+                }
             }
         }
     }
@@ -312,6 +330,10 @@ public class Player {
 
     public void placeShield(int x, int y){
         this.board.placeShield(x, y);
+    }
+
+    public boolean hasShield(int x, int y){
+        return this.board.hasShield(x, y);
     }
 
     public boolean allShipsDestroyed(){

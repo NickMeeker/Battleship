@@ -122,6 +122,10 @@ public class GameBoard {
         this.gameBoard[x][y].placeShield();
     }
 
+    public boolean hasShield(int x, int y){
+        return this.gameBoard[x][y].hasShield();
+    }
+
     public boolean allShipsDestroyed(){
 
         int counter = 0;
