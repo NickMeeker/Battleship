@@ -118,7 +118,7 @@ public class CurrentGamesState extends State {
 
 
         final JSONArray gamesArray = user.getUserHostGames();
-        final JSONArray guestArray = user.getUserGuestGames();
+        //final JSONArray guestArray = user.getUserGuestGames();
         rowsList = new ArrayList<Stack>();
 
 
@@ -150,34 +150,34 @@ public class CurrentGamesState extends State {
             table.row();
             rowsList.add(stack);
         }
-        for(i = 0; i < guestArray.length(); i++){
-            TextButton tmp = new TextButton("", skin);
-            Image matchBar = new Image(barBlue);
-            tmp.setText(i + "");
-            final Stack stack = new Stack();
-            stack.add(matchBar);
-            String spaces =  "";
-            stack.add(new Label("   Host: ", skin));
-            stack.add(new Label(String.format("%1$" + 13 + "s", spaces) + guestArray.getJSONObject(i).getString("hostPlayer"), skin));
-            stack.add(new Label(String.format("%1$" + 59 + "s", spaces) + "Guest: ", skin));
-            stack.add(new Label(String.format("%1$" + 72 + "s", spaces) + guestArray.getJSONObject(i).getString("guestPlayer"), skin));
+//        for(i = 0; i < guestArray.length(); i++){
+//            TextButton tmp = new TextButton("", skin);
+//            Image matchBar = new Image(barBlue);
+//            tmp.setText(i + "");
+//            final Stack stack = new Stack();
+//            stack.add(matchBar);
+//            String spaces =  "";
+//            stack.add(new Label("   Host: ", skin));
+//            stack.add(new Label(String.format("%1$" + 13 + "s", spaces) + guestArray.getJSONObject(i).getString("hostPlayer"), skin));
+//            stack.add(new Label(String.format("%1$" + 59 + "s", spaces) + "Guest: ", skin));
+//            stack.add(new Label(String.format("%1$" + 72 + "s", spaces) + guestArray.getJSONObject(i).getString("guestPlayer"), skin));
+//
+//            stack.addListener(new ClickListener(){
+//                @Override
+//                public void clicked(InputEvent event, float x, float y) {
+//                    super.clicked(event, x, y);
+//                    launchGame = true;
+//                    launchGameID = guestArray.getJSONObject(rowsList.indexOf(stack)).getString("_id");
+//                    Image matchBar = new Image(barSelected);
+//                    stack.add(matchBar);
+//                }
+//            });
 
-            stack.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    super.clicked(event, x, y);
-                    launchGame = true;
-                    launchGameID = guestArray.getJSONObject(rowsList.indexOf(stack)).getString("_id");
-                    Image matchBar = new Image(barSelected);
-                    stack.add(matchBar);
-                }
-            });
-
-            table.add(stack).width(454).height(40).padTop(10).padBottom(5);
-            table.row();
-            rowsList.add(stack);
-        }
-        table.add();
+//            table.add(stack).width(454).height(40).padTop(10).padBottom(5);
+//            table.row();
+//            rowsList.add(stack);
+//        }
+        //table.add();
 
 
     }
