@@ -26,11 +26,15 @@ public class MainMenuState extends State {
     private GameButton friendsBtn;
     private GameButton creditsBtn;
     private GameButton optionsBtn;
+    private GameButton profileBtn;
 
     public MainMenuState(GameStateManager gsm, User user){
         super(gsm);
         this.user = user;
 
+        System.out.println("username: " + user.getUsername());
+        //System.out.println("coins: " + user.getCoins());
+        //System.out.println("username: " + user.getUserID());
         // Setup background
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
         background = new Texture("MainBackground.png");
@@ -44,10 +48,10 @@ public class MainMenuState extends State {
         creditsBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "CreditsButton.png");
         storeBtn = new GameButton(Battleship.WIDTH - 64, 0 , 64, 64, "StoreButton.png");
         optionsBtn = new GameButton(Battleship.WIDTH - 50, Battleship.HEIGHT - 50, 50, 50, "Options.png");
-
+        profileBtn = new GameButton(Battleship.WIDTH/8, cam.position.y-300,360, 100, "ProfileButton.png");
     }
 
-    @Override
+
     public void handleInput(){
 
         // Setup touch reactions
@@ -68,6 +72,8 @@ public class MainMenuState extends State {
                 gsm.push(new StoreState(gsm, user));
             } else if(isTouched(touchPosition, optionsBtn)){
                 gsm.push(new OptionsState(gsm));
+            } else if(isTouched(touchPosition, profileBtn)){
+                gsm.push(new ProfileState(gsm, user));
             }
         }
     }
@@ -90,6 +96,7 @@ public class MainMenuState extends State {
         sb.draw(creditsBtn.getImage(), creditsBtn.getX(), creditsBtn.getY(), creditsBtn.getWidth(), creditsBtn.getHeight());
         sb.draw(storeBtn.getImage(), storeBtn.getX(), storeBtn.getY(), storeBtn.getWidth(), storeBtn.getHeight());
         sb.draw(optionsBtn.getImage(), optionsBtn.getX(), optionsBtn.getY(), optionsBtn.getWidth(), optionsBtn.getHeight());
+        sb.draw(profileBtn.getImage(), profileBtn.getX(), profileBtn.getY(), profileBtn.getWidth(), profileBtn.getHeight());
         sb.end();
     }
 

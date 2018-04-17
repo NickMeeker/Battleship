@@ -103,11 +103,6 @@ public class CredentialsManager {
         }
     }
 
-    public void deleteAuthData(){
-        if(ifp.exists())
-            ifp.delete();
-    }
-
     public boolean attemptInitAuth(){
         return loggedIn;
     }

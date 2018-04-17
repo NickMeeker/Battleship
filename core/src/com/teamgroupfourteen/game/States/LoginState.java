@@ -29,7 +29,6 @@ public class LoginState extends State {
     private TextField passwordField;
     private GameButton titleBtn;
     private GameButton loginButton;
-    private GameButton createAccountBtn;
     private File ifp;
     private LoginRequest resp;
     private boolean loggedIn;
@@ -38,18 +37,15 @@ public class LoginState extends State {
     public LoginState(GameStateManager gsm) {
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
-
-        // Setup background
         background = new Texture("MainBackground.png");
         mainBackground = new TextureRegion(background, 0, 0, Battleship.WIDTH, Battleship.HEIGHT );
 
         // attempts a login check using stored authentication data if applicable
-        resp = new LoginRequest("", "");
-        loggedIn = resp.attemptInitAuth();
+        resp = new LoginRequest("team14", "team14");
+        loggedIn = false;//resp.attemptInitAuth();
 
         titleBtn = new GameButton(Battleship.WIDTH/2 - 200, Battleship.HEIGHT  - 150, 400, 150, "title2.png");
         loginButton = new GameButton(Battleship.WIDTH/8, cam.position.y - 200, 360, 100, "ConfirmButton.png");
-        createAccountBtn = new GameButton(Battleship.WIDTH/8, cam.position.y - 300, 360, 100, "CreateAccountButton.png");
 
         // Initialize the stage for text fields
         stage = new Stage();
@@ -59,14 +55,14 @@ public class LoginState extends State {
 
         // initialize text fields and add them to stage
         usernameField = new TextField("", uiSkin);
-        usernameField.setPosition(Battleship.WIDTH/2-150, 500);
+        usernameField.setPosition(cam.position.x/2-20, 500);
         usernameField.setSize(300, 40);
         usernameField.setMessageText("Username");
         usernameField.setColor(52,52,51,1);
         stage.addActor(usernameField);
 
         passwordField = new TextField("", uiSkin);
-        passwordField.setPosition(Battleship.WIDTH/2-150, 400);
+        passwordField.setPosition(cam.position.x/2-20, 400);
         passwordField.setSize(300, 40);
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
@@ -93,9 +89,9 @@ public class LoginState extends State {
                     User user = new User();
                     gsm.set(new MainMenuState(gsm, user));
                 }
-            } else if(isTouched(touchPosition, createAccountBtn)){
-                gsm.set(new RegistrationState(gsm));
+
             }
+
         }
     }
 
@@ -119,7 +115,6 @@ public class LoginState extends State {
         sb.draw(mainBackground, 0, 0, Battleship.WIDTH, Battleship.HEIGHT);
         sb.draw(titleBtn.getImage(), titleBtn.getX(), titleBtn.getY(), titleBtn.getWidth(), titleBtn.getHeight());
         sb.draw(loginButton.getImage(), loginButton.getX(), loginButton.getY(), loginButton.getWidth(), loginButton.getHeight());
-        sb.draw(createAccountBtn.getImage(), createAccountBtn.getX(), createAccountBtn.getY(), createAccountBtn.getWidth(), createAccountBtn.getHeight());
         sb.end();
         stage.act();
         stage.draw();

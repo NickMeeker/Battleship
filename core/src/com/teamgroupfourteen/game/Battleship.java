@@ -26,13 +26,17 @@ public class Battleship extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
+        User user = new User();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		// gsm.push(new MainMenuState(gsm, user));
+		Player player1= new Player(null);
+		Player player2 = new Player(null);
+		gsm.push(new MainMenuState(gsm, user));
 		//gsm.push(new CurrentGamesState(gsm, user));
-		 gsm.push(new LoginState(gsm));
+		//gsm.push(new LoginState(gsm));
 		//gsm.push(new RegistrationState(gsm));
 		//gsm.push(new TransitionState(gsm, "Safa"));
 		//gsm.push(new WinState(gsm, "Safa"));
+		//gsm.push(new ProfileState(gsm, user));
 	}
 
 	@Override

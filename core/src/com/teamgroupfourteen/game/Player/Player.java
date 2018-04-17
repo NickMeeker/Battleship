@@ -57,6 +57,7 @@ public class Player {
     Queue<Integer> possibleX;
     Queue<Integer> possibleY;
 
+    private APIParser parser;
     private HttpResponse<JsonNode> resp;
 
 
@@ -97,8 +98,18 @@ public class Player {
                         .routeParam("id", userID)
                         .asJson();
 
-                JSONObject respAsJSON = APIParser.getJsonObject(resp);
+                JsonNode node;
+                System.out.println(resp.getBody().toString());
+                JSONObject respAsJSON = new JSONObject(resp.getBody());
+                node = new JsonNode(resp.getBody().toString());
+//                System.out.println(respAsJSON.getInt("exp"));
+//                System.out.println(respAsJSON.getInt("exp"));
+//
+//                System.out.println(node.getObject().getInt("exp"));
+//
+//                System.out.println(resp.getBody().getObject().getInt("exp"));
 
+                System.out.println(node.getArray());
                 exp = respAsJSON.getInt("exp");
                 numCoins = respAsJSON.getInt("coins");
                 numPowerUp1 = respAsJSON.getInt("powerUp1");

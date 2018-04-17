@@ -4,7 +4,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.teamgroupfourteen.game.Authentication.APIParser;
+//import com.teamgroupfourteen.game.Authentication.APIParser;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.States.GameStateManager;
 import com.teamgroupfourteen.game.User.User;

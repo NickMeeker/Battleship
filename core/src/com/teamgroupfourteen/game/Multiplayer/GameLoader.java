@@ -27,22 +27,16 @@ public class GameLoader  {
     private JSONObject gameData;
     CredentialsManager cm;
 
-    public GameLoader(String gameID, GameStateManager gsm, String playerName){
+    public GameLoader(String gameID, GameStateManager gsm){
         this.gameID = gameID;
-        System.out.println(gameID);
         this.cm = new CredentialsManager();
         gameData = getGameById();
         assignDataFields();
 
         Player player1 = new Player(hostPlayer);
         Player player2 = new Player(guestPlayer);
-        Player clientPlayer;
 
-        if(playerName.equals(player1.getPlayerName())){
-            clientPlayer = player1;
-        } else
-            clientPlayer = player2;
-        gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog, gameID, clientPlayer));
+        //gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog));
     }
 
     public void assignDataFields(){
@@ -59,9 +53,7 @@ public class GameLoader  {
                     .header("Authorization", cm.getToken())
                     .asJson();
 
-            System.out.println(resp.getBody().getObject());
             JSONObject respAsJson = APIParser.getJsonObject(resp);
-            System.out.println(respAsJson);
             return respAsJson;
         } catch(UnirestException e){
             return null;

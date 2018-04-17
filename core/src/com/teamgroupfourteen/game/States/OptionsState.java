@@ -59,7 +59,7 @@ public class OptionsState extends State{
                 gsm.pop();
             } else if (isTouched(touchPosition, logoutBtn)) {
                 CredentialsManager cm = new CredentialsManager();
-                cm.deleteAuthData();
+                //cm.deleteAuthData();
                 gsm.set(new LoginState(gsm));
             }
         }

@@ -4,8 +4,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.teamgroupfourteen.game.Authentication.APIParser;
-import com.teamgroupfourteen.game.Authentication.CredentialsManager;
+//import com.teamgroupfourteen.game.Authentication.APIParser;
+//import com.teamgroupfourteen.game.Authentication.CredentialsManager;
 import com.teamgroupfourteen.game.Battleship;
 import com.teamgroupfourteen.game.Player.Player;
 
@@ -16,14 +16,14 @@ import com.teamgroupfourteen.game.Player.Player;
 public class HostGame {
     private String host;
     private HttpResponse<JsonNode> resp;
-    private CredentialsManager cm;
+    //private CredentialsManager cm;
     public String gameID;
     public HostGame(String host){
         this.host = host;
-        this.cm = new CredentialsManager();
+        //this.cm = new CredentialsManager();
         try{
             this.resp = Unirest.post(Battleship.APIPREFIX + "games")
-                .header("Authorization", cm.getToken())
+                //.header("Authorization", cm.getToken())
                 .field("move", "")
                 .field("setupLog", "")
                 .field("gameLog", "")
