@@ -32,7 +32,7 @@ public class GameLoader  {
         System.out.println(gameID);
         this.cm = new CredentialsManager();
         gameData = getGameById();
-        System.out.println(gameData);
+        System.out.println(guestPlayer);
         assignDataFields();
 
         Player player1 = new Player(hostPlayer);

@@ -31,7 +31,7 @@ public class JoinGame {
         this.gsm = gsm;
     }
 
-    public boolean pairGames(){
+    public String pairGames(){
         JSONArray gamesArray = getGames();
         gamesList = new ArrayList<JSONObject>();
         for(int i = 0; i < gamesArray.length(); i++){
@@ -47,14 +47,13 @@ public class JoinGame {
             } else{
                 // WE FOUND A GAME
                 String gameID = gamesList.get(tryIndex).getString("_id");
-                MultiplayerGameManager mgm = new MultiplayerGameManager(gameID);
-                mgm.updateGuestPlayer(guestName);
-                GameLoader gameLoader = new GameLoader(gameID, gsm);
+                return gameID;
+
             }
         }
 
         // if we made it here, we were unable to join a game so there needs to be some functionality for that
-        return false;
+        return "";
     }
 
     public JSONArray getGames(){
