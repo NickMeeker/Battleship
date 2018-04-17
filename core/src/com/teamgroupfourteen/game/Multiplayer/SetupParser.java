@@ -98,7 +98,7 @@ public class SetupParser {
         return this.shipNum;
     }
 
-    public char getOrientaion(){
+    public char getOrientation(){
         return this.orientation;
     }
 }

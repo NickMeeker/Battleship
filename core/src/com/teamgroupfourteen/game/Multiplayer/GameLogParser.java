@@ -43,15 +43,15 @@ public class GameLogParser {
 
         String logEntry = this.logEntries.get(entryNum);
 
-        if(logEntry.charAt(1) == '0')
+        if(logEntry.charAt(0) == '0')
             playerNum = 0;
         else if(logEntry.charAt(0) == '1')
             playerNum = 1;
 
 
-        if(logEntry.charAt(0) == 'n'){
+        if(logEntry.charAt(1) == 'n'){
 
-            moveType = logEntry.charAt(0);
+            moveType = logEntry.charAt(1);
             // we're dealing with a normal move of firing one shot
             row = logEntry.charAt(2);
             row -= 65;
@@ -59,9 +59,9 @@ public class GameLogParser {
             column = logEntry.charAt(3);
             column -= 48;
 
-        } else if(logEntry.charAt(0) == 's'){
+        } else if(logEntry.charAt(1) == 's'){
             // we're dealing with a shield placement
-            moveType = logEntry.charAt(0);
+            moveType = logEntry.charAt(1);
             row = logEntry.charAt(2);
             row -= 65;
 
@@ -69,10 +69,10 @@ public class GameLogParser {
             column -= 48;
 
 
-        } else if(logEntry.charAt(0) == 'd'){
+        } else if(logEntry.charAt(1) == 'd'){
             // we're dealing with a double shot
 
-            moveType = logEntry.charAt(0);
+            moveType = logEntry.charAt(1);
 
             row = logEntry.charAt(2);
             row -= 65;
@@ -81,9 +81,9 @@ public class GameLogParser {
             column -= 48;
 
 
-        } else if(logEntry.charAt(0) == 'm'){
+        } else if(logEntry.charAt(1) == 'm'){
             // we're dealing with a multishot
-            moveType = logEntry.charAt(0);
+            moveType = logEntry.charAt(1);
 
             row = logEntry.charAt(2);
             row -= 65;

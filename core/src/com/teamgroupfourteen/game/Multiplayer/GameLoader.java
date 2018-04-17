@@ -27,18 +27,22 @@ public class GameLoader  {
     private JSONObject gameData;
     CredentialsManager cm;
 
-    public GameLoader(String gameID, GameStateManager gsm){
+    public GameLoader(String gameID, GameStateManager gsm, String playerName){
         this.gameID = gameID;
         System.out.println(gameID);
         this.cm = new CredentialsManager();
         gameData = getGameById();
-        System.out.println(guestPlayer);
         assignDataFields();
 
         Player player1 = new Player(hostPlayer);
         Player player2 = new Player(guestPlayer);
+        Player clientPlayer;
 
-        gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog, gameID));
+        if(playerName.equals(player1.getPlayerName())){
+            clientPlayer = player1;
+        } else
+            clientPlayer = player2;
+        gsm.set(new PlayState(gsm, player1, player2, false, true, setupLog, gameLog, gameID, clientPlayer));
     }
 
     public void assignDataFields(){

@@ -71,7 +71,7 @@ public class MultiplayerState extends State {
                         MultiplayerGameManager mgm = new MultiplayerGameManager(foundGame);
                         mgm.updateGuestPlayer(user.getUsername());
                         System.out.println(mgm.getGuestPlayer());
-                        GameLoader gameLoader = new GameLoader(foundGame, gsm);
+                        GameLoader gameLoader = new GameLoader(foundGame, gsm, user.getUsername());
                     }
                 }else if (isTouched(touchPosition, backBtn)) {
                     gsm.pop();
@@ -88,7 +88,7 @@ public class MultiplayerState extends State {
                 if(!mgm.getGuestPlayer().equals("")) {
                     System.out.println(mgm.getGuestPlayer());
                     mgm.updateActive(true);
-                    GameLoader gameLoader = new GameLoader(gameID, gsm);
+                    GameLoader gameLoader = new GameLoader(gameID, gsm, user.getUsername());
                 }
             }
         }

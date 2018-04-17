@@ -28,6 +28,10 @@ import java.util.Scanner;
 public class Player {
     private GameBoard board;
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
     private String playerName;
     private String userID;
     private String token;

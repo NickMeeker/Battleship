@@ -190,7 +190,7 @@ public class CurrentGamesState extends State {
             if (isTouched(touchPosition, selectGameBtn)) {
                 if(launchGame){
                     // todo launch selected game
-                    GameLoader gameLoader = new GameLoader(launchGameID, gsm);
+                    GameLoader gameLoader = new GameLoader(launchGameID, gsm, user.getUsername());
                 }
             } else if (isTouched(touchPosition, cancelGameBtn)) {
                 gsm.pop();

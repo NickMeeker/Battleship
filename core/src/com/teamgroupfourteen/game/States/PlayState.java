@@ -12,6 +12,7 @@ import com.teamgroupfourteen.game.Multiplayer.GameLogParser;
 import com.teamgroupfourteen.game.Multiplayer.MultiplayerGameManager;
 import com.teamgroupfourteen.game.Multiplayer.SetupParser;
 import com.teamgroupfourteen.game.Player.Player;
+import com.teamgroupfourteen.game.User.User;
 
 import java.util.ArrayList;
 
@@ -118,6 +119,8 @@ public class PlayState extends State {
     private String setup;
     private String moveList;
     private StringBuilder sb;
+    private Player clientPlayer;
+    private int dtConstant = 0;
 
     MultiplayerGameManager mgm;
 
@@ -140,6 +143,7 @@ public class PlayState extends State {
 
         //make player 1 the current player
         currentPlayer = player1;
+        clientPlayer = player1;
 
         //initialize the background
         background = new Texture("backgroundFinal.png");
@@ -201,24 +205,50 @@ public class PlayState extends State {
         pressLeft = false;
         crosshairMoving = false;
 
+        //buttons
+        upBtn = new GameButton(190, 220, 100, 100, "Arrow_up.png");
+        downBtn = new GameButton(190, 20, 100, 100, "Arrow_down.png");
+        leftBtn = new GameButton(90, 120, 100, 100, "Arrow_left.png");
+        rightBtn = new GameButton(290, 120, 100, 100, "Arrow_right.png");
+        panLeft = new GameButton(20, 145, 50, 50, "Arrow_left.png");
+        panRight = new GameButton(410, 145, 50, 50, "Arrow_right.png");
+        greyFireBtn = new GameButton(340, 20, 120, 60, "GrayFire.png");
+        fireBtn = new GameButton(340, 20, 120, 60, "Fire.png");
+
+
         //sounds
         explosion = Gdx.audio.newSound(Gdx.files.internal("Explosion.mp3"));
         splash = Gdx.audio.newSound(Gdx.files.internal("Splash.mp3"));
+
+        //initialize the board textures
+        gameGrid  = new Texture("GameGrid.png");
+        coordinateBackground  = new Texture("blackSquare.png");
+
+        //initialize board regions
+        mainGrid = new TextureRegion(gameGrid, 0, 0, 440, 440);
+        coordinateBackgroundRegion = new TextureRegion(coordinateBackground, 0, 0, 1536, 1478);
     }
 
     //single player and online constructor
-    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, String setup, String moveList, String gameID){
+    public PlayState(GameStateManager gsm, Player player1, Player player2, boolean singlePlayer, boolean online, String setup, String moveList, String gameID, Player clientPlayer){
         super(gsm);
         cam.setToOrtho(false, Battleship.WIDTH, Battleship.HEIGHT);
 
-        if(online)
-            mgm = new MultiplayerGameManager(gameID);
 
+        if(online) {
+            mgm = new MultiplayerGameManager(gameID);
+            mgm.setLocalGameData();
+        }
         //set the game type flags
         this.singlePlayer = singlePlayer;
         this.online = online;
+        this.clientPlayer = clientPlayer;
 
-        if(online||singlePlayer){
+        if(online) {
+            this.setup = mgm.getSetupLog();
+            this.moveList = mgm.getGameLog();
+        }
+        if(singlePlayer){
             this.setup = setup;
             this.moveList = moveList;
             popOnlineFlag = false;
@@ -328,12 +358,57 @@ public class PlayState extends State {
         //sounds
         explosion = Gdx.audio.newSound(Gdx.files.internal("Explosion.mp3"));
         splash = Gdx.audio.newSound(Gdx.files.internal("Splash.mp3"));
+
+        //buttons
+        upBtn = new GameButton(190, 220, 100, 100, "Arrow_up.png");
+        downBtn = new GameButton(190, 20, 100, 100, "Arrow_down.png");
+        leftBtn = new GameButton(90, 120, 100, 100, "Arrow_left.png");
+        rightBtn = new GameButton(290, 120, 100, 100, "Arrow_right.png");
+        panLeft = new GameButton(20, 145, 50, 50, "Arrow_left.png");
+        panRight = new GameButton(410, 145, 50, 50, "Arrow_right.png");
+        greyFireBtn = new GameButton(340, 20, 120, 60, "GrayFire.png");
+        fireBtn = new GameButton(340, 20, 120, 60, "Fire.png");
+
+        if(online) {
+            powerUp = new Texture[4];
+
+            for (int i = 0; i < 4; i++) {
+                if (i == 0) {
+                    powerUp[i] = new Texture("RedX.png");
+                }
+                if (i == 1) {
+                    powerUp[i] = new Texture("shield.png");
+                }
+                if (i == 2) {
+                    powerUp[i] = new Texture("multishot.png");
+                }
+                if (i == 3) {
+                    powerUp[i] = new Texture("doubleshot.png");
+                }
+            }
+
+            powerUpRegion = new TextureRegion(powerUp[currentPowerUpNum], 0, 0, 40, 40);
+        }
+
+        if(online){
+            rightPowerUp = new GameButton(20, 20, 50, 50, "Arrow_right.png");
+            leftPowerUp = new GameButton(120, 20, 50, 50, "Arrow_left.png");
+        }
+
+        //initialize the board textures
+        gameGrid  = new Texture("GameGrid.png");
+        coordinateBackground  = new Texture("blackSquare.png");
+
+        //initialize board regions
+        mainGrid = new TextureRegion(gameGrid, 0, 0, 440, 440);
+        coordinateBackgroundRegion = new TextureRegion(coordinateBackground, 0, 0, 1536, 1478);
     }
 
     @Override
-    public void handleInput(){
+    public void handleInput() {
         //player 1 board setup
-        if (setupCount == 0){
+
+        if (setupCount == 0 && clientPlayer == players[0]){
             if(online && setup.equals("")) {
                 if(!popOnlineFlag.booleanValue()) {
                     gsm.push(new PlayStateSetup(gsm, players[0], popOnlineFlag, this));
@@ -349,48 +424,35 @@ public class PlayState extends State {
                         sb.append(',');
                     }
                     //TODO: Send sb to database
-
                     mgm.updateSetupLog(sb.toString());
-                    System.out.println(mgm.getSetupLog());
-                    gsm.pop();
                 }
 
-            }
-            else if(online){
-                this.players[0].createShips();
-                SetupParser setupParser = new SetupParser(setup);
-                setupParser.buildLogEntries();
-                for(int i = 0; i < 5; i++){
-                    setupParser.parseLogEntry(i);System.out.println("i: " + i + " row "  + setupParser.getRow() + " column " + setupParser.getColumn());
-                    players[0].setShipPosition(i, setupParser.getRow(), setupParser.getColumn(), 0);
-                    players[0].setShipOrientation(i, setupParser.getOrientaion());
-                }
-
-                setupCount++;
             }
             else if(singlePlayer){
-                gsm.push(new PlayStateSetup(gsm, players[0], this.popOnlineFlag, this));
+                gsm.push(new PlayStateSetup(gsm, players[0], false, this));
                 setupCount++;
-            }
-            else{
-                gsm.push(new PlayStateSetup(gsm, players[0], this.popOnlineFlag, this));
+            } else{
+                gsm.push(new PlayStateSetup(gsm, players[0], false, this));
                 setupCount++;
             }
             //advance to next step of setup
 
         }
+        if(setupCount == 0 && clientPlayer == players[1]){
+            return;
+        }
         //player 2 board setup
-        else if(setupCount == 1){System.out.println("player2");
-            if(online && setup.length() == 30) {
-                popOnlineFlag = false;
+        if(setupCount == 1 && (clientPlayer == players[1] || !online)){
+            if(online) {
+                System.out.println(popOnlineFlag);
                 if(!popOnlineFlag.booleanValue()) {
                     gsm.push(new PlayStateSetup(gsm, players[1], popOnlineFlag, this));
                 }
                 if(popOnlineFlag.booleanValue()) {
                     for (int i = 0; i < 5; i++) {
                         sb.append(1);
-                        sb.append((char) (((players[1].getShipPosition(i).y - 340) / 40) + 65));
-                        sb.append(((players[1].getShipPosition(i).x - 60) / 40));
+                        sb.append((char) (9 - ((players[1].getShipPosition(i).y - 340) / 40) + 65));
+                        sb.append((int) ((players[1].getShipPosition(i).x - 60) / 40));
                         sb.append(players[1].getShipName(i));
                         sb.append(players[1].getShipOrientation(i));
 
@@ -399,25 +461,12 @@ public class PlayState extends State {
                     }
 
                     //TODO send sb to database
-
-                    mgm.updateSetupLog(sb.toString());
-                    System.out.println(mgm.getSetupLog());
-
-                    gsm.pop();
-                }
-            }
-
-            else if(online){
-                this.players[1].createShips();
-                SetupParser setupParser = new SetupParser(setup);
-                setupParser.buildLogEntries();
-                for(int i = 5; i < 10; i++){
-                    setupParser.parseLogEntry(i);
-                    players[1].setShipPosition(i - 5, setupParser.getRow(), setupParser.getColumn(), 0);
-                    players[1].setShipOrientation(i - 5, setupParser.getOrientaion());
+                    if(setupCount == 1) {
+                        mgm.updateSetupLog(sb.toString());
+                    }
+                    setup = mgm.getSetupLog();
                 }
 
-                setupCount++;
             }
 
             //if single player, have the computer build a board
@@ -445,7 +494,28 @@ public class PlayState extends State {
         }
         //Now that the game boards are built, lets build the rest of the game
         else if(setupCount == 2){
+            if(online){
+                this.players[0].createShips();
+                SetupParser setupParser = new SetupParser(setup);
+                setupParser.buildLogEntries();
+                for(int i = 0; i < 5; i++){
+                    setupParser.parseLogEntry(i);
+                    players[0].updateShipPosition(setupParser.getShipNum(),  60 + setupParser.getColumn()*40-(int)players[0].getShipPosition(setupParser.getShipNum()).x,
+                            800 - 60 - 40 - setupParser.getRow()*40 - (int)players[0].getShipPosition(setupParser.getShipNum()).y, 0);
+                    players[0].setShipOrientation(setupParser.getShipNum(), setupParser.getOrientation());
+                }
+                this.players[1].createShips();
+                for(int i = 5; i < 10; i++){
+                    setupParser.parseLogEntry(i);
+                    System.out.println(players[1].getShipPosition(setupParser.getShipNum()));
+                    players[1].updateShipPosition(setupParser.getShipNum(),  60 + setupParser.getColumn()*40-(int)players[1].getShipPosition(setupParser.getShipNum()).x,
+                            800-60-40-setupParser.getRow()*40 - (int)players[1].getShipPosition(setupParser.getShipNum()).y, 0);
+                    players[1].setShipOrientation(setupParser.getShipNum(), setupParser.getOrientation());
+                    System.out.println(players[1].getShipPosition(setupParser.getShipNum()));
 
+                }
+                mgm.updateTurnPlayer(players[0].getPlayerName());
+            }
             if(online && !moveList.equals("")){
                 GameLogParser gameParser = new GameLogParser(moveList);
                 gameParser.buildLogEntries();
@@ -508,28 +578,19 @@ public class PlayState extends State {
                         powerUp[i] = new Texture("RedX.png");
                     }
                     if (i == 1) {
-                        powerUp[i] = new Texture("Shield.png");
+                        powerUp[i] = new Texture("shield.png");
                     }
                     if (i == 2) {
                         powerUp[i] = new Texture("multishot.png");
                     }
                     if (i == 3) {
-                        powerUp[i] = new Texture("doubleShot.png");
+                        powerUp[i] = new Texture("doubleshot.png");
                     }
                 }
 
                 powerUpRegion = new TextureRegion(powerUp[currentPowerUpNum], 0, 0, 40, 40);
             }
 
-            //buttons
-            upBtn = new GameButton(190, 220, 100, 100, "Arrow_up.png");
-            downBtn = new GameButton(190, 20, 100, 100, "Arrow_down.png");
-            leftBtn = new GameButton(90, 120, 100, 100, "Arrow_left.png");
-            rightBtn = new GameButton(290, 120, 100, 100, "Arrow_right.png");
-            panLeft = new GameButton(20, 145, 50, 50, "Arrow_left.png");
-            panRight = new GameButton(410, 145, 50, 50, "Arrow_right.png");
-            greyFireBtn = new GameButton(340, 20, 120, 60, "GrayFire.png");
-            fireBtn = new GameButton(340, 20, 120, 60, "Fire.png");
 
             if(online||singlePlayer){
                 rightPowerUp = new GameButton(125, 245, 50, 50, "Arrow_right.png");
@@ -539,7 +600,6 @@ public class PlayState extends State {
             //move the setup to the finished stage. Setup is now complete
             setupCount = 3;
         }
-
 
         if(Gdx.input.justTouched()){
             Vector3 touchPosition = super.getInputRegion();
@@ -672,10 +732,12 @@ public class PlayState extends State {
 
             //fire button: this conditional checks to make sure the fire button was pressed
             //  and that the cell that you want to hit has not been hit already
-            else if(isTouched(touchPosition, fireBtn) && !(players[(currentPlayerNum + 1) % 2].cellIsHit(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40)) && !dropBombs){
-
+            else if(isTouched(touchPosition, fireBtn) && !(players[(currentPlayerNum + 1) % 2].cellIsHit(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40))){
+                if(online && !mgm.getTurnPlayer().equals(players[currentPlayerNum].getPlayerName())){
+                    return;
+                }
                 //hit the other player at the position of the crosshair
-                if(currentPowerUpNum == 0) {System.out.println(currentPlayerNum);
+                if(currentPowerUpNum == 0) {
                     players[(currentPlayerNum + 1) % 2].hitCell(((int) crosshairVector.x - 60) / 40, ((int) crosshairVector.y - 340) / 40);
                 }
                 else if(currentPowerUpNum == 1){
@@ -701,6 +763,8 @@ public class PlayState extends State {
                 if(singlePlayer){
 
                     if(players[1].allShipsDestroyed()){
+                        //TODO player win state
+
                         gsm.set(new WinState(gsm, "Player 1"));
                     }
 
@@ -708,6 +772,7 @@ public class PlayState extends State {
                         players[1].makeMove(players[0]);
 
                     if(players[0].allShipsDestroyed()){System.out.println("check");
+                        //TODO computer win state
                         gsm.set(new WinState(gsm, "Computer"));
                     }
                 }
@@ -718,29 +783,34 @@ public class PlayState extends State {
                     if(currentPowerUpNum == 0){
                         sb.append(currentPlayerNum);
                         sb.append('n');
-                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append((char)(9 - (((int)crosshairVector.y - 340) / 40) + 65));
                         sb.append(((int)crosshairVector.x - 60) / 40);
                     }
                     else if(currentPowerUpNum == 1){
                         sb.append(currentPlayerNum);
                         sb.append('s');
-                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append((char) (9 - (((int)crosshairVector.y - 340) / 40) + 65));
                         sb.append(((int)crosshairVector.x - 60) / 40);
                     }
                     else if(currentPowerUpNum == 2){
                         sb.append(currentPlayerNum);
                         sb.append('m');
-                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append((char) (9 - (((int)crosshairVector.y - 340) / 40) + 65));
                         sb.append(((int)crosshairVector.x - 60) / 40);
                     }
                     else if(currentPowerUpNum == 3){
-                        sb.append((currentPlayerNum + 1) & 2);
+                        sb.append(currentPlayerNum);
                         sb.append('d');
-                        sb.append(9 - (((int)crosshairVector.y - 340) / 40));
+                        sb.append((char) (9 - (((int)crosshairVector.y - 340) / 40) + 65));
                         sb.append(((int)crosshairVector.x - 60) / 40);
                     }
 
+                    sb.append(',');
+
                     //TODO push sb to database
+                    mgm.updateGameLog(sb.toString());
+                    mgm.updateTurnPlayer(players[(currentPlayerNum + 1) % 2].getPlayerName());
+                    System.out.println(mgm.getTurnPlayer());
 
                     if(players[(currentPlayerNum + 1) % 2].allShipsDestroyed()){
                         //TODO end game state
@@ -764,6 +834,7 @@ public class PlayState extends State {
                         }
                     }
 
+                    //currentPlayerNum = (currentPlayerNum + 1) % 2;
                 }
             }
 
@@ -772,6 +843,26 @@ public class PlayState extends State {
 
     @Override
     public void update(float dt) {
+        if(online) {
+            mgm.setLocalGameData();
+            if(players[currentPlayerNum].getPlayerName().equals(mgm.getTurnPlayer())){
+                if(clientPlayer.getPlayerName().equals(players[0].getPlayerName()))
+                    currentPlayerNum = 0;
+                else
+                    currentPlayerNum = 1;
+
+                System.out.println(currentPlayerNum);
+            }
+            if (setupCount < 2) {
+                setup = mgm.getSetupLog();
+            }
+            if (setup.length() == 30) {
+                setupCount = 1;
+            } else if (setup.length() == 59 && setupCount != 3) {
+                setupCount = 2;
+            }
+
+        }
         handleInput();
     }
 
@@ -859,10 +950,10 @@ public class PlayState extends State {
                 //draw the appropriate pan button
                 sb.draw(panLeft.getImage(), panLeft.getX(), panLeft.getY(), panLeft.getWidth(), panLeft.getHeight());
 
-                if(online||singlePlayer){
+                if(online){
                     sb.draw(leftPowerUp.getImage(), leftPowerUp.getX(), leftPowerUp.getY(), leftPowerUp.getWidth(), leftPowerUp.getHeight());
                     sb.draw(rightPowerUp.getImage(), rightPowerUp.getX(), rightPowerUp.getY(), rightPowerUp.getWidth(), rightPowerUp.getHeight());
-                    sb.draw(powerUpRegion, 70, 245, 50, 50);
+                    sb.draw(powerUpRegion, 70, 20, 50, 50);
                 }
 
                 //check if all cells to see if there were any hits
@@ -930,7 +1021,7 @@ public class PlayState extends State {
                     }
                     else if(pressLeft){
                         crosshairVector.add(-8, 0, 0);
-                        if((online||singlePlayer) && currentPowerUpNum == 2){
+                        if(online && currentPowerUpNum == 2){
                             crosshairVector2.add(-8, 0, 0);
                             crosshairVector3.add(-8, 0, 0);
                             crosshairVector4.add(-8, 0, 0);
@@ -968,10 +1059,12 @@ public class PlayState extends State {
 
                 if(turnCountDown == 1){
                     turnFlag = true;
-                }
+
+                }if(online)
+                    gsm.set(new MainMenuState(gsm, new User()));
 
                 //draw a grey fire button if the currently selected cell has already been hit
-                if(players[(currentPlayerNum + 1) % 2].cellIsHit(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40) && dropBombs){
+                if(players[(currentPlayerNum + 1) % 2].cellIsHit(((int)crosshairVector.x - 60) / 40, ((int)crosshairVector.y - 340) / 40)){
                     sb.draw(greyFireBtn.getImage(), greyFireBtn.getX(), greyFireBtn.getY(), greyFireBtn.getWidth(), greyFireBtn.getHeight());
                 }
                 //else draw an active fire button
